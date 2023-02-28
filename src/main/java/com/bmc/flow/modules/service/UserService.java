@@ -6,7 +6,9 @@ import com.bmc.flow.modules.database.entities.catalogs.SeniorityEntity;
 import com.bmc.flow.modules.database.entities.records.*;
 import com.bmc.flow.modules.database.repositories.UserRepository;
 import com.bmc.flow.modules.database.repositories.records.*;
+import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
+import com.bmc.flow.modules.service.base.PageResult;
 import com.bmc.flow.modules.utilities.SecurityUtils;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.smallrye.mutiny.Uni;
@@ -14,7 +16,6 @@ import io.smallrye.mutiny.Uni;
 import javax.enterprise.context.ApplicationScoped;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -56,8 +57,13 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     this.secUtils = secUtils;
   }
 
-  public Uni<List<UserDto>> getUsersByProjectId(final UUID projectId) {
-    return userRepo.findAllUsersByProjectId(projectId);
+
+  public Uni<PageResult<UserDto>> findAllByProjectId(final UUID projectId, final Pageable pageable) {
+    return findAllPaged(userRepo.findAllByProjectId(projectId, pageable.getSort()), pageable.getPage());
+  }
+
+  public Uni<PageResult<UserDto>> findAllByBoardId(final UUID boardId, final Pageable pageable) {
+    return findAllPaged(userRepo.findAllByBoardId(boardId, pageable.getSort()), pageable.getPage());
   }
 
   @ReactiveTransactional
@@ -161,5 +167,4 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     }
 
   }
-
 }

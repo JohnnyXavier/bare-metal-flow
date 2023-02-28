@@ -1,10 +1,11 @@
 package com.bmc.flow.modules.service.base;
 
+import com.bmc.flow.modules.resources.base.Pageable;
 import io.quarkus.cache.CacheResult;
+import io.quarkus.hibernate.reactive.panache.PanacheQuery;
 import io.quarkus.hibernate.reactive.panache.PanacheRepositoryBase;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.quarkus.panache.common.Page;
-import io.quarkus.panache.common.Sort;
 import io.smallrye.mutiny.Uni;
 
 import javax.validation.Valid;
@@ -35,12 +36,12 @@ public abstract class BasicPersistenceService<D, E> {
 
   //FIXME: create a CotalogPersistence Service so we put findAll there
   // we don want to expose a findAll for every card or every user, being it paged or not
-  public Uni<PageResult<D>> findAll(final Sort sort, final Page page) {
-    return repository.findAll(sort)
+  public Uni<PageResult<D>> findAll(final Pageable pageable) {
+    return repository.findAll(pageable.getSort())
                      .project(dtoClass)
-                     .page(page)
+                     .page(pageable.getPage())
                      .list()
-                     .flatMap(ds -> countAll(dtoClass.getName()).map(count -> new PageResult<>(ds, count, page)));
+                     .flatMap(ds -> countAll(dtoClass.getName()).map(count -> new PageResult<>(ds, count, pageable.getPage())));
   }
 
   /**
@@ -71,5 +72,14 @@ public abstract class BasicPersistenceService<D, E> {
   }
 
   protected abstract void updateField(final E toUpdate, final String key, final String value);
+
+  protected Uni<PageResult<D>> findAllPaged(final PanacheQuery<E> panacheQuery, final Page page) {
+    return panacheQuery.project(dtoClass)
+                       .page(page)
+                       .list()
+                       .flatMap(ds -> countAll(dtoClass.getName())
+                           .map(count -> new PageResult<>(ds, count, page)));
+
+  }
 
 }

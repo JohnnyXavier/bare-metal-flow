@@ -1,19 +1,18 @@
 package com.bmc.flow.modules.database.repositories;
 
-import com.bmc.flow.modules.database.dto.UserDto;
 import com.bmc.flow.modules.database.entities.UserEntity;
+import io.quarkus.hibernate.reactive.panache.PanacheQuery;
 import io.quarkus.hibernate.reactive.panache.PanacheRepositoryBase;
-import io.smallrye.mutiny.Uni;
+import io.quarkus.panache.common.Sort;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
 public class UserRepository implements PanacheRepositoryBase<UserEntity, UUID> {
 
   private static final String SELECT_DTO = " select e.id, e.firstName, e.lastName, e.email, e.callSign, e.avatar," +
-      " e.isActive, e.createdAt, e.seniority.id, e.createdBy.id";
+      " e.isActive, e.createdAt, e.seniority.id";
 
   private static final String FROM_ENTITY = " from UserEntity e";
 
@@ -56,12 +55,16 @@ public class UserRepository implements PanacheRepositoryBase<UserEntity, UUID> {
    *         projectent2_.id=$1
    * </pre>
    */
-  public Uni<List<UserDto>> findAllUsersByProjectId(final UUID projectId) {
+  public PanacheQuery<UserEntity> findAllByProjectId(final UUID projectId, final Sort sort) {
     return this.find(SELECT_DTO + FROM_ENTITY +
                          " left join e.projects as up" +
-                         " where up.id =?1", projectId)
-               .project(UserDto.class)
-               .list();
+                         " where up.id =?1", sort, projectId);
+  }
+
+  public PanacheQuery<UserEntity> findAllByBoardId(final UUID boardId, final Sort sort) {
+    return this.find(SELECT_DTO + FROM_ENTITY +
+                         " left join e.boards as ub" +
+                         " where ub.id =?1", sort, boardId);
   }
 
 }
