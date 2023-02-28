@@ -1,0 +1,90 @@
+obfuscation:
+  cities:
+    - new_york
+    - angeles
+    - chicago
+    - houston
+    - phoenix
+    - philly
+    - antonio
+    - diego
+    - dallas
+    - jose
+    - austin
+    - jacksonville
+    - fort_worth
+    - columbus
+    - indianapolis
+    - charlotte
+    - francisco
+    - seattle
+    - denver
+    - nashville
+    - oklahoma
+    - paso
+    - boston
+    - portland
+    - vegas
+    - detroit
+  alphabet:
+    - alpha
+    - bravo
+    - charlie
+    - dixie
+    - echo
+    - foxtrot
+    - golf
+    - hotel
+    - india
+    - juliet
+    - kilo
+    - lima
+    - mike
+    - november
+    - oscar
+    - papa
+    - quebec
+    - romeo
+    - sierra
+    - tango
+    - uniform
+    - victor
+    - whiskey
+    - x_ray
+    - yankee
+    - zulu
+
+
+quarkus: # persistence configuration
+  datasource:
+    reactive:
+      url: vertx-reactive:postgresql://localhost:5432/bare-metal-flow
+      max-size: 16
+      cache-prepared-statements: true
+    db-kind: postgresql
+    username: xavier
+    password: xavier
+  hibernate-orm:
+    physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+
+    log:
+      sql: true
+      format-sql: true
+    database:
+      default-schema: public
+      generation: none
+
+  # server configuration
+  http:
+    port: 8080
+    access-log:
+      enabled: false
+
+  # log configuration
+  #   cache configuration
+  cache:
+    caffeine:
+      count-all:
+        metrics-enabled: true
+        expire-after-write: 10S
+        initial-capacity: 20
