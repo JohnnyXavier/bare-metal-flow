@@ -75,7 +75,7 @@ public class CardService extends BasicPersistenceService<CardDto, CardEntity> {
       case "name" -> toUpdate.setName(value);
       case "description" -> toUpdate.setDescription(value);
       case "coverImage" -> toUpdate.setCoverImage(value);
-      case "dueDate" -> toUpdate.setDueDate(value == null ? null : parse(value)); // create method null or empty -> then
+      case "dueDate" -> toUpdate.setDueDate(value == null ? null : parse(value));
       case "completedDate" -> toUpdate.setCompletedDate(value == null ? null : parse(value));
       case "status" -> setStatus(toUpdate, value);
       case "difficulty" -> setDifficulty(toUpdate, value);
