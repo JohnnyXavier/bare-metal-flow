@@ -1,5 +1,6 @@
 package com.bmc.flow.modules.database.entities.records;
 
+import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.base.BaseRecordEntity;
 import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
 import lombok.EqualsAndHashCode;
@@ -19,16 +20,15 @@ import static javax.persistence.CascadeType.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class AccountEntity extends BaseRecordEntity {
 
-  // FIXME: maybe add users to accounts to limit which user can be proposed to be added pFolios / projects / etc...
-  //  the above will make stats on accounts and lower segmentations clearer and queries less "joiny" and convoluted
-  @ManyToOne
-  private PortfolioEntity portfolio;
-
   @OneToMany(mappedBy = "account", cascade = ALL)
   private Set<ProjectEntity> projects = new HashSet<>();
 
   @ManyToMany(cascade = {PERSIST, MERGE})
   @JoinTable(name = "account_labels", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "label_id"))
   private Set<LabelEntity> labels = new HashSet<>();
+
+  @ManyToMany(cascade = {PERSIST, MERGE})
+  @JoinTable(name = "account_users", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+  private Set<UserEntity> users = new HashSet<>();
 
 }

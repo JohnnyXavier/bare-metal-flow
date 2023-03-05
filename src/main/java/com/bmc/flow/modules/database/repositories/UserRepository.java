@@ -55,16 +55,11 @@ public class UserRepository implements PanacheRepositoryBase<UserEntity, UUID> {
    *         projectent2_.id=$1
    * </pre>
    */
-  public PanacheQuery<UserEntity> findAllByProjectId(final UUID projectId, final Sort sort) {
-    return this.find(SELECT_DTO + FROM_ENTITY +
-                         " left join e.projects as up" +
-                         " where up.id =?1", sort, projectId);
-  }
-
-  public PanacheQuery<UserEntity> findAllByBoardId(final UUID boardId, final Sort sort) {
-    return this.find(SELECT_DTO + FROM_ENTITY +
-                         " left join e.boards as ub" +
-                         " where ub.id =?1", sort, boardId);
+  public PanacheQuery<UserEntity> findAllByCollectionId(final String collectionName, final UUID collectionId, final Sort sort) {
+    return this.find(String.format(SELECT_DTO + FROM_ENTITY +
+                                       " left join e.%s as collection" +
+                                       " where collection.id =?1", collectionName),
+                     sort, collectionId);
   }
 
 }

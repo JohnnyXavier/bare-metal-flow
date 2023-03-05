@@ -41,4 +41,9 @@ public class LabelService extends BasicPersistenceService<LabelDto, LabelEntity>
       default -> throw new IllegalStateException("Unexpected value: " + key);
     }
   }
+
+  public Uni<LabelEntity> findEntityByName(final String name) {
+    return labelRepo.findEntityByName(name);
+
+  }
 }

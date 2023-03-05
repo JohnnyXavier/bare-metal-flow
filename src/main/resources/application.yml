@@ -84,10 +84,15 @@ quarkus: # persistence configuration
       enabled: false
 
   # log configuration
+  log:
+    category:
+      "com.bmc":
+        level: DEBUG
+
   #   cache configuration
   cache:
     caffeine:
       count-all:
         metrics-enabled: false
-        expire-after-write: 10S
+        expire-after-write: 120S
         initial-capacity: 20

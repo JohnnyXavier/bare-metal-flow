@@ -2,7 +2,7 @@ package com.bmc.flow.modules.service.records;
 
 import com.bmc.flow.modules.database.dto.records.BoardDto;
 import com.bmc.flow.modules.database.entities.UserEntity;
-import com.bmc.flow.modules.database.entities.catalogs.BoardType;
+import com.bmc.flow.modules.database.entities.catalogs.BoardTypeEntity;
 import com.bmc.flow.modules.database.entities.records.BoardEntity;
 import com.bmc.flow.modules.database.entities.records.ProjectEntity;
 import com.bmc.flow.modules.database.repositories.records.BoardRepository;
@@ -39,14 +39,14 @@ public class BoardService extends BasicPersistenceService<BoardDto, BoardEntity>
     ProjectEntity project = new ProjectEntity();
     project.setId(boardDto.getProjectId());
 
-    BoardType boardType = new BoardType();
-    boardType.setId(boardDto.getBoardTypeId());
+    BoardTypeEntity boardTypeEntity = new BoardTypeEntity();
+    boardTypeEntity.setId(boardDto.getBoardTypeId());
 
     BoardEntity board = new BoardEntity();
     board.setId(randomUUID());
     board.setName(boardDto.getName());
     board.setDescription(boardDto.getDescription());
-    board.setBoardType(boardType);
+    board.setBoardType(boardTypeEntity);
     board.setProject(project);
     board.setCreatedBy(boardCreator);
 

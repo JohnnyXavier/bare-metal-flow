@@ -56,7 +56,7 @@ public class ResponseUtils {
     String pgErrCode = pgEx.getCode();
     String pgErr = pgEx.getDetail() == null ? pgEx.getErrorMessage() : pgEx.getDetail();
 
-    log.errorf("pgErrorCode: [%s] - errorDetail: [%s]", pgErrCode, pgErr);
+    log.errorf(":::pgErrorCode: [%s] - errorDetail: [%s]", pgErrCode, pgErr);
 
     Map<String, String> errMessage = new HashMap<>();
     errMessage.put("error", pgErr.substring(pgErr.lastIndexOf("=") + 1)

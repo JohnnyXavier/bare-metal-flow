@@ -2,7 +2,9 @@ package com.bmc.flow.modules.database.repositories.records;
 
 import com.bmc.flow.modules.database.dto.records.SprintDto;
 import com.bmc.flow.modules.database.entities.records.SprintEntity;
+import io.quarkus.hibernate.reactive.panache.PanacheQuery;
 import io.quarkus.hibernate.reactive.panache.PanacheRepositoryBase;
+import io.quarkus.panache.common.Sort;
 import io.smallrye.mutiny.Uni;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -24,18 +26,9 @@ public class SprintRepository implements PanacheRepositoryBase<SprintEntity, UUI
                .list();
   }
 
-  public Uni<List<SprintDto>> findAllByProjectId(final UUID projectId) {
-    return this.find(SELECT_DTO + FROM_ENTITY +
-                         " where e.project.id =?1", projectId)
-               .project(SprintDto.class)
-               .list();
+  public PanacheQuery<SprintEntity> findAllByCollectionId(final String collectionName, final UUID collectionId, final Sort sort) {
+    return this.find(String.format(SELECT_DTO + FROM_ENTITY +
+                                       " where %s.id =?1", collectionName),
+                     sort, collectionId);
   }
-
-  public Uni<List<SprintDto>> findAllByBoardId(final UUID boardId) {
-    return this.find(SELECT_DTO + FROM_ENTITY +
-                         " where e.board.id =?1", boardId)
-               .project(SprintDto.class)
-               .list();
-  }
-
 }

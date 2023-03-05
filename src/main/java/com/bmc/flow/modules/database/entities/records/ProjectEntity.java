@@ -4,6 +4,7 @@ import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.base.BaseRecordEntity;
 import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
 import com.bmc.flow.modules.database.entities.records.retro.RetrospectiveEntity;
+import com.bmc.flow.modules.database.entities.resourcing.ScheduleEntryEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,9 +32,16 @@ public class ProjectEntity extends BaseRecordEntity {
   @JoinTable(name = "project_users", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
   private Set<UserEntity> users = new HashSet<>();
 
+  @ManyToOne
+  private UserEntity projectLead;
+
   @ManyToMany(cascade = {PERSIST, MERGE})
   @JoinTable(name = "project_labels", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "label_id"))
   private Set<LabelEntity> labels = new HashSet<>();
+
+
+  @OneToMany(mappedBy = "project", cascade = ALL)
+  private Set<ScheduleEntryEntity> scheduling;
 
   @ManyToOne
   private AccountEntity account;

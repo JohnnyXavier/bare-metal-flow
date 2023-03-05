@@ -12,8 +12,6 @@ declare
     user_two uuid;
     account_one uuid;
     account_two uuid;
-    default_portfolio uuid;
-    portfolio_two uuid;
     default_project uuid;
     project_two uuid;
     default_kanban_board uuid;
@@ -41,9 +39,6 @@ user_two := ''9c540951-b340-46cb-b1be-331f3ef9d8c5'';
 
 account_one := ''a652ad6d-b99a-4ff0-1f7e-e7eb6091f50b'';
 account_two := ''da2836a2-576f-4d8b-8a35-79a15f0b8c88'';
-
-default_portfolio := ''4fa18a64-f208-4fd5-9dc2-5d0822e1d957'';
-portfolio_two := ''fc8819e1-0cde-4c67-aa7c-572f015249fe'';
 
 default_project := ''2ad49ee4-c629-4bb5-9bd4-a59de16a8c72'';
 project_two := ''1da6480d-f183-4ea5-9890-039a133c15e9'';
@@ -80,6 +75,7 @@ insert into seniority(id, name, level, description, is_system, created_at, updat
     (gen_random_uuid(), ''architect'', 600, ''can achieve highly complex tasks, can design systems, requires no guidance'', true, cre_upd, cre_upd, system_user);
 
 insert into label(id, color_hex, description, name, created_at, updated_at, created_by_id) VALUES
+    (gen_random_uuid(), ''#0f5772'', ''my personal stuff'', ''personal'', cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''#0f5772'', ''this is a back-end label'', ''back-end'', cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''#bee4ff'', ''this is a front-end label'', ''front-end'', cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''#ffdba3'', ''this is a devops label'', ''devops'', cre_upd, cre_upd, system_user),
@@ -121,20 +117,54 @@ insert into department(id, name, description, is_system, created_at, updated_at,
     (gen_random_uuid(), ''operations'', '''', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''finance'', '''', true, cre_upd, cre_upd, system_user);
 
+
+insert into shrinkage(id, name, duration_in_min, percentage, is_system, created_at, updated_at, created_by_id) VALUES
+    (gen_random_uuid(), ''general-05-%'', null, 5, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''general-10-%'', null, 10, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''general-15-%'', null, 15, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''general-20-%'', null, 20, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''general-25-%'', null, 25, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''general-30-%'', null, 30, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''general-35-%'', null, 35, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''general-40-%'', null, 40, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''general-55-%'', null, 45, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''general-50-%'', null, 50, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''coffee-break-15-min'', 15, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''coffee-break-10-min'', 10, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''personal-break-5-min'', 5, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''personal-break-10-min'', 10, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''personal-break-15-min'', 15, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''agile-standUp-10-min'', 10, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''agile-standUp-15-min'', 15, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''agile-standUp-20-min'', 20, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''agile-sprint-planning-30-min'', 30, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''agile-sprint-planning-45-min'', 45, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''agile-sprint-planning-60-min'', 60, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''agile-sprint-retro-30-min'', 30, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''agile-sprint-retro-45-min'', 45, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''agile-sprint-retro-60-min'', 60, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''meetings-client-15-min'', 15, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''meetings-client-30-min'', 30, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''meetings-client-45-min'', 45, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''meetings-client-60-min'', 60, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''meetings-internal-15-min'', 15, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''meetings-internal-30-min'', 30, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''meetings-internal-45-min'', 45, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''meetings-internal-60-min'', 60, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''meetings-external-15-min'', 15, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''meetings-external-30-min'', 30, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''meetings-external-45-min'', 45, null, true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''meetings-external-60-min'', 60, null, true, cre_upd, cre_upd, system_user);
+
 -- insert demo data
 insert into users(id, first_name, last_name, email, call_sign, seniority_id, created_at, updated_at, created_by_id) VALUES
     (user_two, ''first-name-02'', ''last-name-02'', ''email-02@somemail.com'', ''maverick'', seniority_sr, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''first-name-03'', ''last-name-03'', ''email-03@somemail.com'', ''goose'', seniority_jr, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''first-name-04'', ''last-name-04'', ''email-04@somemail.com'', ''iceman'', seniority_jr, cre_upd, cre_upd, system_user);
 
-insert into portfolio(id, name, description, is_default, created_at, updated_at, created_by_id) values
-    (default_portfolio, ''default-portfolio'', default_description, true, cre_upd, cre_upd, system_user),
-    (portfolio_two, ''portfolio-user-02-THIS'', default_description, true, cre_upd, cre_upd, user_two),
-    (gen_random_uuid(), ''portfolio-user-02-ANOTHER'', default_description, false, cre_upd, cre_upd, user_two);
-
-insert into account(id, name, description, portfolio_id, created_at, updated_at, created_by_id) VALUES
-    (account_one, ''default-account'', default_description, default_portfolio, cre_upd, cre_upd, system_user),
-    (account_two, ''account-two'', default_description, default_portfolio, cre_upd, cre_upd, system_user);
+insert into account(id, name, description, created_at, updated_at, created_by_id) VALUES
+    (account_one, ''default-account'', default_description, cre_upd, cre_upd, system_user),
+    (account_two, ''account-two'', default_description, cre_upd, cre_upd, system_user);
 
 insert into project(id, name, account_id, description, created_at, updated_at, created_by_id) values
     (default_project, ''default-project'', account_one, default_description, cre_upd, cre_upd, system_user),
@@ -155,7 +185,6 @@ insert into sprint(id, created_at, updated_at, goal, name, from_date, to_date, c
 insert into card(id, name, description, cover_image, due_date, board_id, card_status_id, card_type_id, created_at, updated_at, created_by_id) values
     (default_kanban_card, ''default-card'', default_description, default_cover_image, make_timestamp(2023, 10, 01, 00, 00, 00), default_kanban_board, default_card_status, default_card_type, cre_upd, cre_upd, system_user),
     (default_sprint_card, ''default-sprint-card'', default_description, default_cover_image, make_timestamp(2023, 10, 01, 00, 00, 00), default_sprint_board, default_card_status, default_card_type, cre_upd, cre_upd, system_user);
-
 
 insert into project_users(user_id, project_id) VALUES
     (system_user, default_project),

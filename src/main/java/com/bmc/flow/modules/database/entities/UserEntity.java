@@ -3,12 +3,10 @@ package com.bmc.flow.modules.database.entities;
 import com.bmc.flow.modules.database.entities.base.BaseEntity;
 import com.bmc.flow.modules.database.entities.catalogs.DepartmentEntity;
 import com.bmc.flow.modules.database.entities.catalogs.SeniorityEntity;
-import com.bmc.flow.modules.database.entities.records.BoardEntity;
-import com.bmc.flow.modules.database.entities.records.CardEntity;
-import com.bmc.flow.modules.database.entities.records.ProjectEntity;
-import com.bmc.flow.modules.database.entities.records.TaskEntity;
+import com.bmc.flow.modules.database.entities.records.*;
 import com.bmc.flow.modules.database.entities.records.retro.RetroActionEntity;
 import com.bmc.flow.modules.database.entities.records.retro.RetrospectiveEntity;
+import com.bmc.flow.modules.database.entities.resourcing.ScheduleEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +16,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 // required for Postgres as 'user' is reserved
@@ -48,8 +48,17 @@ public class UserEntity extends BaseEntity {
   @ManyToOne
   private SeniorityEntity seniority;
 
+  @OneToOne(mappedBy = "user", cascade = ALL)
+  private ScheduleEntity userSchedule;
+
+  @OneToMany(mappedBy = "projectLead", cascade = ALL)
+  private Set<ProjectEntity> projectLead;
+
   @OneToMany(mappedBy = "createdBy")
   private Set<UserEntity> createdUsers = new HashSet<>();
+
+  @ManyToMany(mappedBy = "users")
+  private Set<AccountEntity> accounts = new HashSet<>();
 
   @ManyToMany(mappedBy = "users")
   private Set<ProjectEntity> projects = new HashSet<>();

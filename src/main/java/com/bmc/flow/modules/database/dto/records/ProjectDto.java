@@ -19,10 +19,12 @@ public class ProjectDto extends BaseRecordDto {
 
   @NotNull
   private UUID accountId;
+  private UUID projectLead;
 
   public ProjectDto(final UUID id, final String name, String description, final String coverImage, final LocalDateTime createdAt,
                     @ProjectedFieldName("createdBy.id") final UUID createdBy,
-                    @ProjectedFieldName("account.id") final UUID accountId) {
+                    @ProjectedFieldName("account.id") final UUID accountId,
+                    @ProjectedFieldName("projectLead.id") final UUID projectLead) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -30,6 +32,7 @@ public class ProjectDto extends BaseRecordDto {
     this.createdAt = createdAt;
     this.createdBy = createdBy;
     this.accountId = accountId;
+    this.projectLead = projectLead;
   }
 
 }

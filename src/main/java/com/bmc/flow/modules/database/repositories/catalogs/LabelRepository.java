@@ -23,4 +23,9 @@ public class LabelRepository implements PanacheRepositoryBase<LabelEntity, UUID>
                .list();
   }
 
+  public Uni<LabelEntity> findEntityByName(final String name) {
+    return this.find("select e " + FROM_ENTITY +
+                         " where e.name =?1", name)
+               .firstResult();
+  }
 }

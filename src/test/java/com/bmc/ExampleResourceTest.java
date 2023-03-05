@@ -15,7 +15,7 @@ class ExampleResourceTest {
   @Disabled("a placeholder to run stress tests manually")
   void testHelloEndpoint() {
 
-    String path = "localhost:8080/v1/seniority/all?pageIx=0&pageSize=100&sortBy=name&sortDir=desc";
+    String path = "localhost:8080/v1/users/project/2ad49ee4-c629-4bb5-9bd4-a59de16a8c72?pageIx=0&pageSize=5&sortBy=name&sortDir=desc";
     RestAssured.get(path);
 
     int warmup = 2000;

@@ -7,14 +7,15 @@ import com.bmc.flow.modules.database.entities.records.ProjectEntity;
 import com.bmc.flow.modules.database.entities.records.SprintEntity;
 import com.bmc.flow.modules.database.entities.records.retro.RetrospectiveEntity;
 import com.bmc.flow.modules.database.repositories.records.SprintRepository;
+import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
+import com.bmc.flow.modules.service.base.PageResult;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.smallrye.mutiny.Uni;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 import static java.lang.Boolean.FALSE;
@@ -29,14 +30,6 @@ public class SprintService extends BasicPersistenceService<SprintDto, SprintEnti
   public SprintService(final SprintRepository repository) {
     super(repository, SprintDto.class);
     this.repository = repository;
-  }
-
-  public Uni<List<SprintDto>> findAllByProjectId(final UUID projectId) {
-    return repository.findAllByProjectId(projectId);
-  }
-
-  public Uni<List<SprintDto>> findAllByBoardId(final UUID boardId) {
-    return repository.findAllByBoardId(boardId);
   }
 
 
@@ -107,4 +100,9 @@ public class SprintService extends BasicPersistenceService<SprintDto, SprintEnti
     }
   }
 
+  public Uni<PageResult<SprintDto>> findAllInCollectionId(final String collectionName, final UUID collectionId, final Pageable pageable) {
+    return findAllPaged(repository.findAllByCollectionId(collectionName, collectionId, pageable.getSort()),
+                        "-find-all-sprints-in-" + collectionName,
+                        pageable.getPage());
+  }
 }

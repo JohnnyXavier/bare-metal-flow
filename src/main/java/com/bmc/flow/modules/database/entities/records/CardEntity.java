@@ -1,6 +1,8 @@
 package com.bmc.flow.modules.database.entities.records;
 
-import com.bmc.flow.modules.database.entities.*;
+import com.bmc.flow.modules.database.entities.AttachmentEntity;
+import com.bmc.flow.modules.database.entities.ChangeLogCardEntity;
+import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.base.BaseRecordEntity;
 import com.bmc.flow.modules.database.entities.catalogs.CardDifficultyEntity;
 import com.bmc.flow.modules.database.entities.catalogs.CardStatusEntity;
@@ -40,6 +42,9 @@ public class CardEntity extends BaseRecordEntity {
   @Column(columnDefinition = "boolean default false")
   private Boolean isCompleted;
 
+  @Column(nullable = true)
+  private Short bugsReported;
+
   // generic tasks, definition of done, definition of ready
   @OneToMany(mappedBy = "card", cascade = ALL)
   private Set<TaskEntity> tasks = new HashSet<>();
@@ -52,6 +57,9 @@ public class CardEntity extends BaseRecordEntity {
 
   @OneToMany(mappedBy = "card", cascade = ALL)
   private Set<ChangeLogCardEntity> changelog = new HashSet<>();
+
+  @OneToMany(mappedBy = "card", cascade = ALL)
+  private Set<CardBugReport> bugReports = new HashSet<>();
 
   @ManyToMany(cascade = ALL)
   @JoinTable(name = "card_attachments", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "attachment_id"))

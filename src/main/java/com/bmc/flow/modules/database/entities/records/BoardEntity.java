@@ -2,7 +2,7 @@ package com.bmc.flow.modules.database.entities.records;
 
 import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.base.BaseRecordEntity;
-import com.bmc.flow.modules.database.entities.catalogs.BoardType;
+import com.bmc.flow.modules.database.entities.catalogs.BoardTypeEntity;
 import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,7 +36,7 @@ public class BoardEntity extends BaseRecordEntity {
   private Set<LabelEntity> labels = new HashSet<>();
 
   @ManyToOne(cascade = ALL)
-  private BoardType boardType;
+  private BoardTypeEntity boardType;
 
   @ManyToOne
   private ProjectEntity project;

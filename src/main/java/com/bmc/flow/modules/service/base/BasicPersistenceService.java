@@ -34,26 +34,31 @@ public abstract class BasicPersistenceService<D, E> {
                      .singleResult();
   }
 
-  //FIXME: create a CotalogPersistence Service so we put findAll there
+  //FIXME: create a CatalogPersistence Service so we put findAll there
   // we don want to expose a findAll for every card or every user, being it paged or not
   public Uni<PageResult<D>> findAll(final Pageable pageable) {
-    return repository.findAll(pageable.getSort())
-                     .project(dtoClass)
-                     .page(pageable.getPage())
-                     .list()
-                     .flatMap(ds -> countAll(dtoClass.getName()).map(count -> new PageResult<>(ds, count, pageable.getPage())));
+    return this.findAllPaged(repository.findAll(pageable.getSort()), "-find-all", pageable.getPage());
+  }
+
+  protected Uni<PageResult<D>> findAllPaged(final PanacheQuery<E> panacheQuery, final String queryName, final Page page) {
+    return panacheQuery.project(dtoClass)
+                       .page(page)
+                       .list()
+                       .flatMap(ds -> countAll(panacheQuery, dtoClass.getName() + queryName)
+                           .map(count -> new PageResult<>(ds, count, page)));
   }
 
   /**
    * This method is public so cache can access it.
    *
-   * @param name this is so the cacheKey is properly generated and distinct for each service caller
+   * @param panacheQuery
+   * @param name         this is so the cacheKey is properly generated and distinct for each service caller
    *
    * @return the count for the given table.
    */
   @CacheResult(cacheName = "count-all", keyGenerator = CountAllCKGen.class)
-  public Uni<Long> countAll(final String name) {
-    return repository.count();
+  public Uni<Long> countAll(final PanacheQuery<E> panacheQuery, final String name) {
+    return panacheQuery.count();
   }
 
   public abstract Uni<D> create(@Valid final D fromDto);
@@ -72,14 +77,5 @@ public abstract class BasicPersistenceService<D, E> {
   }
 
   protected abstract void updateField(final E toUpdate, final String key, final String value);
-
-  protected Uni<PageResult<D>> findAllPaged(final PanacheQuery<E> panacheQuery, final Page page) {
-    return panacheQuery.project(dtoClass)
-                       .page(page)
-                       .list()
-                       .flatMap(ds -> countAll(dtoClass.getName())
-                           .map(count -> new PageResult<>(ds, count, page)));
-
-  }
 
 }

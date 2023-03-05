@@ -3,7 +3,6 @@ package com.bmc.flow.modules.resources.base;
 import io.quarkus.panache.common.Page;
 import io.quarkus.panache.common.Sort;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Optional;
 import java.util.function.ToIntFunction;
@@ -40,7 +39,5 @@ public class Pageable {
     this.page = Optional.ofNullable(pageIx)
                         .map(index -> Page.of(max(index, 0), checkPageSize.applyAsInt(pageSize)))
                         .orElseGet(() -> Page.ofSize(pageSize));
-
   }
-
 }

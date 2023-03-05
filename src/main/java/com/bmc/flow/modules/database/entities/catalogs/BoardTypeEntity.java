@@ -18,7 +18,7 @@ import static javax.persistence.CascadeType.ALL;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class BoardType extends BaseCatalogEntity {
+public class BoardTypeEntity extends BaseCatalogEntity {
 
   @OneToMany(mappedBy = "boardType", cascade = ALL)
   private Set<BoardEntity> board;

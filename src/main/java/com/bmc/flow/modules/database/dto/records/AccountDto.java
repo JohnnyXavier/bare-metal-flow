@@ -6,7 +6,6 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,16 +16,13 @@ import static com.bmc.flow.modules.utilities.DataUtils.getImage;
 @RegisterForReflection
 public class AccountDto extends BaseRecordDto {
 
-  @NotNull
-  private final UUID portfolioId;
 
   public AccountDto(final UUID id, final String name, final String description, final String coverImage, final LocalDateTime createdAt,
-                    @ProjectedFieldName("createdBy.id") final UUID createdBy, @ProjectedFieldName("portfolio.id") final UUID portfolioId) {
+                    @ProjectedFieldName("createdBy.id") final UUID createdBy) {
     this.id = id;
     this.name = name;
     this.coverImage = getImage(coverImage, "ACCOUNT");
     this.description = description;
-    this.portfolioId = portfolioId;
     this.createdBy = createdBy;
     this.createdAt = createdAt;
   }

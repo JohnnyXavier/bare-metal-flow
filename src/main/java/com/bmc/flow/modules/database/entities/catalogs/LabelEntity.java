@@ -40,9 +40,6 @@ public class LabelEntity extends BaseCatalogEntity {
   private Set<BoardEntity> boards = new HashSet<>();
 
   @ManyToMany(mappedBy = "labels")
-  private Set<PortfolioEntity> portfolios = new HashSet<>();
-
-  @ManyToMany(mappedBy = "labels")
   private Set<ProjectEntity> projects = new HashSet<>();
 
   @ManyToMany(mappedBy = "labels")

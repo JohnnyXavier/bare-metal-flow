@@ -4,11 +4,17 @@ import com.bmc.flow.modules.database.dto.UserDto;
 import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.catalogs.SeniorityEntity;
 import com.bmc.flow.modules.database.entities.records.*;
+import com.bmc.flow.modules.database.entities.resourcing.ScheduleEntity;
+import com.bmc.flow.modules.database.entities.resourcing.ShrinkageEntity;
 import com.bmc.flow.modules.database.repositories.UserRepository;
 import com.bmc.flow.modules.database.repositories.records.*;
+import com.bmc.flow.modules.database.repositories.resourcing.ScheduleRepository;
+import com.bmc.flow.modules.database.repositories.resourcing.ShrinkageRepository;
 import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
+import com.bmc.flow.modules.service.catalogs.BoardTypeService;
+import com.bmc.flow.modules.service.catalogs.LabelService;
 import com.bmc.flow.modules.utilities.SecurityUtils;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.smallrye.mutiny.Uni;
@@ -31,39 +37,46 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
 
   private final AccountRepository accountRepo;
 
-  private final PortfolioRepository portfolioRepo;
-
   private final ProjectRepository projectRepo;
 
   private final BoardRepository boardRepo;
 
   private final CardRepository cardRepo;
 
+  private final ScheduleRepository scheduleRepo;
+
   private final CommentRepository commentRepo;
+
+  private final BoardTypeService boardTypeService;
+
+  private final LabelService labelService;
+
+  private final ShrinkageRepository shrinkageRepo;
 
   private final SecurityUtils secUtils;
 
-  public UserService(final UserRepository userRepo, final AccountRepository accountRepo, final PortfolioRepository portfolioRepo,
-                     final ProjectRepository projectRepo, final BoardRepository boardRepo, final CardRepository cardRepo,
-                     final CommentRepository commentRepo, final SecurityUtils secUtils) {
+  public UserService(final UserRepository userRepo, final AccountRepository accountRepo, final ProjectRepository projectRepo,
+                     final BoardRepository boardRepo, final CardRepository cardRepo, final ScheduleRepository scheduleRepo,
+                     final CommentRepository commentRepo, final LabelService labelService, final BoardTypeService boardTypeService,
+                     final ShrinkageRepository shrinkageRepo, final SecurityUtils secUtils) {
     super(userRepo, UserDto.class);
     this.userRepo = userRepo;
     this.accountRepo = accountRepo;
-    this.portfolioRepo = portfolioRepo;
     this.projectRepo = projectRepo;
     this.boardRepo = boardRepo;
     this.cardRepo = cardRepo;
+    this.scheduleRepo = scheduleRepo;
     this.commentRepo = commentRepo;
+    this.boardTypeService = boardTypeService;
+    this.labelService = labelService;
+    this.shrinkageRepo = shrinkageRepo;
     this.secUtils = secUtils;
   }
 
-
-  public Uni<PageResult<UserDto>> findAllByProjectId(final UUID projectId, final Pageable pageable) {
-    return findAllPaged(userRepo.findAllByProjectId(projectId, pageable.getSort()), pageable.getPage());
-  }
-
-  public Uni<PageResult<UserDto>> findAllByBoardId(final UUID boardId, final Pageable pageable) {
-    return findAllPaged(userRepo.findAllByBoardId(boardId, pageable.getSort()), pageable.getPage());
+  public Uni<PageResult<UserDto>> findAllInCollectionId(final String collectionName, final UUID collectionId, final Pageable pageable) {
+    return findAllPaged(userRepo.findAllByCollectionId(collectionName, collectionId, pageable.getSort()),
+                        "-find-all-users-in-" + collectionName,
+                        pageable.getPage());
   }
 
   @ReactiveTransactional
@@ -77,45 +90,43 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     newUser.setEmail(userDto.getEmail());
     newUser.setCallSign(userDto.getCallSign());
     newUser.setActive(true);
-    newUser.setCreatedBy(newUser.getCreatedBy());
 
-    PortfolioEntity newPortfolio = new PortfolioEntity();
-    newPortfolio.setId(randomUUID());
-    newPortfolio.setDescription("default portfolio's description");
-    newPortfolio.setName(newUser.getFirstName() + "'s default portfolio");
-    newPortfolio.setCreatedBy(newUser);
-    newPortfolio.setIsDefault(TRUE);
+    ScheduleEntity userSchedule = new ScheduleEntity();
+    userSchedule.setUser(newUser);
+    userSchedule.setHoursADay((short) 8);
+    userSchedule.setCreatedBy(newUser);
 
-    AccountEntity newAccount = new AccountEntity();
-    newAccount.setId(randomUUID());
-    newAccount.setDescription("default account's description");
-    newAccount.setName(newUser.getFirstName() + "'s default account");
-    newAccount.setPortfolio(newPortfolio);
-    newAccount.setCreatedBy(newUser);
+    AccountEntity firstAccount = new AccountEntity();
+    firstAccount.setId(randomUUID());
+    firstAccount.setDescription("This is your personal account, you can use it to group multiple projects.");
+    firstAccount.setName(newUser.getCallSign() + "'s Personal account");
+    firstAccount.setCreatedBy(newUser);
+    firstAccount.setUsers(Set.of(newUser));
 
-    ProjectEntity newProject = new ProjectEntity();
-    newProject.setId(randomUUID());
-    newProject.setDescription("default project's description");
-    newProject.setName(newUser.getFirstName() + "'s default project");
-    newProject.setAccount(newAccount);
-    newProject.getUsers().add(newUser);
-    newProject.setCreatedBy(newUser);
+    ProjectEntity firstProject = new ProjectEntity();
+    firstProject.setId(randomUUID());
+    firstProject.setDescription("This is your personal project");
+    firstProject.setName(newUser.getCallSign() + "'s personal project");
+    firstProject.setAccount(firstAccount);
+    firstProject.setUsers(Set.of(newUser));
+    firstProject.setProjectLead(newUser);
+    firstProject.setCreatedBy(newUser);
 
-    BoardEntity board = new BoardEntity();
-    board.setId(randomUUID());
-    board.setDescription("default Board's description");
-    board.setName(newUser.getFirstName() + "'s default board");
-    board.setProject(newProject);
-    board.getUsers().add(newUser);
-    board.setCreatedBy(newUser);
+    BoardEntity kanbanBoard = new BoardEntity();
+    kanbanBoard.setId(randomUUID());
+    kanbanBoard.setDescription("This is your personal Board");
+    kanbanBoard.setName(newUser.getCallSign() + "'s personal board");
+    kanbanBoard.setProject(firstProject);
+    kanbanBoard.setUsers(Set.of(newUser));
+    kanbanBoard.setCreatedBy(newUser);
 
     CardEntity newCard = new CardEntity();
     newCard.setId(randomUUID());
-    newCard.setDescription("default card's description");
+    newCard.setDescription("This is a default card description");
     newCard.setName(newUser.getFirstName() + "'s default card");
     newCard.setAssignees(Set.of(newUser));
     newCard.setWatchers(Set.of(newUser));
-    newCard.setBoard(board);
+    newCard.setBoard(kanbanBoard);
     newCard.setDueDate(LocalDateTime.of(2025, 10, 10, 10, 10, 10, 10));
     newCard.setCreatedBy(newUser);
 
@@ -125,15 +136,34 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     newComment.setCard(newCard);
     newComment.setCreatedBy(newUser);
 
-    return userRepo.persist(newUser)
-                   .call(() -> accountRepo.persist(newAccount))
-                   .call(() -> portfolioRepo.persist(newPortfolio))
-                   .call(() -> projectRepo.persist(newProject))
-                   .call(() -> boardRepo.persist(board))
-                   .call(() -> cardRepo.persist(newCard))
-                   .call(() -> commentRepo.persist(newComment))
-                   .invoke(() -> newUser.setCreatedBy(newUser))
-                   .replaceWith(findById(newUser.getId()));
+    Set<ShrinkageEntity> shrinkages = userSchedule.getShrinkages();
+
+    return userRepo
+        .persist(newUser)
+        // persist entities
+        .call(() -> accountRepo.persist(firstAccount))
+        .call(() -> projectRepo.persist(firstProject))
+        .call(() -> boardRepo.persist(kanbanBoard))
+        .call(() -> cardRepo.persist(newCard))
+        .call(() -> commentRepo.persist(newComment))
+        .call(() -> scheduleRepo.persist(userSchedule))
+
+        //update user with attached entities
+        .invoke(() -> newUser.setCreatedBy(newUser))
+        .invoke(() -> newUser.setUserSchedule(userSchedule))
+
+        // update entities with existing system data
+        .chain(() -> boardTypeService.findEntityByName("kanban").invoke(kanbanBoard::setBoardType))
+        .chain(() -> shrinkageRepo.findEntityByName("coffee-break-15-min").invoke(shrinkages::add))
+        .chain(() -> shrinkageRepo.findEntityByName("personal-break-10-min").invoke(shrinkages::add))
+        .chain(() -> shrinkageRepo.findEntityByName("agile-standUp-10-min").invoke(shrinkages::add))
+        .chain(() -> labelService.findEntityByName("personal").invoke(label -> {
+          firstAccount.setLabels(Set.of(label));
+          firstProject.setLabels(Set.of(label));
+          kanbanBoard.setLabels(Set.of(label));
+          newCard.setLabels(Set.of(label));
+        }))
+        .replaceWith(findById(newUser.getId()));
   }
 
   @ReactiveTransactional
@@ -167,4 +197,5 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     }
 
   }
+
 }
