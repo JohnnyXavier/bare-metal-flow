@@ -7,7 +7,6 @@ import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.resources.utils.ResponseUtils;
 import com.bmc.flow.modules.service.records.SprintService;
 import io.smallrye.mutiny.Uni;
-import io.vertx.core.http.HttpServerRequest;
 
 import javax.persistence.NoResultException;
 import javax.validation.constraints.NotNull;
@@ -41,13 +40,11 @@ public class SprintResource extends BasicOpsResource<SprintDto, SprintEntity> {
 
   @GET
   @Path("{collection}/{collectionId}")
-  public Uni<Response> findAllByCollectionId(final String collection, final UUID collectionId, final HttpServerRequest request,
+  public Uni<Response> findAllByCollectionId(final String collection, final UUID collectionId,
                                              @QueryParam(value = "sortBy") @NotNull final String sortBy,
                                              @QueryParam(value = "sortDir") final String sortDir,
                                              @QueryParam(value = "pageIx") final Integer pageIx,
                                              @QueryParam(value = "pageSize") @NotNull final Integer pageSize) {
-    logRequestURI(request);
-
     String collections = SupportedCollections.get(collection);
     if (collections == null) {
       return Uni.createFrom().item(Response.ok().status(NOT_FOUND).build());

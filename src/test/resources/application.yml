@@ -68,7 +68,7 @@ quarkus: # persistence configuration
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
 
     log:
-      sql: true
+      sql: false
       format-sql: true
     database:
       default-schema: public

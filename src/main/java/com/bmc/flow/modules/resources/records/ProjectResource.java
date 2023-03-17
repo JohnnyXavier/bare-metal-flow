@@ -6,7 +6,6 @@ import com.bmc.flow.modules.resources.base.BasicOpsResource;
 import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.records.ProjectService;
 import io.smallrye.mutiny.Uni;
-import io.vertx.core.http.HttpServerRequest;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
@@ -30,24 +29,22 @@ public class ProjectResource extends BasicOpsResource<ProjectDto, ProjectEntity>
 
   @GET
   @Path("createdBy/{userId}")
-  public Uni<Response> findAllCreatedByUserId(final UUID userId, final HttpServerRequest request,
+  public Uni<Response> findAllCreatedByUserId(final UUID userId,
                                               @QueryParam(value = "sortBy") @NotNull final String sortBy,
                                               @QueryParam(value = "sortDir") final String sortDir,
                                               @QueryParam(value = "pageIx") final Integer pageIx,
                                               @QueryParam(value = "pageSize") @NotNull final Integer pageSize) {
-    logRequestURI(request);
     return projectService.findAllByUserIdPaged(userId, new Pageable(sortBy, sortDir, pageIx, pageSize))
                          .map(userDtos -> Response.ok(userDtos).build());
   }
 
   @GET
   @Path("account/{accountId}")
-  public Uni<Response> findAllByAccountId(final UUID accountId, final HttpServerRequest request,
+  public Uni<Response> findAllByAccountId(final UUID accountId,
                                           @QueryParam(value = "sortBy") @NotNull final String sortBy,
                                           @QueryParam(value = "sortDir") final String sortDir,
                                           @QueryParam(value = "pageIx") final Integer pageIx,
                                           @QueryParam(value = "pageSize") @NotNull final Integer pageSize) {
-    logRequestURI(request);
     return projectService.findAllByAccountIdPaged(accountId, new Pageable(sortBy, sortDir, pageIx, pageSize))
                          .map(userDtos -> Response.ok(userDtos).build());
   }

@@ -6,7 +6,6 @@ import com.bmc.flow.modules.resources.base.BasicOpsResource;
 import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.UserService;
 import io.smallrye.mutiny.Uni;
-import io.vertx.core.http.HttpServerRequest;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
@@ -45,12 +44,11 @@ public class UserResource extends BasicOpsResource<UserDto, UserEntity> {
 
   @GET
   @Path("{collection}/{collectionId}")
-  public Uni<Response> findAllByCollectionId(final String collection, final UUID collectionId, final HttpServerRequest request,
+  public Uni<Response> findAllByCollectionId(final String collection, final UUID collectionId,
                                              @QueryParam(value = "sortBy")@NotNull final String sortBy,
                                              @QueryParam(value = "sortDir") final String sortDir,
                                              @QueryParam(value = "pageIx") final Integer pageIx,
                                              @QueryParam(value = "pageSize") @NotNull final Integer pageSize) {
-    logRequestURI(request);
 
     String collections = userSupportedCollections.get(collection);
     if (collections == null) {

@@ -63,7 +63,7 @@ board_type_sprint := ''a0a012b5-313b-4aa7-ad7a-8a664449bd36'';
 
 -- first create the default user to use it as creator of the rest of the domain
 insert into users(id, first_name, last_name, email, call_sign, seniority_id, created_at, updated_at, created_by_id) VALUES
-    (system_user, ''system-user'', '''', ''system-user@bmc-flow.com'', ''the-boss'', null, cre_upd, cre_upd, system_user);
+    (system_user, ''system-user'', '''', ''system-user@bmc-flow.com'', ''System-User'', null, cre_upd, cre_upd, system_user);
 
 -- insert Catalog data
 insert into seniority(id, name, level, description, is_system, created_at, updated_at, created_by_id) VALUES
@@ -162,15 +162,15 @@ insert into users(id, first_name, last_name, email, call_sign, seniority_id, cre
     (gen_random_uuid(), ''first-name-03'', ''last-name-03'', ''email-03@somemail.com'', ''goose'', seniority_jr, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''first-name-04'', ''last-name-04'', ''email-04@somemail.com'', ''iceman'', seniority_jr, cre_upd, cre_upd, system_user);
 
-insert into account(id, name, description, created_at, updated_at, created_by_id) VALUES
-    (account_one, ''default-account'', default_description, cre_upd, cre_upd, system_user),
-    (account_two, ''account-two'', default_description, cre_upd, cre_upd, system_user);
+insert into account(id, name, description, cover_image, created_at, updated_at, created_by_id) VALUES
+    (account_one, ''default-account'', ''system default account'', ''https://robohash.org/'' || account_one, cre_upd, cre_upd, system_user),
+    (account_two, ''account-two'', ''another demo pre created account'', ''https://robohash.org/'' || account_two, cre_upd, cre_upd, system_user);
 
-insert into project(id, name, account_id, description, created_at, updated_at, created_by_id) values
-    (default_project, ''default-project'', account_one, default_description, cre_upd, cre_upd, system_user),
-    (project_two, ''bmc-site'', account_one, default_description, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''bmc-data-pipeline'', account_two, default_description, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''test-project'', account_two, default_description, cre_upd, cre_upd, system_user);
+insert into project(id, name, account_id, description, cover_image, created_at, updated_at, created_by_id) values
+    (default_project, ''default-project'', account_one, default_description, ''https://robohash.org/'' || default_project, cre_upd, cre_upd, system_user),
+    (project_two, ''bmc-site'', account_one, default_description, ''https://robohash.org/'' || default_project, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''bmc-data-pipeline'', account_two, default_description, ''https://robohash.org/'' || gen_random_uuid(), cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''test-project'', account_two, default_description, ''https://robohash.org/'' || gen_random_uuid(), cre_upd, cre_upd, system_user);
 
 insert into board(id, name, description, cover_image, board_type_id, project_id, created_at, updated_at, created_by_id) values
     (default_kanban_board, ''default-kanban-board'', default_description, default_cover_image, board_type_kanban, default_project, cre_upd, cre_upd, system_user),

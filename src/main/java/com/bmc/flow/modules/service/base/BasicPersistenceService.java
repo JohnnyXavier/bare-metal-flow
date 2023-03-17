@@ -5,6 +5,7 @@ import io.quarkus.cache.CacheResult;
 import io.quarkus.hibernate.reactive.panache.PanacheQuery;
 import io.quarkus.hibernate.reactive.panache.PanacheRepositoryBase;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.logging.Log;
 import io.quarkus.panache.common.Page;
 import io.smallrye.mutiny.Uni;
 
@@ -35,7 +36,7 @@ public abstract class BasicPersistenceService<D, E> {
   }
 
   //FIXME: create a CatalogPersistence Service so we put findAll there
-  // we don want to expose a findAll for every card or every user, being it paged or not
+  // we don't want to expose a findAll for every card or every user, being it paged or not
   public Uni<PageResult<D>> findAll(final Pageable pageable) {
     return this.findAllPaged(repository.findAll(pageable.getSort()), "-find-all", pageable.getPage());
   }
@@ -44,7 +45,7 @@ public abstract class BasicPersistenceService<D, E> {
     return panacheQuery.project(dtoClass)
                        .page(page)
                        .list()
-                       .flatMap(ds -> countAll(panacheQuery, dtoClass.getName() + queryName)
+                       .flatMap(ds -> countAll(panacheQuery, dtoClass.getSimpleName() + queryName)
                            .map(count -> new PageResult<>(ds, count, page)));
   }
 
@@ -52,12 +53,13 @@ public abstract class BasicPersistenceService<D, E> {
    * This method is public so cache can access it.
    *
    * @param panacheQuery
-   * @param name         this is so the cacheKey is properly generated and distinct for each service caller
+   * @param cacheKey         this is so the cacheKey is properly generated and distinct for each service caller
    *
    * @return the count for the given table.
    */
   @CacheResult(cacheName = "count-all", keyGenerator = CountAllCKGen.class)
-  public Uni<Long> countAll(final PanacheQuery<E> panacheQuery, final String name) {
+  public Uni<Long> countAll(final PanacheQuery<E> panacheQuery, final String cacheKey) {
+    Log.debugf("added entry to [count all] cache: %s", cacheKey);
     return panacheQuery.count();
   }
 
@@ -78,4 +80,9 @@ public abstract class BasicPersistenceService<D, E> {
 
   protected abstract void updateField(final E toUpdate, final String key, final String value);
 
+  @CacheResult(cacheName = "count-all", keyGenerator = CountAllCKGen.class)
+  public Uni<Long> countAllByUserId(final UUID userId, final String cacheKey) {
+    Log.debugf("added entry to [count all] cache: %s", cacheKey);
+    return repository.count("createdBy.id", userId);
+  }
 }

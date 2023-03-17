@@ -6,7 +6,6 @@ import com.bmc.flow.modules.resources.base.BasicOpsResource;
 import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.records.AccountService;
 import io.smallrye.mutiny.Uni;
-import io.vertx.core.http.HttpServerRequest;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
@@ -29,12 +28,11 @@ public class AccountResource extends BasicOpsResource<AccountDto, AccountEntity>
 
   @GET
   @Path("createdBy/{userId}")
-  public Uni<Response> findAllCreatedByUserId(final UUID userId, final HttpServerRequest request,
+  public Uni<Response> findAllCreatedByUserId(final UUID userId,
                                               @QueryParam(value = "sortBy") @NotNull final String sortBy,
                                               @QueryParam(value = "sortDir") final String sortDir,
                                               @QueryParam(value = "pageIx") final Integer pageIx,
                                               @QueryParam(value = "pageSize") @NotNull final Integer pageSize) {
-    logRequestURI(request);
     return accountService.findAllByUserIdPaged(userId, new Pageable(sortBy, sortDir, pageIx, pageSize))
                          .map(userDtos -> Response.ok(userDtos).build());
   }

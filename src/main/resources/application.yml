@@ -71,7 +71,7 @@ quarkus: # persistence configuration
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     sql-load-script: basic_data.sql
     log:
-      sql: true
+      sql: false
       format-sql: true
     database:
       default-schema: public
@@ -81,18 +81,36 @@ quarkus: # persistence configuration
   http:
     port: 8080
     access-log:
-      enabled: false
+      enabled: true
+  #    cors:
+  #      ~: true
+  #      origins: "http://localhost:3000"
+  #      methods: GET,PUT,POST,DELETE,OPTIONS
+
 
   # log configuration
   log:
     category:
+      "io.vertx.sqlclient.impl":
+        level: ERROR
+      "com.bmc.flow.modules.service.base.CountAllCKGen":
+        level: INFO
       "com.bmc":
         level: DEBUG
+    console:
+      async: true
 
   #   cache configuration
   cache:
     caffeine:
       count-all:
         metrics-enabled: false
-        expire-after-write: 120S
+        expire-after-write: 10S
         initial-capacity: 20
+
+"%dev":
+  quarkus:
+    http:
+      cors:
+        ~: true
+        origins: "/.*/"

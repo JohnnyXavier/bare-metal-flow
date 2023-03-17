@@ -10,8 +10,7 @@ public class CountAllCKGen implements CacheKeyGenerator {
 
   @Override
   public Object generate(final Method method, final Object... methodParams) {
-    String dtoClassName = methodParams[1].toString();
-    String cacheKey = dtoClassName.substring(dtoClassName.lastIndexOf(".")+1);
+    String cacheKey = methodParams[1].toString().toLowerCase();
     log.debugf(":::generated cache key: [%s]", cacheKey);
     return cacheKey;
   }

@@ -3,7 +3,6 @@ package com.bmc.flow.modules.resources.base;
 import com.bmc.flow.modules.resources.utils.ResponseUtils;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import io.smallrye.mutiny.Uni;
-import io.vertx.core.http.HttpServerRequest;
 import io.vertx.pgclient.PgException;
 
 import javax.persistence.NoResultException;
@@ -26,12 +25,10 @@ public abstract class BasicCatalogResource<D, E> extends BasicOpsResource<D, E> 
 
   @GET
   @Path("all")
-  public Uni<Response> findAll(final HttpServerRequest request,
-                               @QueryParam(value = "sortBy") @NotNull final String sortBy,
+  public Uni<Response> findAll(@QueryParam(value = "sortBy") @NotNull final String sortBy,
                                @QueryParam(value = "sortDir") final String sortDir,
                                @QueryParam(value = "pageIx") final Integer pageIx,
                                @QueryParam(value = "pageSize") @NotNull final Integer pageSize) {
-    logRequestURI(request);
     return service.findAll(new Pageable(sortBy, sortDir, pageIx, pageSize))
                   .map(pageResult -> Response.ok(pageResult).build())
                   .onFailure(NoResultException.class).recoverWithItem(Response.status(NOT_FOUND)::build)

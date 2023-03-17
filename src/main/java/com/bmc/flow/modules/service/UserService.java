@@ -89,9 +89,11 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     newUser.setLastName(userDto.getLastName());
     newUser.setEmail(userDto.getEmail());
     newUser.setCallSign(userDto.getCallSign());
+    newUser.setAvatar("https://robohash.org/" + newUser.getId());
     newUser.setActive(true);
 
     ScheduleEntity userSchedule = new ScheduleEntity();
+    userSchedule.setId(randomUUID());
     userSchedule.setUser(newUser);
     userSchedule.setHoursADay((short) 8);
     userSchedule.setCreatedBy(newUser);
@@ -101,6 +103,7 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     firstAccount.setDescription("This is your personal account, you can use it to group multiple projects.");
     firstAccount.setName(newUser.getCallSign() + "'s Personal account");
     firstAccount.setCreatedBy(newUser);
+    firstAccount.setCoverImage("https://robohash.org/" + firstAccount.getId());
     firstAccount.setUsers(Set.of(newUser));
 
     ProjectEntity firstProject = new ProjectEntity();
@@ -108,6 +111,7 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     firstProject.setDescription("This is your personal project");
     firstProject.setName(newUser.getCallSign() + "'s personal project");
     firstProject.setAccount(firstAccount);
+    firstProject.setCoverImage("https://robohash.org/" + firstProject.getId());
     firstProject.setUsers(Set.of(newUser));
     firstProject.setProjectLead(newUser);
     firstProject.setCreatedBy(newUser);

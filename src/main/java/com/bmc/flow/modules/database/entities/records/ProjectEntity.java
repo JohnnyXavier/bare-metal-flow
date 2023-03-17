@@ -26,6 +26,9 @@ public class ProjectEntity extends BaseRecordEntity {
   private Set<BoardEntity> boards = new HashSet<>();
 
   @OneToMany(mappedBy = "project", cascade = ALL)
+  private Set<CardEntity> cards = new HashSet<>();
+
+  @OneToMany(mappedBy = "project", cascade = ALL)
   private Set<RetrospectiveEntity> retroBoards = new HashSet<>();
 
   @ManyToMany(cascade = {PERSIST, MERGE})

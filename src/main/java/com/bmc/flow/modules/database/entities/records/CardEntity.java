@@ -81,6 +81,12 @@ public class CardEntity extends BaseRecordEntity {
   private BoardEntity board;
 
   @ManyToOne
+  private ProjectEntity project;
+
+  @ManyToOne
+  private AccountEntity account;
+
+  @ManyToOne
   private CardTypeEntity cardType;
 
   @ManyToOne

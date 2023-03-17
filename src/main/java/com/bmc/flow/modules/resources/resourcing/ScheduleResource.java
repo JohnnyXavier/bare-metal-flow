@@ -6,7 +6,6 @@ import com.bmc.flow.modules.resources.base.BasicOpsResource;
 import com.bmc.flow.modules.resources.utils.ResponseUtils;
 import com.bmc.flow.modules.service.resourcing.ScheduleService;
 import io.smallrye.mutiny.Uni;
-import io.vertx.core.http.HttpServerRequest;
 
 import javax.persistence.NoResultException;
 import javax.ws.rs.GET;
@@ -30,8 +29,7 @@ public class ScheduleResource extends BasicOpsResource<ScheduleDto, ScheduleEnti
 
   @GET
   @Path("{userId}")
-  public Uni<Response> findByUserId(final UUID userId, final HttpServerRequest request) {
-    logRequestURI(request);
+  public Uni<Response> findByUserId(final UUID userId) {
     return scheduleService.findByUserId(userId)
                           .map(resultDto -> Response.ok(resultDto).build())
                           .onFailure(NoResultException.class).recoverWithItem(Response.status(NOT_FOUND)::build)
@@ -41,8 +39,7 @@ public class ScheduleResource extends BasicOpsResource<ScheduleDto, ScheduleEnti
 
   @GET
   @Path("full/{userId}")
-  public Uni<Response> findFullByUserId(final UUID userId, final HttpServerRequest request) {
-    logRequestURI(request);
+  public Uni<Response> findFullByUserId(final UUID userId) {
     return scheduleService.findFullByUserId(userId)
                           .map(resultDto -> Response.ok(resultDto).build())
                           .onFailure(NoResultException.class).recoverWithItem(Response.status(NOT_FOUND)::build)

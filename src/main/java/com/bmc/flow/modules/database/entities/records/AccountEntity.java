@@ -23,6 +23,9 @@ public class AccountEntity extends BaseRecordEntity {
   @OneToMany(mappedBy = "account", cascade = ALL)
   private Set<ProjectEntity> projects = new HashSet<>();
 
+  @OneToMany(mappedBy = "account", cascade = ALL)
+  private Set<CardEntity> cards = new HashSet<>();
+
   @ManyToMany(cascade = {PERSIST, MERGE})
   @JoinTable(name = "account_labels", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "label_id"))
   private Set<LabelEntity> labels = new HashSet<>();
