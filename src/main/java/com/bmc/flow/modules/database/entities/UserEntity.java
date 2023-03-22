@@ -29,9 +29,7 @@ public class UserEntity extends BaseEntity {
 
   public static final String FIELD_NAME = "user";
 
-  private String firstName;
-
-  private String lastName;
+  private String password;
 
   @NotNull
   private String callSign;

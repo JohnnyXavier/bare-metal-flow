@@ -62,8 +62,8 @@ board_type_sprint := ''a0a012b5-313b-4aa7-ad7a-8a664449bd36'';
 
 
 -- first create the default user to use it as creator of the rest of the domain
-insert into users(id, first_name, last_name, email, call_sign, seniority_id, created_at, updated_at, created_by_id) VALUES
-    (system_user, ''system-user'', '''', ''system-user@bmc-flow.com'', ''System-User'', null, cre_upd, cre_upd, system_user);
+insert into users(id, email, call_sign, password, avatar, seniority_id, created_at, updated_at, created_by_id) VALUES
+    (system_user, ''admin@demo.com'', ''Demo User'', ''admin'', ''https://robohash.org/'' || system_user, null, cre_upd, cre_upd, system_user);
 
 -- insert Catalog data
 insert into seniority(id, name, level, description, is_system, created_at, updated_at, created_by_id) VALUES
@@ -157,10 +157,10 @@ insert into shrinkage(id, name, duration_in_min, percentage, is_system, created_
     (gen_random_uuid(), ''meetings-external-60-min'', 60, null, true, cre_upd, cre_upd, system_user);
 
 -- insert demo data
-insert into users(id, first_name, last_name, email, call_sign, seniority_id, created_at, updated_at, created_by_id) VALUES
-    (user_two, ''first-name-02'', ''last-name-02'', ''email-02@somemail.com'', ''maverick'', seniority_sr, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''first-name-03'', ''last-name-03'', ''email-03@somemail.com'', ''goose'', seniority_jr, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''first-name-04'', ''last-name-04'', ''email-04@somemail.com'', ''iceman'', seniority_jr, cre_upd, cre_upd, system_user);
+insert into users(id, email, call_sign, avatar, seniority_id, password, created_at, updated_at, created_by_id) VALUES
+    (user_two, ''maverick@demo.com'', ''maverick'', ''https://robohash.org/'' || user_two, seniority_sr, ''maverick'', cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''goose@demo.com'', ''goose'', ''https://robohash.org/'' || seniority_jr, seniority_jr, ''goose'', cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''iceman@demo.com'', ''iceman'', ''https://robohash.org/'' || seniority_sr, seniority_jr, ''iceman'', cre_upd, cre_upd, system_user);
 
 insert into account(id, name, description, cover_image, created_at, updated_at, created_by_id) VALUES
     (account_one, ''default-account'', ''system default account'', ''https://robohash.org/'' || account_one, cre_upd, cre_upd, system_user),

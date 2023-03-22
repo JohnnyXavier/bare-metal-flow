@@ -85,9 +85,8 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
 
     UserEntity newUser = new UserEntity();
     newUser.setId(randomUUID());
-    newUser.setFirstName(userDto.getFirstName());
-    newUser.setLastName(userDto.getLastName());
     newUser.setEmail(userDto.getEmail());
+    newUser.setPassword("demo");
     newUser.setCallSign(userDto.getCallSign());
     newUser.setAvatar("https://robohash.org/" + newUser.getId());
     newUser.setActive(true);
@@ -127,7 +126,7 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     CardEntity newCard = new CardEntity();
     newCard.setId(randomUUID());
     newCard.setDescription("This is a default card description");
-    newCard.setName(newUser.getFirstName() + "'s default card");
+    newCard.setName(newUser.getCallSign() + "'s default card");
     newCard.setAssignees(Set.of(newUser));
     newCard.setWatchers(Set.of(newUser));
     newCard.setBoard(kanbanBoard);
@@ -185,8 +184,6 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
 
   public void updateField(final UserEntity toUpdate, final String key, final String value) {
     switch (key) {
-      case "firstName" -> toUpdate.setFirstName(value);
-      case "lastName" -> toUpdate.setLastName(value);
       case "email" -> toUpdate.setEmail(value);
       case "callSign" -> toUpdate.setCallSign(value);
       case "avatar" -> toUpdate.setAvatar(value);

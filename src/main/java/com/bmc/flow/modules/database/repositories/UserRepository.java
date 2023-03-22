@@ -11,8 +11,8 @@ import java.util.UUID;
 @ApplicationScoped
 public class UserRepository implements PanacheRepositoryBase<UserEntity, UUID> {
 
-  private static final String SELECT_DTO = " select e.id, e.firstName, e.lastName, e.email, e.callSign, e.avatar," +
-      " e.isActive, e.createdAt, e.seniority.id";
+  private static final String SELECT_DTO = " select e.id, e.email, e.callSign, e.avatar, e.isActive, e.createdAt," +
+          " e.seniority.id";
 
   private static final String FROM_ENTITY = " from UserEntity e";
 
