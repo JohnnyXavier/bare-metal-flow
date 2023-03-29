@@ -26,13 +26,13 @@ public abstract class BasicPersistenceService<D, E> {
 
   protected BasicPersistenceService(final PanacheRepositoryBase<E, UUID> repository, final Class<D> dtoClass) {
     this.repository = repository;
-    this.dtoClass = dtoClass;
+    this.dtoClass   = dtoClass;
   }
 
   public Uni<D> findById(final UUID id) {
     return repository.find("id", id)
-                     .project(dtoClass)
-                     .singleResult();
+               .project(dtoClass)
+               .singleResult();
   }
 
   //FIXME: create a CatalogPersistence Service so we put findAll there
@@ -41,20 +41,20 @@ public abstract class BasicPersistenceService<D, E> {
     return this.findAllPaged(repository.findAll(pageable.getSort()), "-find-all", pageable.getPage());
   }
 
-  protected Uni<PageResult<D>> findAllPaged(final PanacheQuery<E> panacheQuery, final String queryName, final Page page) {
+  protected Uni<PageResult<D>> findAllPaged(final PanacheQuery<E> panacheQuery, final String queryName,
+                                            final Page page) {
     return panacheQuery.project(dtoClass)
-                       .page(page)
-                       .list()
-                       .flatMap(ds -> countAll(panacheQuery, dtoClass.getSimpleName() + queryName)
-                           .map(count -> new PageResult<>(ds, count, page)));
+               .page(page)
+               .list()
+               .flatMap(ds -> countAll(panacheQuery, dtoClass.getSimpleName() + queryName)
+                                  .map(count -> new PageResult<>(ds, count, page)));
   }
 
   /**
    * This method is public so cache can access it.
    *
-   * @param panacheQuery
-   * @param cacheKey         this is so the cacheKey is properly generated and distinct for each service caller
-   *
+   * @param panacheQuery the actual query
+   * @param cacheKey     this is so the cacheKey is properly generated and distinct for each service caller
    * @return the count for the given table.
    */
   @CacheResult(cacheName = "count-all", keyGenerator = CountAllCKGen.class)
@@ -68,9 +68,9 @@ public abstract class BasicPersistenceService<D, E> {
   @ReactiveTransactional
   public Uni<Void> update(final UUID id, final String key, final String value) {
     return repository.findById(id)
-                     .onItem().ifNull().fail()
-                     .invoke(entityToUpdate -> updateField(entityToUpdate, key, value))
-                     .replaceWith(Uni.createFrom().voidItem());
+               .onItem().ifNull().fail()
+               .invoke(entityToUpdate -> updateField(entityToUpdate, key, value))
+               .replaceWith(Uni.createFrom().voidItem());
   }
 
   @ReactiveTransactional

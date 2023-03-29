@@ -28,7 +28,7 @@ public class ScheduleService extends BasicPersistenceService<ScheduleDto, Schedu
 
   public ScheduleService(final ScheduleRepository scheduleRepo, final ShrinkageRepository shrinkageRepo) {
     super(scheduleRepo, ScheduleDto.class);
-    this.scheduleRepo = scheduleRepo;
+    this.scheduleRepo  = scheduleRepo;
     this.shrinkageRepo = shrinkageRepo;
   }
 
@@ -39,7 +39,7 @@ public class ScheduleService extends BasicPersistenceService<ScheduleDto, Schedu
     newSchedule.setHoursADay(scheduleDto.getHoursADay());
 
     return scheduleRepo.persist(newSchedule)
-                       .replaceWith(findById(newSchedule.getId()));
+               .replaceWith(findById(newSchedule.getId()));
   }
 
   @Override
@@ -59,35 +59,27 @@ public class ScheduleService extends BasicPersistenceService<ScheduleDto, Schedu
   public Uni<FullScheduleDto> findFullByUserId(final UUID userId) {
     FullScheduleDto fullScheduleDto = new FullScheduleDto();
     return scheduleRepo.findFullByUserId(userId)
-                       .invoke(scheduleEntity -> {
-                         fullScheduleDto.setId(scheduleEntity.getId());
-                         fullScheduleDto.setHoursADay(scheduleEntity.getHoursADay());
-                         fullScheduleDto.setCreatedAt(scheduleEntity.getCreatedAt());
-                         fullScheduleDto.setCreatedBy(scheduleEntity.getCreatedBy().getId());
+               .invoke(scheduleEntity -> {
+                 fullScheduleDto.setId(scheduleEntity.getId());
+                 fullScheduleDto.setHoursADay(scheduleEntity.getHoursADay());
+                 fullScheduleDto.setCreatedAt(scheduleEntity.getCreatedAt());
+                 fullScheduleDto.setCreatedBy(scheduleEntity.getCreatedBy().getId());
 
-                         Set<ShrinkageDto> shrinkageDtos =
-                             scheduleEntity.getShrinkages()
-                                           .stream()
-                                           .map(entity -> {
-                                             ShrinkageDto shrinkageDto = new ShrinkageDto();
+                 Set<ShrinkageDto> shrinkageDtos =
+                     scheduleEntity.getShrinkages()
+                         .stream()
+                         .map(entity ->
+                                  new ShrinkageDto(entity.getId(), entity.getName(), "", entity.getDurationInMin(),
+                                      (entity.getPercentage() == null ? 0 : entity.getPercentage()),
+                                      entity.getIsSystem(),
+                                      entity.getCreatedAt(), entity.getCreatedBy().getId())
+                         )
+                         .collect(Collectors.toSet());
 
-                                             shrinkageDto.setId(entity.getId());
-                                             shrinkageDto.setName(entity.getName());
-                                             shrinkageDto.setPercentage(entity.getPercentage() == null ? 0 : entity.getPercentage());
-                                             shrinkageDto.setDurationInMin(entity.getDurationInMin());
-                                             shrinkageDto.setIsSystem(entity.getIsSystem());
-                                             shrinkageDto.setCreatedAt(entity.getCreatedAt());
-                                             shrinkageDto.setCreatedBy(entity.getCreatedBy().getId());
-                                             shrinkageDto.setDescription("");
+                 fullScheduleDto.setShrinkages(shrinkageDtos);
+                 fullScheduleDto.setTotalShrinkageTime();
 
-                                             return shrinkageDto;
-                                           })
-                                           .collect(Collectors.toSet());
-
-                         fullScheduleDto.setShrinkages(shrinkageDtos);
-                         fullScheduleDto.setTotalShrinkageTime();
-
-                       }).replaceWith(fullScheduleDto);
+               }).replaceWith(fullScheduleDto);
 
   }
 }

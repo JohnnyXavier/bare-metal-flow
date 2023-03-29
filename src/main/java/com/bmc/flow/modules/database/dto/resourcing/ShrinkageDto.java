@@ -4,7 +4,6 @@ import com.bmc.flow.modules.database.dto.base.BaseCatalogDto;
 import io.quarkus.hibernate.reactive.panache.common.ProjectedFieldName;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Max;
@@ -15,7 +14,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @RegisterForReflection
-@NoArgsConstructor
 public class ShrinkageDto extends BaseCatalogDto {
 
   @Min(0)

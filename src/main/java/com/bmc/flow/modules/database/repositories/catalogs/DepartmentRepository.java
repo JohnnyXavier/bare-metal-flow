@@ -23,4 +23,10 @@ public class DepartmentRepository implements PanacheRepositoryBase<DepartmentEnt
                .list();
   }
 
+  public Uni<DepartmentEntity> findEntityByName(final String name) {
+    return this.find("select e " + FROM_ENTITY +
+                         " where e.name =?1", name)
+               .firstResult();
+  }
+
 }

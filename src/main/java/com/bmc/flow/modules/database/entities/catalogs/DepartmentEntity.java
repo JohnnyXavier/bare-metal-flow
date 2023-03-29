@@ -10,8 +10,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "department")
@@ -22,8 +21,7 @@ public class DepartmentEntity extends BaseCatalogEntity {
 
   public static final String FIELD_NAME = "department";
 
-  @ManyToMany(cascade = {PERSIST, MERGE})
-  @JoinTable(name = "department_users", joinColumns = @JoinColumn(name = "department_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+  @OneToMany(mappedBy = "department", cascade = ALL)
   private Set<UserEntity> users = new HashSet<>();
 
 }

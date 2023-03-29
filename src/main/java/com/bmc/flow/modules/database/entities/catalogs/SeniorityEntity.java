@@ -21,8 +21,6 @@ import static javax.persistence.CascadeType.ALL;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class SeniorityEntity extends BaseCatalogEntity {
 
-  public static final String FIELD_NAME = "seniority";
-
   @OneToMany(mappedBy = "seniority", cascade = ALL)
   public Set<UserEntity> users = new HashSet<>();
 

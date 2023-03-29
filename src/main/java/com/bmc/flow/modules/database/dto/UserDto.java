@@ -18,37 +18,34 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 @Setter
 @RegisterForReflection
 public class UserDto {
-
-  protected UUID id;
-
+  protected UUID          id;
   protected LocalDateTime createdAt;
-
   @NotNull
   @Email
-  private String email;
+  private   String        email;
   @NotNull
-  private String callSign;
-
-  private String avatar;
-
-  private Boolean isActive;
-
-  private UUID seniorityId;
-
-    @JsonProperty(access = WRITE_ONLY)
-    private String password;
+  private   String        callSign;
+  private   String        avatar;
+  private   Boolean       isActive;
+  private   UUID          seniorityId;
+  private   UUID          departmentId;
+  @JsonProperty(access = WRITE_ONLY)
+  private   String        password;
 
   public UserDto(final UUID id, final String email, final String callSign,
                  final String avatar, final Boolean isActive, final LocalDateTime createdAt,
-                 @ProjectedFieldName("seniority.id") final UUID seniorityId, final String password) {
-    this.id = id;
-    this.callSign = callSign;
-    this.email = email;
-    this.avatar = getImage(avatar, "USER");
-    this.isActive = isActive;
-    this.createdAt = createdAt;
-    this.seniorityId = seniorityId;
-    this.password=password;
+                 @ProjectedFieldName("seniority.id") final UUID seniorityId,
+                 @ProjectedFieldName("department.id") final UUID departmentId,
+                 final String password) {
+    this.id           = id;
+    this.callSign     = callSign;
+    this.email        = email;
+    this.avatar       = getImage(avatar, "USER");
+    this.isActive     = isActive;
+    this.createdAt    = createdAt;
+    this.seniorityId  = seniorityId;
+    this.departmentId = departmentId;
+    this.password     = password;
   }
 
 }

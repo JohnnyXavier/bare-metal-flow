@@ -26,6 +26,7 @@ declare
     default_card_type uuid;
     board_type_kanban uuid;
     board_type_sprint uuid;
+    department_eng uuid;
     default_description varchar;
 begin
 cre_upd := current_timestamp;
@@ -60,10 +61,12 @@ default_card_type := ''2afb2efe-0a46-4787-ad29-f99f88e44809'';
 board_type_kanban := ''10e1cd86-9382-40ea-bbde-76bf48807b62'';
 board_type_sprint := ''a0a012b5-313b-4aa7-ad7a-8a664449bd36'';
 
+department_eng := ''a1f012b5-313b-4aa7-ad7a-8a664449bdd4'';
+
 
 -- first create the default user to use it as creator of the rest of the domain
 insert into users(id, email, call_sign, password, avatar, seniority_id, created_at, updated_at, created_by_id) VALUES
-    (system_user, ''admin@demo.com'', ''Demo User'', ''admin'', ''https://robohash.org/'' || system_user, null, cre_upd, cre_upd, system_user);
+    (system_user, ''admin@demo.com'', ''admin user'', ''admin'', ''https://robohash.org/'' || system_user, null, cre_upd, cre_upd, system_user);
 
 -- insert Catalog data
 insert into seniority(id, name, level, description, is_system, created_at, updated_at, created_by_id) VALUES
@@ -72,7 +75,13 @@ insert into seniority(id, name, level, description, is_system, created_at, updat
     (seniority_jr, ''junior'', 300, ''can achieve simple tasks, requires heavy guidance'', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''semi-sr'', 400, ''can achieve medium complex tasks, requires some guidance'', true, cre_upd, cre_upd, system_user),
     (seniority_sr, ''senior'', 500, ''can achieve highly complex tasks, requires minimum to no guidance'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''architect'', 600, ''can achieve highly complex tasks, can design systems, requires no guidance'', true, cre_upd, cre_upd, system_user);
+    (gen_random_uuid(), ''architect'', 600, ''can achieve highly complex tasks, can design systems, requires no guidance'', true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''guru front end'', 600, ''front end houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''guru back end'', 600, ''back end houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''guru devops end'', 600, ''devops end houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''guru admin end'', 600, ''admin/ops houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user);
+
+update users set seniority_id = (select id from seniority where name = ''architect'') where id = system_user;
 
 insert into label(id, color_hex, description, name, created_at, updated_at, created_by_id) VALUES
     (gen_random_uuid(), ''#0f5772'', ''my personal stuff'', ''personal'', cre_upd, cre_upd, system_user),
@@ -112,7 +121,7 @@ insert into board_type(id, name, description, is_system, created_at, updated_at,
     (board_type_sprint, ''sprint'', ''short iterations in time working style'', true, cre_upd, cre_upd, system_user);
 
 insert into department(id, name, description, is_system, created_at, updated_at, created_by_id) VALUES
-    (gen_random_uuid(), ''engineering'', '''', true, cre_upd, cre_upd, system_user),
+    (department_eng, ''engineering'', '''', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''quality'', '''', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''operations'', '''', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''finance'', '''', true, cre_upd, cre_upd, system_user);
@@ -157,10 +166,14 @@ insert into shrinkage(id, name, duration_in_min, percentage, is_system, created_
     (gen_random_uuid(), ''meetings-external-60-min'', 60, null, true, cre_upd, cre_upd, system_user);
 
 -- insert demo data
-insert into users(id, email, call_sign, avatar, seniority_id, password, created_at, updated_at, created_by_id) VALUES
-    (user_two, ''maverick@demo.com'', ''maverick'', ''https://robohash.org/'' || user_two, seniority_sr, ''maverick'', cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''goose@demo.com'', ''goose'', ''https://robohash.org/'' || seniority_jr, seniority_jr, ''goose'', cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''iceman@demo.com'', ''iceman'', ''https://robohash.org/'' || seniority_sr, seniority_jr, ''iceman'', cre_upd, cre_upd, system_user);
+
+update users set seniority_id = (select id from seniority where name = ''architect''), department_id = department_eng
+where id = system_user;
+
+insert into users(id, email, call_sign, avatar, department_id, seniority_id, password, created_at, updated_at, created_by_id) VALUES
+    (user_two, ''maverick@demo.com'', ''maverick'', ''https://robohash.org/'' || user_two, department_eng, seniority_sr, ''maverick'', cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''goose@demo.com'', ''goose'', ''https://robohash.org/'' || seniority_jr, department_eng, seniority_jr, ''goose'', cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''iceman@demo.com'', ''iceman'', ''https://robohash.org/'' || seniority_sr, department_eng, seniority_jr, ''iceman'', cre_upd, cre_upd, system_user);
 
 insert into account(id, name, description, cover_image, created_at, updated_at, created_by_id) VALUES
     (account_one, ''default-account'', ''system default account'', ''https://robohash.org/'' || account_one, cre_upd, cre_upd, system_user),

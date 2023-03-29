@@ -32,56 +32,39 @@ public class UserEntity extends BaseEntity {
   private String password;
 
   @NotNull
-  private String callSign;
-
+  private String                   callSign;
   @Column(unique = true)
   @Email
-  private String email;
-
-  private String avatar;
-
+  private String                   email;
+  private String                   avatar;
   @Column(columnDefinition = "boolean default true")
-  private boolean isActive;
-
+  private boolean                  isActive;
   @ManyToOne
-  private SeniorityEntity seniority;
-
+  private SeniorityEntity          seniority;
+  @ManyToOne
+  private DepartmentEntity         department;
   @OneToOne(mappedBy = "user", cascade = ALL)
-  private ScheduleEntity userSchedule;
-
+  private ScheduleEntity           userSchedule;
   @OneToMany(mappedBy = "projectLead", cascade = ALL)
-  private Set<ProjectEntity> projectLead;
-
+  private Set<ProjectEntity>       projectLead;
   @OneToMany(mappedBy = "createdBy")
-  private Set<UserEntity> createdUsers = new HashSet<>();
-
+  private Set<UserEntity>          createdUsers      = new HashSet<>();
   @ManyToMany(mappedBy = "users")
-  private Set<AccountEntity> accounts = new HashSet<>();
-
+  private Set<AccountEntity>       accounts          = new HashSet<>();
   @ManyToMany(mappedBy = "users")
-  private Set<ProjectEntity> projects = new HashSet<>();
-
+  private Set<ProjectEntity>       projects          = new HashSet<>();
   @ManyToMany(mappedBy = "users")
-  private Set<BoardEntity> boards = new HashSet<>();
-
+  private Set<BoardEntity>         boards            = new HashSet<>();
   @ManyToMany(mappedBy = "assignees")
-  private Set<CardEntity> assignedCards = new HashSet<>();
-
+  private Set<CardEntity>          assignedCards     = new HashSet<>();
   @ManyToMany(mappedBy = "watchers")
-  private Set<CardEntity> watchingCards = new HashSet<>();
-
-  @ManyToMany(mappedBy = "users")
-  private Set<DepartmentEntity> departments = new HashSet<>();
-
+  private Set<CardEntity>          watchingCards     = new HashSet<>();
   @ManyToMany(mappedBy = "assignedTo")
-  private Set<TaskEntity> tasks = new HashSet<>();
-
+  private Set<TaskEntity>          tasks             = new HashSet<>();
   @ManyToMany(mappedBy = "assignedTo")
-  private Set<RetroActionEntity> retroActions = new HashSet<>();
-
+  private Set<RetroActionEntity>   retroActions      = new HashSet<>();
   @ManyToMany(mappedBy = "attendingUsers")
-  private Set<RetrospectiveEntity> retroBoards = new HashSet<>();
-
+  private Set<RetrospectiveEntity> retroBoards       = new HashSet<>();
   @ManyToMany(mappedBy = "missingUsers")
   private Set<RetrospectiveEntity> missedRetroBoards = new HashSet<>();
 

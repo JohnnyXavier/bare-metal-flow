@@ -71,7 +71,7 @@ quarkus: # persistence configuration
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     sql-load-script: basic_data.sql
     log:
-      sql: false
+      sql: true
       format-sql: true
     database:
       default-schema: public
@@ -114,3 +114,4 @@ quarkus: # persistence configuration
       cors:
         ~: true
         origins: "/.*/"
+        access-control-allow-credentials: true

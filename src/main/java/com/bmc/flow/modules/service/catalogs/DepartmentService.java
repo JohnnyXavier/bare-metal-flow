@@ -5,6 +5,7 @@ import com.bmc.flow.modules.database.entities.catalogs.DepartmentEntity;
 import com.bmc.flow.modules.database.repositories.catalogs.DepartmentRepository;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.utils.CreationUtils;
+import io.quarkus.cache.CacheResult;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.smallrye.mutiny.Uni;
 
@@ -28,6 +29,11 @@ public class DepartmentService extends BasicPersistenceService<DepartmentDto, De
 
     return departmentRepo.persist(newDepartment)
                          .replaceWith(findById(newDepartment.getId()));
+  }
+
+  @CacheResult(cacheName = "department-by-name")
+  public Uni<DepartmentEntity> findEntityByName(final String name) {
+    return departmentRepo.findEntityByName(name);
   }
 
   @Override
