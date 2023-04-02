@@ -6,29 +6,75 @@
 do
 '
 declare
+    --     alpha user ("real" demo user)
+    user_alpha uuid;
+    account_alpha_personal uuid;
+    account_alpha_work uuid;
+    account_alpha_university uuid;
+    project_alpha_college uuid;
+    project_alpha_hobbies uuid;
+    project_alpha_work_client_1 uuid;
+    project_alpha_work_client_2 uuid;
+    project_alpha_work_client_3 uuid;
+    alpha_kanban_board_work_1 uuid;
+    alpha_kanban_board_college_1 uuid;
+    alpha_kanban_board_college_2 uuid;
+    --
     seniority_jr uuid;
     seniority_sr uuid;
+    --
     system_user uuid;
     user_two uuid;
+    user_three uuid;
+    user_four uuid;
+    --
     account_one uuid;
     account_two uuid;
+    --
     default_project uuid;
     project_two uuid;
+    --
     default_kanban_board uuid;
+    --
     default_sprint_board uuid;
+    --
     default_retro_board uuid;
+    --
     default_sprint uuid;
+    --
     default_kanban_card uuid;
     default_sprint_card uuid;
-    default_cover_image varchar;
+    default_cover_image_ varchar;
+    --
     cre_upd timestamp;
+    --
     default_card_status uuid;
     default_card_type uuid;
+    --
     board_type_kanban uuid;
     board_type_sprint uuid;
+    --
     department_eng uuid;
+    --
     default_description varchar;
+    robohash varchar;
+    robohash_default varchar;
 begin
+
+-- alpha
+user_alpha := ''5fca2f0b-0318-4d05-8ee7-e7b9b48bf48d'';
+account_alpha_personal := gen_random_uuid();
+account_alpha_work := gen_random_uuid();
+account_alpha_university := gen_random_uuid();
+project_alpha_college := gen_random_uuid();
+project_alpha_hobbies := gen_random_uuid();
+project_alpha_work_client_1 := gen_random_uuid();
+project_alpha_work_client_2 := gen_random_uuid();
+project_alpha_work_client_3 := gen_random_uuid();
+alpha_kanban_board_work_1 := gen_random_uuid();
+alpha_kanban_board_college_1 := gen_random_uuid();
+alpha_kanban_board_college_2 := gen_random_uuid();
+--
 cre_upd := current_timestamp;
 default_description := ''default description'';
 
@@ -37,6 +83,8 @@ seniority_sr := ''fb408e5b-72f1-42fe-b5b9-4cb802e3daf9'';
 
 system_user := ''7132ad6d-6c39-4ff0-bf7e-e7eb6091f50b'';
 user_two := ''9c540951-b340-46cb-b1be-331f3ef9d8c5'';
+user_three := gen_random_uuid();
+user_four := gen_random_uuid();
 
 account_one := ''a652ad6d-b99a-4ff0-1f7e-e7eb6091f50b'';
 account_two := ''da2836a2-576f-4d8b-8a35-79a15f0b8c88'';
@@ -53,7 +101,9 @@ default_sprint_card := ''fb408e5b-72f1-42fe-b5b9-4cb802e3daf9'';
 
 default_sprint := ''fb408e5b-72f1-42fe-b5b9-4cb802e3daf9'';
 
-default_cover_image := ''https://via.placeholder.com/80?text=BMC+Flow'';
+default_cover_image_ := ''https://via.placeholder.com/80?text=BMC+Flow'';
+robohash := ''https://robohash.org/'';
+robohash_default := ''https://robohash.org/default'';
 
 default_card_status := ''da84184b-2f73-4c74-a2c4-78ec1a2a3fe0'';
 default_card_type := ''2afb2efe-0a46-4787-ad29-f99f88e44809'';
@@ -66,7 +116,7 @@ department_eng := ''a1f012b5-313b-4aa7-ad7a-8a664449bdd4'';
 
 -- first create the default user to use it as creator of the rest of the domain
 insert into users(id, email, call_sign, password, avatar, seniority_id, created_at, updated_at, created_by_id) VALUES
-    (system_user, ''admin@demo.com'', ''admin user'', ''admin'', ''https://robohash.org/'' || system_user, null, cre_upd, cre_upd, system_user);
+    (system_user, ''admin@demo.com'', ''admin user'', ''admin'', robohash || system_user || ''?set=set3'', null, cre_upd, cre_upd, system_user);
 
 -- insert Catalog data
 insert into seniority(id, name, level, description, is_system, created_at, updated_at, created_by_id) VALUES
@@ -80,8 +130,6 @@ insert into seniority(id, name, level, description, is_system, created_at, updat
     (gen_random_uuid(), ''guru back end'', 600, ''back end houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''guru devops end'', 600, ''devops end houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''guru admin end'', 600, ''admin/ops houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user);
-
-update users set seniority_id = (select id from seniority where name = ''architect'') where id = system_user;
 
 insert into label(id, color_hex, description, name, created_at, updated_at, created_by_id) VALUES
     (gen_random_uuid(), ''#0f5772'', ''my personal stuff'', ''personal'', cre_upd, cre_upd, system_user),
@@ -125,7 +173,6 @@ insert into department(id, name, description, is_system, created_at, updated_at,
     (gen_random_uuid(), ''quality'', '''', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''operations'', '''', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''finance'', '''', true, cre_upd, cre_upd, system_user);
-
 
 insert into shrinkage(id, name, duration_in_min, percentage, is_system, created_at, updated_at, created_by_id) VALUES
     (gen_random_uuid(), ''general-05-%'', null, 5, true, cre_upd, cre_upd, system_user),
@@ -171,23 +218,25 @@ update users set seniority_id = (select id from seniority where name = ''archite
 where id = system_user;
 
 insert into users(id, email, call_sign, avatar, department_id, seniority_id, password, created_at, updated_at, created_by_id) VALUES
-    (user_two, ''maverick@demo.com'', ''maverick'', ''https://robohash.org/'' || user_two, department_eng, seniority_sr, ''maverick'', cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''goose@demo.com'', ''goose'', ''https://robohash.org/'' || seniority_jr, department_eng, seniority_jr, ''goose'', cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''iceman@demo.com'', ''iceman'', ''https://robohash.org/'' || seniority_sr, department_eng, seniority_jr, ''iceman'', cre_upd, cre_upd, system_user);
+    (user_two, ''maverick@demo.com'', ''maverick'', robohash || user_two || ''?set=set2'', department_eng, seniority_sr, ''maverick'', cre_upd, cre_upd, system_user),
+    (user_three, ''goose@demo.com'', ''goose'', robohash || seniority_jr || ''?set=set2'', department_eng, seniority_jr, ''goose'', cre_upd, cre_upd, system_user),
+    (user_four, ''iceman@demo.com'', ''iceman'', robohash || seniority_sr || ''?set=set2'', department_eng, seniority_jr, ''iceman'', cre_upd, cre_upd, system_user);
 
 insert into account(id, name, description, cover_image, created_at, updated_at, created_by_id) VALUES
-    (account_one, ''default-account'', ''system default account'', ''https://robohash.org/'' || account_one, cre_upd, cre_upd, system_user),
-    (account_two, ''account-two'', ''another demo pre created account'', ''https://robohash.org/'' || account_two, cre_upd, cre_upd, system_user);
+    (account_one, ''default-account'', ''system default account'', robohash || account_one, cre_upd, cre_upd, system_user),
+    (account_two, ''account-two'', ''another demo pre created account'', robohash || account_two, cre_upd, cre_upd, system_user);
+
 
 insert into project(id, name, account_id, description, cover_image, created_at, updated_at, created_by_id) values
-    (default_project, ''default-project'', account_one, default_description, ''https://robohash.org/'' || default_project, cre_upd, cre_upd, system_user),
-    (project_two, ''bmc-site'', account_one, default_description, ''https://robohash.org/'' || default_project, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''bmc-data-pipeline'', account_two, default_description, ''https://robohash.org/'' || gen_random_uuid(), cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''test-project'', account_two, default_description, ''https://robohash.org/'' || gen_random_uuid(), cre_upd, cre_upd, system_user);
+    (default_project, ''default-project'', account_one, default_description, robohash || default_project, cre_upd, cre_upd, system_user),
+    (project_two, ''bmc-site'', account_one, default_description, robohash || default_project, cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''bmc-data-pipeline'', account_two, default_description, robohash || gen_random_uuid(), cre_upd, cre_upd, system_user),
+    (gen_random_uuid(), ''test-project'', account_two, default_description, robohash || gen_random_uuid(), cre_upd, cre_upd, system_user);
 
 insert into board(id, name, description, cover_image, board_type_id, project_id, created_at, updated_at, created_by_id) values
-    (default_kanban_board, ''default-kanban-board'', default_description, default_cover_image, board_type_kanban, default_project, cre_upd, cre_upd, system_user),
-    (default_sprint_board, ''default-sprint-board'', default_description, default_cover_image, board_type_sprint, default_project, cre_upd, cre_upd, system_user);
+    (default_kanban_board, ''default-kanban-board'', default_description, robohash_default, board_type_kanban, default_project, cre_upd, cre_upd, system_user),
+    (default_sprint_board, ''default-sprint-board'', default_description, robohash_default, board_type_sprint, default_project, cre_upd, cre_upd, system_user);
+
 
 insert into retrospective(id, created_at, updated_at, created_by_id, project_id) VALUES
     (default_retro_board, cre_upd, cre_upd, system_user, default_project);
@@ -196,12 +245,63 @@ insert into sprint(id, created_at, updated_at, goal, name, from_date, to_date, c
     (default_sprint, cre_upd, cre_upd, ''this is a sprint Goal'', ''this is the sprint name'', make_timestamp(2023, 10, 01, 00, 00, 00), make_timestamp(2023, 10, 15, 00, 00, 00), system_user, default_sprint_board, default_project, default_retro_board);
 
 insert into card(id, name, description, cover_image, due_date, board_id, card_status_id, card_type_id, created_at, updated_at, created_by_id) values
-    (default_kanban_card, ''default-card'', default_description, default_cover_image, make_timestamp(2023, 10, 01, 00, 00, 00), default_kanban_board, default_card_status, default_card_type, cre_upd, cre_upd, system_user),
-    (default_sprint_card, ''default-sprint-card'', default_description, default_cover_image, make_timestamp(2023, 10, 01, 00, 00, 00), default_sprint_board, default_card_status, default_card_type, cre_upd, cre_upd, system_user);
+    (default_kanban_card, ''default-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), default_kanban_board, default_card_status, default_card_type, cre_upd, cre_upd, system_user),
+    (default_sprint_card, ''default-sprint-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), default_sprint_board, default_card_status, default_card_type, cre_upd, cre_upd, system_user);
 
 insert into project_users(user_id, project_id) VALUES
     (system_user, default_project),
     (system_user, project_two),
     (user_two, default_project);
+
+-- Alpha data
+insert into users(id, email, call_sign, avatar, department_id, seniority_id, password, created_at, updated_at, created_by_id) VALUES
+    (user_alpha, ''alpha@demo.com'', ''alpha'', ''https://robohash.org/alpha?set=set2'', department_eng, seniority_sr, ''alpha'', cre_upd, cre_upd, user_alpha);
+
+insert into account(id, name, description, cover_image, created_at, updated_at, created_by_id) VALUES
+    (account_alpha_personal, ''personal account'', ''another demo pre created account'', robohash || account_alpha_personal, cre_upd, cre_upd, user_alpha),
+    (account_alpha_university, ''university'', ''another demo pre created account'', robohash || account_alpha_university, cre_upd, cre_upd, user_alpha),
+    (account_alpha_work, ''work'', ''another demo pre created account'', robohash || account_alpha_work, cre_upd, cre_upd, user_alpha);
+
+insert into project(id, name, account_id, description, cover_image, created_at, updated_at, created_by_id) values
+    (project_alpha_college, ''final projects'', account_alpha_university, ''End of year projects'', robohash || project_alpha_college, cre_upd, cre_upd, user_alpha),
+    (gen_random_uuid(), ''summer projects'', account_alpha_university, ''Summer courses'', robohash || ''summer-projects'', cre_upd, cre_upd, user_alpha),
+    (project_alpha_hobbies, ''hobbies'', account_alpha_personal, ''hobbies'', robohash || project_alpha_hobbies, cre_upd, cre_upd, user_alpha),
+    (project_alpha_work_client_1, ''the burger joint'', account_alpha_work, ''burger joint projects'', robohash || project_alpha_work_client_1, cre_upd, cre_upd, user_alpha),
+    (project_alpha_work_client_2, ''android client'', account_alpha_work, ''mobile client projects'', robohash || project_alpha_work_client_2, cre_upd, cre_upd, user_alpha),
+    (project_alpha_work_client_3, ''running & co'', account_alpha_work, ''running & co projects'', robohash || project_alpha_work_client_3, cre_upd, cre_upd, user_alpha);
+
+insert into board(id, name, description, cover_image, board_type_id, project_id, created_at, updated_at, created_by_id) values
+    (alpha_kanban_board_work_1, ''burger shop online'', default_description, robohash_default, board_type_kanban, project_alpha_work_client_1, cre_upd, cre_upd, user_alpha),
+    (gen_random_uuid(), ''payment points'', default_description, robohash_default, board_type_kanban, project_alpha_work_client_1, cre_upd, cre_upd, user_alpha),
+    (gen_random_uuid(), ''world cup 2023'', default_description, robohash_default, board_type_kanban, project_alpha_work_client_2, cre_upd, cre_upd, user_alpha),
+    (gen_random_uuid(), ''marathon 2023'', default_description, robohash_default, board_type_kanban, project_alpha_work_client_3, cre_upd, cre_upd, user_alpha),
+    (gen_random_uuid(), ''arduino'', default_description, robohash_default, board_type_kanban, project_alpha_hobbies, cre_upd, cre_upd, user_alpha),
+    (alpha_kanban_board_college_1, ''electronics'', default_description, robohash_default, board_type_kanban, project_alpha_college, cre_upd, cre_upd, user_alpha),
+    (alpha_kanban_board_college_2, ''mechanics'', default_description, robohash_default, board_type_kanban, project_alpha_college, cre_upd, cre_upd, user_alpha);
+
+insert into card(id, name, description, cover_image, due_date, board_id, card_status_id, card_type_id, created_at, updated_at, created_by_id) values
+    (gen_random_uuid(), ''1st-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, default_card_status, default_card_type, cre_upd, cre_upd, user_alpha),
+    (gen_random_uuid(), ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, default_card_status, default_card_type, cre_upd, cre_upd, user_alpha),
+    (gen_random_uuid(), ''3rd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, default_card_status, default_card_type, cre_upd, cre_upd, user_alpha);
+
+insert into project_users(user_id, project_id) VALUES
+    (user_alpha, project_alpha_work_client_1),
+    (user_alpha, project_alpha_work_client_2),
+    (user_alpha, project_alpha_work_client_3),
+    (user_alpha, project_alpha_college);
+
+
+insert into board_users(board_id, user_id) VALUES
+    (alpha_kanban_board_work_1, user_alpha),
+    (alpha_kanban_board_work_1, user_two),
+    (alpha_kanban_board_work_1, user_three),
+    (alpha_kanban_board_work_1, user_four),
+    (alpha_kanban_board_college_1, user_alpha),
+    (alpha_kanban_board_college_1, system_user),
+    (alpha_kanban_board_college_1, user_four),
+    (alpha_kanban_board_college_1, user_two),
+    (alpha_kanban_board_college_1, user_three),
+    (alpha_kanban_board_college_2, user_two),
+    (alpha_kanban_board_college_2, user_alpha);
 end;
 ';
