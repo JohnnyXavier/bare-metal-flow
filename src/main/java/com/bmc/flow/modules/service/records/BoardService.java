@@ -6,7 +6,9 @@ import com.bmc.flow.modules.database.entities.catalogs.BoardTypeEntity;
 import com.bmc.flow.modules.database.entities.records.BoardEntity;
 import com.bmc.flow.modules.database.entities.records.ProjectEntity;
 import com.bmc.flow.modules.database.repositories.records.BoardRepository;
+import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
+import com.bmc.flow.modules.service.base.PageResult;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.smallrye.mutiny.Uni;
 
@@ -29,6 +31,11 @@ public class BoardService extends BasicPersistenceService<BoardDto, BoardEntity>
 
   public Uni<List<BoardDto>> getAllByProjectId(final UUID projectId) {
     return repository.findAllByProjectId(projectId);
+  }
+
+  public Uni<PageResult<BoardDto>> findAllByUserIdPaged(UUID userId, final Pageable pageable) {
+    return findAllPaged(repository.find("createdBy.id", pageable.getSort(), userId), "-all-boards-by-user",
+        pageable.getPage());
   }
 
   @ReactiveTransactional

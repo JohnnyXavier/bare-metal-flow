@@ -2,6 +2,7 @@ package com.bmc.flow.modules.database.entities.records;
 
 import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.base.BaseRecordEntity;
+import com.bmc.flow.modules.database.entities.catalogs.BoardColumnEntity;
 import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,7 +25,13 @@ public class AccountEntity extends BaseRecordEntity {
   private Set<ProjectEntity> projects = new HashSet<>();
 
   @OneToMany(mappedBy = "account", cascade = ALL)
+  private Set<BoardEntity> boards = new HashSet<>();
+
+  @OneToMany(mappedBy = "account", cascade = ALL)
   private Set<CardEntity> cards = new HashSet<>();
+
+  @OneToMany(mappedBy = "account", cascade = ALL)
+  private Set<BoardColumnEntity> boardColumns = new HashSet<>();
 
   @ManyToMany(cascade = {PERSIST, MERGE})
   @JoinTable(name = "account_labels", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "label_id"))

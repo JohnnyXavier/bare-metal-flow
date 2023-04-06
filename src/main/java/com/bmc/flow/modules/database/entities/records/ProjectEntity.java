@@ -2,6 +2,7 @@ package com.bmc.flow.modules.database.entities.records;
 
 import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.base.BaseRecordEntity;
+import com.bmc.flow.modules.database.entities.catalogs.BoardColumnEntity;
 import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
 import com.bmc.flow.modules.database.entities.records.retro.RetrospectiveEntity;
 import com.bmc.flow.modules.database.entities.resourcing.ScheduleEntryEntity;
@@ -31,20 +32,22 @@ public class ProjectEntity extends BaseRecordEntity {
   @OneToMany(mappedBy = "project", cascade = ALL)
   private Set<RetrospectiveEntity> retroBoards = new HashSet<>();
 
+  @OneToMany(mappedBy = "project", cascade = ALL)
+  private Set<ScheduleEntryEntity> scheduling;
+
+  @OneToMany(mappedBy = "project", cascade = ALL)
+  private Set<BoardColumnEntity> boardColumns = new HashSet<>();
+
   @ManyToMany(cascade = {PERSIST, MERGE})
   @JoinTable(name = "project_users", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
   private Set<UserEntity> users = new HashSet<>();
-
-  @ManyToOne
-  private UserEntity projectLead;
 
   @ManyToMany(cascade = {PERSIST, MERGE})
   @JoinTable(name = "project_labels", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "label_id"))
   private Set<LabelEntity> labels = new HashSet<>();
 
-
-  @OneToMany(mappedBy = "project", cascade = ALL)
-  private Set<ScheduleEntryEntity> scheduling;
+  @ManyToOne
+  private UserEntity projectLead;
 
   @ManyToOne
   private AccountEntity account;

@@ -2,6 +2,7 @@ package com.bmc.flow.modules.database.entities.records;
 
 import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.base.BaseRecordEntity;
+import com.bmc.flow.modules.database.entities.catalogs.BoardColumnEntity;
 import com.bmc.flow.modules.database.entities.catalogs.BoardTypeEntity;
 import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
 import lombok.EqualsAndHashCode;
@@ -22,10 +23,10 @@ import static javax.persistence.CascadeType.*;
 public class BoardEntity extends BaseRecordEntity {
 
   @OneToMany(mappedBy = "board", cascade = ALL)
-  private Set<CardEntity> cards = new HashSet<>();
+  private Set<SprintEntity> sprints = new HashSet<>();
 
   @OneToMany(mappedBy = "board", cascade = ALL)
-  private Set<SprintEntity> sprints = new HashSet<>();
+  private Set<BoardColumnEntity> boardColumns = new HashSet<>();
 
   @ManyToMany(cascade = {PERSIST, MERGE})
   @JoinTable(name = "board_users", joinColumns = @JoinColumn(name = "board_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
@@ -40,5 +41,8 @@ public class BoardEntity extends BaseRecordEntity {
 
   @ManyToOne
   private ProjectEntity project;
+
+  @ManyToOne
+  private AccountEntity account;
 
 }

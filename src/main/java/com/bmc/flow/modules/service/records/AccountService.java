@@ -44,7 +44,8 @@ public class AccountService extends BasicPersistenceService<AccountDto, AccountE
   }
 
   public Uni<PageResult<AccountDto>> findAllByUserIdPaged(final UUID userId, final Pageable pageable) {
-    return super.findAllPaged(accountRepo.findAllCreatedByUserId(userId, pageable.getSort()), "-all-accounts-by-user", pageable.getPage());
+    return findAllPaged(accountRepo.findAllCreatedByUserId(userId, pageable.getSort()), "-all-accounts-by-user",
+        pageable.getPage());
   }
 
   protected void updateField(final AccountEntity toUpdate, final String key, final String value) {

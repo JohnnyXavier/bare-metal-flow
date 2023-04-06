@@ -12,7 +12,7 @@ import java.util.UUID;
 public class UserRepository implements PanacheRepositoryBase<UserEntity, UUID> {
 
   private static final String SELECT_DTO = " select e.id, e.email, e.callSign, e.avatar, e.isActive, e.createdAt," +
-          " e.seniority.id";
+      " e.seniority.id, e.department.id";
 
   private static final String FROM_ENTITY = " from UserEntity e";
 
@@ -55,11 +55,12 @@ public class UserRepository implements PanacheRepositoryBase<UserEntity, UUID> {
    *         projectent2_.id=$1
    * </pre>
    */
-  public PanacheQuery<UserEntity> findAllByCollectionId(final String collectionName, final UUID collectionId, final Sort sort) {
+  public PanacheQuery<UserEntity> findAllByCollectionId(final String collectionName, final UUID collectionId,
+                                                        final Sort sort) {
     return this.find(String.format(SELECT_DTO + FROM_ENTITY +
-                                       " left join e.%s as collection" +
-                                       " where collection.id =?1", collectionName),
-                     sort, collectionId);
+            " left join e.%s as collection" +
+            " where collection.id =?1", collectionName),
+        sort, collectionId);
   }
 
 }

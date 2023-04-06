@@ -75,8 +75,8 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
   public Uni<PageResult<UserDto>> findAllInCollectionId(final String collectionName, final UUID collectionId,
                                                         final Pageable pageable) {
     return findAllPaged(userRepo.findAllByCollectionId(collectionName, collectionId, pageable.getSort()),
-                        "-find-all-users-in-" + collectionName,
-                        pageable.getPage());
+        "-find-all-users-in-" + collectionName,
+        pageable.getPage());
   }
 
   @ReactiveTransactional
@@ -142,33 +142,33 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     Set<ShrinkageEntity> shrinkages = userSchedule.getShrinkages();
 
     return userRepo
-               .persist(newUser)
-               // persist entities
-               .call(() -> accountRepo.persist(firstAccount))
-               .call(() -> projectRepo.persist(firstProject))
-               .call(() -> boardRepo.persist(kanbanBoard))
-               .call(() -> cardRepo.persist(newCard))
-               .call(() -> commentRepo.persist(newComment))
-               .call(() -> scheduleRepo.persist(userSchedule))
+        .persist(newUser)
+        // persist entities
+        .call(() -> accountRepo.persist(firstAccount))
+        .call(() -> projectRepo.persist(firstProject))
+        .call(() -> boardRepo.persist(kanbanBoard))
+        .call(() -> cardRepo.persist(newCard))
+        .call(() -> commentRepo.persist(newComment))
+        .call(() -> scheduleRepo.persist(userSchedule))
 
-               //update user with attached entities
-               .invoke(() -> newUser.setCreatedBy(newUser))
-               .invoke(() -> newUser.setUserSchedule(userSchedule))
+        //update user with attached entities
+        .invoke(() -> newUser.setCreatedBy(newUser))
+        .invoke(() -> newUser.setUserSchedule(userSchedule))
 
-               // update entities with existing system data
-               .chain(() -> seniorityService.findEntityByName("architect").invoke(newUser::setSeniority))
-               .chain(() -> departmentService.findEntityByName("engineering").invoke(newUser::setDepartment))
-               .chain(() -> boardTypeService.findEntityByName("kanban").invoke(kanbanBoard::setBoardType))
-               .chain(() -> shrinkageRepo.findEntityByName("coffee-break-15-min").invoke(shrinkages::add))
-               .chain(() -> shrinkageRepo.findEntityByName("personal-break-10-min").invoke(shrinkages::add))
-               .chain(() -> shrinkageRepo.findEntityByName("agile-standUp-10-min").invoke(shrinkages::add))
-               .chain(() -> labelService.findEntityByName("personal").invoke(label -> {
-                 firstAccount.setLabels(Set.of(label));
-                 firstProject.setLabels(Set.of(label));
-                 kanbanBoard.setLabels(Set.of(label));
-                 newCard.setLabels(Set.of(label));
-               }))
-               .replaceWith(findById(newUser.getId()));
+        // update entities with existing system data
+        .chain(() -> seniorityService.findEntityByName("architect").invoke(newUser::setSeniority))
+        .chain(() -> departmentService.findEntityByName("engineering").invoke(newUser::setDepartment))
+        .chain(() -> boardTypeService.findEntityByName("kanban").invoke(kanbanBoard::setBoardType))
+        .chain(() -> shrinkageRepo.findEntityByName("coffee-break-15-min").invoke(shrinkages::add))
+        .chain(() -> shrinkageRepo.findEntityByName("personal-break-10-min").invoke(shrinkages::add))
+        .chain(() -> shrinkageRepo.findEntityByName("agile-standUp-10-min").invoke(shrinkages::add))
+        .chain(() -> labelService.findEntityByName("personal").invoke(label -> {
+          firstAccount.setLabels(Set.of(label));
+          firstProject.setLabels(Set.of(label));
+          kanbanBoard.setLabels(Set.of(label));
+          newCard.setLabels(Set.of(label));
+        }))
+        .replaceWith(findById(newUser.getId()));
   }
 
   @ReactiveTransactional

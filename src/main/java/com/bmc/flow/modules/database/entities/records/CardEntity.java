@@ -4,10 +4,7 @@ import com.bmc.flow.modules.database.entities.AttachmentEntity;
 import com.bmc.flow.modules.database.entities.ChangeLogCardEntity;
 import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.base.BaseRecordEntity;
-import com.bmc.flow.modules.database.entities.catalogs.CardDifficultyEntity;
-import com.bmc.flow.modules.database.entities.catalogs.CardStatusEntity;
-import com.bmc.flow.modules.database.entities.catalogs.CardTypeEntity;
-import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
+import com.bmc.flow.modules.database.entities.catalogs.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +14,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import static javax.persistence.CascadeType.*;
 
@@ -27,7 +25,15 @@ import static javax.persistence.CascadeType.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class CardEntity extends BaseRecordEntity {
 
-  public static final String FIELD_NAME = "card";
+  @Column(columnDefinition = "boolean default false")
+  private boolean isHead;
+
+  @Column(columnDefinition = "boolean default false")
+  private boolean isTail;
+
+  private UUID prevCard;
+
+  private UUID nextCard;
 
   private LocalDateTime dueDate;
 
@@ -62,7 +68,8 @@ public class CardEntity extends BaseRecordEntity {
   private Set<CardBugReport> bugReports = new HashSet<>();
 
   @ManyToMany(cascade = ALL)
-  @JoinTable(name = "card_attachments", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "attachment_id"))
+  @JoinTable(name = "card_attachments", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name =
+      "attachment_id"))
   private Set<AttachmentEntity> attachments = new HashSet<>();
 
   @ManyToMany(cascade = {PERSIST, MERGE})
@@ -81,6 +88,9 @@ public class CardEntity extends BaseRecordEntity {
   private BoardEntity board;
 
   @ManyToOne
+  private BoardColumnEntity boardColumn;
+
+  @ManyToOne
   private ProjectEntity project;
 
   @ManyToOne
@@ -90,7 +100,7 @@ public class CardEntity extends BaseRecordEntity {
   private CardTypeEntity cardType;
 
   @ManyToOne
-  private CardStatusEntity cardStatus;
+  private StatusEntity cardStatus;
 
   @ManyToOne
   private CardDifficultyEntity cardDifficulty;

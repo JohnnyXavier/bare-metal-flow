@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 @QuarkusTest
@@ -87,6 +89,22 @@ class ExampleResourceTest {
     System.out.println("run 2: processing [" + reqs + "] requests took: " + totalTime + "ms");
     System.out.println("run 2: each request took: " + reqTime + "ms");
     System.out.println("run 2: requests per second: " + reqsSec);
+
+  }
+
+
+  @Test
+  void testLinkedListAndSet(){
+    List<String> stringList =  new LinkedList<>();
+    stringList.add("My");
+    stringList.add("name");
+    stringList.add("is");
+    stringList.add("johnny");
+    stringList.add("xavier");
+
+    stringList.forEach(System.out::println);
+
+
 
   }
 

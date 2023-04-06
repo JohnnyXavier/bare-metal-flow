@@ -1,7 +1,7 @@
 package com.bmc.flow.modules.service.catalogs;
 
 import com.bmc.flow.modules.database.dto.catalogs.CardStatusDto;
-import com.bmc.flow.modules.database.entities.catalogs.CardStatusEntity;
+import com.bmc.flow.modules.database.entities.catalogs.StatusEntity;
 import com.bmc.flow.modules.database.repositories.catalogs.CardStatusRepository;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.utils.CreationUtils;
@@ -12,7 +12,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.validation.Valid;
 
 @ApplicationScoped
-public class CardStatusService extends BasicPersistenceService<CardStatusDto, CardStatusEntity> {
+public class CardStatusService extends BasicPersistenceService<CardStatusDto, StatusEntity> {
 
   private final CardStatusRepository cardStatusRepo;
 
@@ -24,7 +24,7 @@ public class CardStatusService extends BasicPersistenceService<CardStatusDto, Ca
   @ReactiveTransactional
   @Override
   public Uni<CardStatusDto> create(@Valid final CardStatusDto cardStatusDto) {
-    CardStatusEntity newCardStatus = new CardStatusEntity();
+    StatusEntity newCardStatus = new StatusEntity();
     CreationUtils.createBaseCatalogEntity(newCardStatus, cardStatusDto);
 
     return cardStatusRepo.persist(newCardStatus)
@@ -32,7 +32,7 @@ public class CardStatusService extends BasicPersistenceService<CardStatusDto, Ca
   }
 
   @Override
-  protected void updateField(final CardStatusEntity toUpdate, final String key, final String value) {
+  protected void updateField(final StatusEntity toUpdate, final String key, final String value) {
     switch (key) {
       case "name" -> toUpdate.setName(value);
       case "description" -> toUpdate.setDescription(value);

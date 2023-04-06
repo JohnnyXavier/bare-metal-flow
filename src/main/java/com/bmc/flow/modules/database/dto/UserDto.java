@@ -32,6 +32,7 @@ public class UserDto {
   @JsonProperty(access = WRITE_ONLY)
   private   String        password;
 
+  //probably get rid of this one and create a message specific for a userDto with password
   public UserDto(final UUID id, final String email, final String callSign,
                  final String avatar, final Boolean isActive, final LocalDateTime createdAt,
                  @ProjectedFieldName("seniority.id") final UUID seniorityId,
@@ -46,6 +47,21 @@ public class UserDto {
     this.seniorityId  = seniorityId;
     this.departmentId = departmentId;
     this.password     = password;
+  }
+
+  public UserDto(final UUID id, final String email, final String callSign,
+                 final String avatar, final Boolean isActive, final LocalDateTime createdAt,
+                 @ProjectedFieldName("seniority.id") final UUID seniorityId,
+                 @ProjectedFieldName("department.id") final UUID departmentId) {
+    this.id           = id;
+    this.callSign     = callSign;
+    this.email        = email;
+    this.avatar       = getImage(avatar, "USER");
+    this.isActive     = isActive;
+    this.createdAt    = createdAt;
+    this.seniorityId  = seniorityId;
+    this.departmentId = departmentId;
+    this.password     = null;
   }
 
 }

@@ -22,8 +22,6 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class LabelEntity extends BaseCatalogEntity {
 
-  public static final String FIELD_NAME = "label";
-
   //TODO: choose a better DB dataType for hex. Candidate is bytea(hex format) for postgresql
   // https://www.postgresql.org/docs/current/datatype-binary.html#id-1.5.7.12.9
   // ...

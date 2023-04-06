@@ -1,21 +1,22 @@
 package com.bmc.flow.modules.service.records;
 
-import com.bmc.flow.modules.database.dto.records.CardDto;
+import com.bmc.flow.modules.database.dto.records.CardSimpleDto;
 import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.catalogs.CardDifficultyEntity;
-import com.bmc.flow.modules.database.entities.catalogs.CardStatusEntity;
+import com.bmc.flow.modules.database.entities.catalogs.StatusEntity;
 import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
 import com.bmc.flow.modules.database.entities.records.BoardEntity;
 import com.bmc.flow.modules.database.entities.records.CardEntity;
 import com.bmc.flow.modules.database.repositories.catalogs.CardStatusRepository;
 import com.bmc.flow.modules.database.repositories.records.CardRepository;
+import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
+import com.bmc.flow.modules.service.base.PageResult;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.smallrye.mutiny.Uni;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,50 +24,50 @@ import static java.time.LocalDateTime.parse;
 import static java.util.UUID.randomUUID;
 
 @ApplicationScoped
-public class CardService extends BasicPersistenceService<CardDto, CardEntity> {
+public class CardService extends BasicPersistenceService<CardSimpleDto, CardEntity> {
 
   private final CardRepository cardRepo;
 
   private final CardStatusRepository cardStatusRepo;
 
   public CardService(final CardRepository cardRepo, final CardStatusRepository cardStatusRepo) {
-    super(cardRepo, CardDto.class);
-    this.cardRepo = cardRepo;
+    super(cardRepo, CardSimpleDto.class);
+    this.cardRepo       = cardRepo;
     this.cardStatusRepo = cardStatusRepo;
   }
 
-  public Uni<List<CardDto>> findAllCardsByBoardId(final UUID boardId) {
-    return cardRepo.findAllByBoardId(boardId);
+  public Uni<PageResult<CardSimpleDto>> findAllByBoardIdPaged(final UUID boardId, final Pageable pageable) {
+    return findAllPaged(cardRepo.findAllByBoardId(boardId, pageable.getSort()), "-all-cards-by-board",
+        pageable.getPage());
   }
 
   @ReactiveTransactional
-  public Uni<CardDto> create(@Valid final CardDto cardDto) {
+  public Uni<CardSimpleDto> create(@Valid final CardSimpleDto cardSimpleDto) {
 
     UserEntity cardCreator = new UserEntity();
-    cardCreator.setId(cardDto.getCreatedBy());
+    cardCreator.setId(cardSimpleDto.getCreatedBy());
 
     BoardEntity board = new BoardEntity();
-    board.setId(cardDto.getBoardId());
+    board.setId(cardSimpleDto.getBoardId());
 
     CardEntity newCard = new CardEntity();
     newCard.setId(randomUUID());
-    newCard.setName(cardDto.getName());
-    newCard.setDescription(cardDto.getDescription());
+    newCard.setName(cardSimpleDto.getName());
+    newCard.setDescription(cardSimpleDto.getDescription());
     newCard.setCreatedBy(cardCreator);
-    newCard.setDueDate(cardDto.getDueDate());
-    newCard.setCompletedDate(cardDto.getCompletedDate());
+    newCard.setDueDate(cardSimpleDto.getDueDate());
     newCard.setBoard(board);
 
-    Optional.ofNullable(cardDto.getCardStatusId())
-            .ifPresent(statusId -> {
-              CardStatusEntity cardStatus = new CardStatusEntity();
-              cardStatus.setId(statusId);
-              newCard.setCardStatus(cardStatus);
-            });
+    Optional.ofNullable(cardSimpleDto.getCardStatusId())
+        .ifPresent(statusId -> {
+          StatusEntity cardStatus = new StatusEntity();
+          cardStatus.setId(statusId);
+          newCard.setCardStatus(cardStatus);
+        });
 
     return cardRepo.persist(newCard)
-                   //.invoke(() -> newCard.setBoard(board))
-                   .replaceWith(findById(newCard.getId()));
+        //.invoke(() -> newCard.setBoard(board))
+        .replaceWith(findById(newCard.getId()));
   }
 
   @Override
@@ -120,23 +121,23 @@ public class CardService extends BasicPersistenceService<CardDto, CardEntity> {
 
   private void setDifficulty(final CardEntity toUpdate, final String value) {
     Optional.ofNullable(value)
-            .ifPresentOrElse(difficulty -> {
-                               CardDifficultyEntity cardDifficulty = new CardDifficultyEntity();
-                               cardDifficulty.setId(UUID.fromString(difficulty));
-                               toUpdate.setCardDifficulty(cardDifficulty);
-                             },
-                             () -> toUpdate.setCardDifficulty(null));
+        .ifPresentOrElse(difficulty -> {
+              CardDifficultyEntity cardDifficulty = new CardDifficultyEntity();
+              cardDifficulty.setId(UUID.fromString(difficulty));
+              toUpdate.setCardDifficulty(cardDifficulty);
+            },
+            () -> toUpdate.setCardDifficulty(null));
   }
 
 
   private void setStatus(final CardEntity toUpdate, final String value) {
     Optional.ofNullable(value)
-            .ifPresentOrElse(status -> {
-                               CardStatusEntity cardStatus = new CardStatusEntity();
-                               cardStatus.setId(UUID.fromString(status));
-                               toUpdate.setCardStatus(cardStatus);
-                             },
-                             () -> toUpdate.setCardStatus(null));
+        .ifPresentOrElse(status -> {
+              StatusEntity cardStatus = new StatusEntity();
+              cardStatus.setId(UUID.fromString(status));
+              toUpdate.setCardStatus(cardStatus);
+            },
+            () -> toUpdate.setCardStatus(null));
   }
 
   private void removeLabel(final CardEntity toUpdate, final String value) {

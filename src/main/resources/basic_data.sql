@@ -8,17 +8,36 @@ do
 declare
     --     alpha user ("real" demo user)
     user_alpha uuid;
+    --
     account_alpha_personal uuid;
     account_alpha_work uuid;
     account_alpha_university uuid;
+    --
     project_alpha_college uuid;
     project_alpha_hobbies uuid;
     project_alpha_work_client_1 uuid;
     project_alpha_work_client_2 uuid;
     project_alpha_work_client_3 uuid;
+    --
     alpha_kanban_board_work_1 uuid;
     alpha_kanban_board_college_1 uuid;
     alpha_kanban_board_college_2 uuid;
+    --
+    alpha_board_col_new uuid;
+    alpha_board_col_in_pro uuid;
+    alpha_board_col_testing uuid;
+    alpha_board_col_done uuid;
+    --
+    card_trnx_01 uuid;
+    card_trnx_02 uuid;
+    card_trnx_03 uuid;
+    card_trnx_04 uuid;
+    card_trnx_05 uuid;
+    card_trnx_06 uuid;
+    card_trnx_07 uuid;
+    card_trnx_08 uuid;
+    card_trnx_09 uuid;
+    card_trnx_10 uuid;
     --
     seniority_jr uuid;
     seniority_sr uuid;
@@ -48,7 +67,11 @@ declare
     --
     cre_upd timestamp;
     --
-    default_card_status uuid;
+    card_status_new uuid;
+    card_status_in_progress uuid;
+    card_status_testing uuid;
+    card_status_done uuid;
+    --
     default_card_type uuid;
     --
     board_type_kanban uuid;
@@ -63,17 +86,36 @@ begin
 
 -- alpha
 user_alpha := ''5fca2f0b-0318-4d05-8ee7-e7b9b48bf48d'';
+--
 account_alpha_personal := gen_random_uuid();
 account_alpha_work := gen_random_uuid();
 account_alpha_university := gen_random_uuid();
+--
 project_alpha_college := gen_random_uuid();
 project_alpha_hobbies := gen_random_uuid();
 project_alpha_work_client_1 := gen_random_uuid();
 project_alpha_work_client_2 := gen_random_uuid();
 project_alpha_work_client_3 := gen_random_uuid();
+--
 alpha_kanban_board_work_1 := gen_random_uuid();
 alpha_kanban_board_college_1 := gen_random_uuid();
 alpha_kanban_board_college_2 := gen_random_uuid();
+--
+alpha_board_col_new := gen_random_uuid();
+alpha_board_col_in_pro := gen_random_uuid();
+alpha_board_col_testing := gen_random_uuid();
+alpha_board_col_done := gen_random_uuid();
+--
+card_trnx_01 := gen_random_uuid();
+card_trnx_02 := gen_random_uuid();
+card_trnx_03 := gen_random_uuid();
+card_trnx_04 := gen_random_uuid();
+card_trnx_05 := gen_random_uuid();
+card_trnx_06 := gen_random_uuid();
+card_trnx_07 := gen_random_uuid();
+card_trnx_08 := gen_random_uuid();
+card_trnx_09 := gen_random_uuid();
+card_trnx_10 := gen_random_uuid();
 --
 cre_upd := current_timestamp;
 default_description := ''default description'';
@@ -105,7 +147,10 @@ default_cover_image_ := ''https://via.placeholder.com/80?text=BMC+Flow'';
 robohash := ''https://robohash.org/'';
 robohash_default := ''https://robohash.org/default'';
 
-default_card_status := ''da84184b-2f73-4c74-a2c4-78ec1a2a3fe0'';
+card_status_new := gen_random_uuid();
+card_status_in_progress := gen_random_uuid();
+card_status_testing := gen_random_uuid();
+card_status_done := gen_random_uuid();
 default_card_type := ''2afb2efe-0a46-4787-ad29-f99f88e44809'';
 
 board_type_kanban := ''10e1cd86-9382-40ea-bbde-76bf48807b62'';
@@ -139,14 +184,14 @@ insert into label(id, color_hex, description, name, created_at, updated_at, crea
     (gen_random_uuid(), ''#c37900'', ''this is a qa label'', ''qa'', cre_upd, cre_upd, system_user);
 
 insert into card_status(id, name, is_system, created_at, updated_at, created_by_id) values
-    (default_card_status, ''new'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''in progress'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''completed'', true, cre_upd, cre_upd, system_user),
+    (card_status_new, ''new'', true, cre_upd, cre_upd, system_user),
+    (card_status_in_progress, ''in progress'', true, cre_upd, cre_upd, system_user),
+    (card_status_testing, ''testing'', true, cre_upd, cre_upd, system_user),
+    (card_status_done, ''done'', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''blocked'', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''blocked-internal'', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''blocked-external'', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''paused'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''testing'', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''testing-internal'', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''testing-client'', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''backlog'', true, cre_upd, cre_upd, system_user);
@@ -245,8 +290,8 @@ insert into sprint(id, created_at, updated_at, goal, name, from_date, to_date, c
     (default_sprint, cre_upd, cre_upd, ''this is a sprint Goal'', ''this is the sprint name'', make_timestamp(2023, 10, 01, 00, 00, 00), make_timestamp(2023, 10, 15, 00, 00, 00), system_user, default_sprint_board, default_project, default_retro_board);
 
 insert into card(id, name, description, cover_image, due_date, board_id, card_status_id, card_type_id, created_at, updated_at, created_by_id) values
-    (default_kanban_card, ''default-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), default_kanban_board, default_card_status, default_card_type, cre_upd, cre_upd, system_user),
-    (default_sprint_card, ''default-sprint-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), default_sprint_board, default_card_status, default_card_type, cre_upd, cre_upd, system_user);
+    (default_kanban_card, ''default-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), default_kanban_board, card_status_new, default_card_type, cre_upd, cre_upd, system_user),
+    (default_sprint_card, ''default-sprint-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), default_sprint_board, card_status_new, default_card_type, cre_upd, cre_upd, system_user);
 
 insert into project_users(user_id, project_id) VALUES
     (system_user, default_project),
@@ -279,10 +324,24 @@ insert into board(id, name, description, cover_image, board_type_id, project_id,
     (alpha_kanban_board_college_1, ''electronics'', default_description, robohash_default, board_type_kanban, project_alpha_college, cre_upd, cre_upd, user_alpha),
     (alpha_kanban_board_college_2, ''mechanics'', default_description, robohash_default, board_type_kanban, project_alpha_college, cre_upd, cre_upd, user_alpha);
 
-insert into card(id, name, description, cover_image, due_date, board_id, card_status_id, card_type_id, created_at, updated_at, created_by_id) values
-    (gen_random_uuid(), ''1st-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, default_card_status, default_card_type, cre_upd, cre_upd, user_alpha),
-    (gen_random_uuid(), ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, default_card_status, default_card_type, cre_upd, cre_upd, user_alpha),
-    (gen_random_uuid(), ''3rd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, default_card_status, default_card_type, cre_upd, cre_upd, user_alpha);
+insert into board_column(id, created_at, updated_at, created_by_id, account_id, board_id, project_id, status_id) values
+    (alpha_board_col_new, cre_upd, cre_upd, user_alpha, account_alpha_university, alpha_kanban_board_college_1, project_alpha_college, card_status_new),
+    (alpha_board_col_in_pro, cre_upd, cre_upd, user_alpha, account_alpha_university, alpha_kanban_board_college_1, project_alpha_college, card_status_in_progress),
+    (alpha_board_col_testing, cre_upd, cre_upd, user_alpha, account_alpha_university, alpha_kanban_board_college_1, project_alpha_college, card_status_testing),
+    (alpha_board_col_done, cre_upd, cre_upd, user_alpha, account_alpha_university, alpha_kanban_board_college_1, project_alpha_college, card_status_done);
+
+
+insert into card(id, name, description, cover_image, due_date, board_id, board_column_id, card_status_id, card_type_id, created_at, updated_at, created_by_id) values
+    (card_trnx_01, ''1st-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_02, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_03, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_04, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_05, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_in_pro, card_status_in_progress, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_06, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_in_pro, card_status_in_progress, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_07, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_testing, card_status_testing, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_08, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_testing, card_status_testing, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_09, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_10, ''3rd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha);
 
 insert into project_users(user_id, project_id) VALUES
     (user_alpha, project_alpha_work_client_1),
