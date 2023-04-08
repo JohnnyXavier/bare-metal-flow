@@ -20,13 +20,14 @@ public class CardSimpleDto extends BaseRecordDto {
   @NotNull
   private UUID          boardId;
   private LocalDateTime dueDate;
+  private LocalDateTime updatedAt;
   private Boolean       isCompleted;
   private UUID          cardTypeId;
   private UUID          cardStatusId;
   private UUID          cardDifficultyId;
 
   public CardSimpleDto(final UUID id, final String name, final String description, final String coverImage,
-                       final LocalDateTime dueDate, final LocalDateTime createdAt,
+                       final LocalDateTime dueDate, final LocalDateTime createdAt,final LocalDateTime updatedAt,
                        @ProjectedFieldName("createdBy.id") final UUID createdBy,
                        @ProjectedFieldName("board.id") final UUID boardId,
                        @ProjectedFieldName("cardStatus.id") final UUID cardStatusId,
@@ -42,6 +43,7 @@ public class CardSimpleDto extends BaseRecordDto {
     this.cardTypeId       = cardTypeId;
     this.createdBy        = createdBy;
     this.createdAt        = createdAt;
+    this.updatedAt        = updatedAt;
     this.cardDifficultyId = cardDifficultyId;
   }
 

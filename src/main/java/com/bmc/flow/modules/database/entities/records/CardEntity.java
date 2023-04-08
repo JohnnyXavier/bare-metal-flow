@@ -14,7 +14,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import static javax.persistence.CascadeType.*;
 
@@ -25,25 +24,19 @@ import static javax.persistence.CascadeType.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class CardEntity extends BaseRecordEntity {
 
-  @Column(columnDefinition = "boolean default false")
-  private boolean isHead;
-
-  @Column(columnDefinition = "boolean default false")
-  private boolean isTail;
-
-  private UUID prevCard;
-
-  private UUID nextCard;
-
+  /**
+   * this should allow to store relative positions of a few thousand cards without triggering a reshuffle.
+   * with a fairly large gap we may not need to trigger a reordering of cards
+   * if we insert at the tail we can go position + gap
+   * if we insert at the head we can go 0 - gap this will give us 2<sup>63</sup>.-1 on each side of
+   * the zero
+   */
+  private Long          position;
   private LocalDateTime dueDate;
-
   private LocalDateTime completedDate;
-
-  private Duration estimatedTime;
-
-  private Duration loggedTime;
-
-  private Duration remainingTime;
+  private Duration      estimatedTime;
+  private Duration      loggedTime;
+  private Duration      remainingTime;
 
   @Column(columnDefinition = "boolean default false")
   private Boolean isCompleted;

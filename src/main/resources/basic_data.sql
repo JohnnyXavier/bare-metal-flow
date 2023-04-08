@@ -82,6 +82,11 @@ declare
     default_description varchar;
     robohash varchar;
     robohash_default varchar;
+    --
+    lorem_ipsum_10w varchar;
+    lorem_ipsum_20w varchar;
+    lorem_ipsum_1p varchar;
+    lorem_ipsum_3s varchar;
 begin
 
 -- alpha
@@ -116,7 +121,7 @@ card_trnx_07 := gen_random_uuid();
 card_trnx_08 := gen_random_uuid();
 card_trnx_09 := gen_random_uuid();
 card_trnx_10 := gen_random_uuid();
---
+-- alpha END
 cre_upd := current_timestamp;
 default_description := ''default description'';
 
@@ -157,6 +162,11 @@ board_type_kanban := ''10e1cd86-9382-40ea-bbde-76bf48807b62'';
 board_type_sprint := ''a0a012b5-313b-4aa7-ad7a-8a664449bd36'';
 
 department_eng := ''a1f012b5-313b-4aa7-ad7a-8a664449bdd4'';
+
+lorem_ipsum_10w := ''Lorem ipsum dolor sit amet, consectetur adipiscing elit...'';
+lorem_ipsum_20w := ''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'';
+lorem_ipsum_3s := ''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pellentesque habitant morbi tristique senectus et netus. Non arcu risus quis varius quam quisque id diam vel.'';
+lorem_ipsum_1p := ''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pellentesque elit ullamcorper dignissim cras. Posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus semper. Libero enim sed faucibus turpis in eu. Et pharetra pharetra massa massa. Sit amet massa vitae tortor condimentum lacinia quis vel. Ultrices eros in cursus turpis massa. Cras semper auctor neque vitae tempus quam pellentesque. Nisl tincidunt eget nullam non. Quam elementum pulvinar etiam non quam. Semper auctor neque vitae tempus. Quis eleifend quam adipiscing vitae. Turpis egestas integer eget aliquet nibh praesent tristique. At tempor commodo ullamcorper a lacus vestibulum sed arcu. Vivamus at augue eget arcu. Eleifend quam adipiscing vitae proin sagittis nisl rhoncus. Enim ut tellus elementum sagittis. Euismod in pellentesque massa placerat duis ultricies lacus. Augue eget arcu dictum varius duis at. Neque egestas congue quisque egestas.'';
 
 
 -- first create the default user to use it as creator of the rest of the domain
@@ -333,15 +343,15 @@ insert into board_column(id, created_at, updated_at, created_by_id, account_id, 
 
 insert into card(id, name, description, cover_image, due_date, board_id, board_column_id, card_status_id, card_type_id, created_at, updated_at, created_by_id) values
     (card_trnx_01, ''1st-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_02, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_03, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_04, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_05, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_in_pro, card_status_in_progress, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_06, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_in_pro, card_status_in_progress, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_07, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_testing, card_status_testing, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_08, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_testing, card_status_testing, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_09, ''2nd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_10, ''3rd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha);
+    (card_trnx_02, lorem_ipsum_3s, lorem_ipsum_10w, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_03, ''3rd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_04, ''This is a fine nice demonstration card name'', ''the description of this card is a bit longer than the default'', robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_05, lorem_ipsum_20w, lorem_ipsum_3s, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_in_pro, card_status_in_progress, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_06, ''6th-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_in_pro, card_status_in_progress, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_07, ''7th-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_testing, card_status_testing, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_08, ''8th-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_testing, card_status_testing, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_09, ''9th-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_10, ''10th-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha);
 
 insert into project_users(user_id, project_id) VALUES
     (user_alpha, project_alpha_work_client_1),
