@@ -16,8 +16,8 @@ public class BoardTypeRepository implements PanacheRepositoryBase<BoardTypeEntit
 
   public Uni<BoardTypeEntity> findEntityByName(final String name) {
     return this.find("select e " + FROM_ENTITY +
-                         " where e.name =?1", name)
-               .firstResult();
+            " where e.name =?1", name)
+        .firstResult();
   }
 
 }

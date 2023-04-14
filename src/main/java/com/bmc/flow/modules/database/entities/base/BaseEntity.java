@@ -14,6 +14,8 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static javax.persistence.FetchType.LAZY;
+
 @MappedSuperclass
 @Getter
 @Setter
@@ -43,7 +45,7 @@ public abstract class BaseEntity {
   @EqualsAndHashCode.Include
   private UUID id;
 
-  @ManyToOne
+  @ManyToOne(fetch = LAZY)
   private UserEntity createdBy;
 
   @CreationTimestamp

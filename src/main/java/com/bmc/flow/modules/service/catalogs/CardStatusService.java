@@ -1,8 +1,8 @@
 package com.bmc.flow.modules.service.catalogs;
 
-import com.bmc.flow.modules.database.dto.catalogs.CardStatusDto;
+import com.bmc.flow.modules.database.dto.catalogs.StatusDto;
 import com.bmc.flow.modules.database.entities.catalogs.StatusEntity;
-import com.bmc.flow.modules.database.repositories.catalogs.CardStatusRepository;
+import com.bmc.flow.modules.database.repositories.catalogs.StatusRepository;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.utils.CreationUtils;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
@@ -12,20 +12,20 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.validation.Valid;
 
 @ApplicationScoped
-public class CardStatusService extends BasicPersistenceService<CardStatusDto, StatusEntity> {
+public class CardStatusService extends BasicPersistenceService<StatusDto, StatusEntity> {
 
-  private final CardStatusRepository cardStatusRepo;
+  private final StatusRepository cardStatusRepo;
 
-  public CardStatusService(final CardStatusRepository cardStatusRepo) {
-    super(cardStatusRepo, CardStatusDto.class);
+  public CardStatusService(final StatusRepository cardStatusRepo) {
+    super(cardStatusRepo, StatusDto.class);
     this.cardStatusRepo = cardStatusRepo;
   }
 
   @ReactiveTransactional
   @Override
-  public Uni<CardStatusDto> create(@Valid final CardStatusDto cardStatusDto) {
+  public Uni<StatusDto> create(@Valid final StatusDto statusDto) {
     StatusEntity newCardStatus = new StatusEntity();
-    CreationUtils.createBaseCatalogEntity(newCardStatus, cardStatusDto);
+    CreationUtils.createBaseCatalogEntity(newCardStatus, statusDto);
 
     return cardStatusRepo.persist(newCardStatus)
                          .replaceWith(findById(newCardStatus.getId()));
@@ -39,5 +39,9 @@ public class CardStatusService extends BasicPersistenceService<CardStatusDto, St
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
     }
+  }
+
+  public Uni<StatusEntity> findEntityByName(final String name) {
+    return cardStatusRepo.findEntityByName(name);
   }
 }

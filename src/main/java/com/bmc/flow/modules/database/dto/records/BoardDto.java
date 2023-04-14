@@ -18,23 +18,25 @@ import static com.bmc.flow.modules.utilities.DataUtils.getImage;
 public class BoardDto extends BaseRecordDto {
 
   @NotNull
-  private UUID projectId;
-
+  private UUID    projectId;
   @NotNull
-  private UUID boardTypeId;
+  private UUID    boardTypeId;
+  private Boolean isFavorite;
 
   public BoardDto(final UUID id, final String name, final String description, final String coverImage, final LocalDateTime createdAt,
+                  final Boolean isFavorite,
                   @ProjectedFieldName("createdBy.id") final UUID createdBy,
                   @ProjectedFieldName("project.id") final UUID projectId,
                   @ProjectedFieldName("boardType.id") final UUID boardTypeId) {
-    this.id = id;
-    this.name = name;
-    this.coverImage = getImage(coverImage, "BOARD");
+    this.id          = id;
+    this.name        = name;
+    this.coverImage  = getImage(coverImage, "BOARD");
     this.description = description;
     this.boardTypeId = boardTypeId;
-    this.projectId = projectId;
-    this.createdBy = createdBy;
-    this.createdAt = createdAt;
+    this.projectId   = projectId;
+    this.createdBy   = createdBy;
+    this.createdAt   = createdAt;
+    this.isFavorite  = isFavorite;
   }
 
 }

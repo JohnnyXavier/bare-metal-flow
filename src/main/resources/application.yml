@@ -57,7 +57,6 @@ obfuscation:
 
 quarkus: # persistence configuration
   datasource:
-    jdbc: false
     reactive:
       url: vertx-reactive:postgresql://localhost:5432/bare_metal_flow
       max-size: 16

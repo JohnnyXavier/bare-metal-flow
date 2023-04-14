@@ -6,7 +6,7 @@ import lombok.extern.jbosslog.JBossLog;
 import java.lang.reflect.Method;
 
 @JBossLog
-public class CountAllCKGen implements CacheKeyGenerator {
+public class StringCKGen implements CacheKeyGenerator {
 
   @Override
   public Object generate(final Method method, final Object... methodParams) {

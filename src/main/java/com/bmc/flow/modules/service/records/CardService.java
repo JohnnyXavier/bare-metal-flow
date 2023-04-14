@@ -1,19 +1,23 @@
 package com.bmc.flow.modules.service.records;
 
+import com.bmc.flow.modules.database.dto.records.CardLabelDto;
 import com.bmc.flow.modules.database.dto.records.CardSimpleDto;
 import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.catalogs.CardDifficultyEntity;
-import com.bmc.flow.modules.database.entities.catalogs.StatusEntity;
 import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
+import com.bmc.flow.modules.database.entities.catalogs.StatusEntity;
 import com.bmc.flow.modules.database.entities.records.BoardEntity;
 import com.bmc.flow.modules.database.entities.records.CardEntity;
-import com.bmc.flow.modules.database.repositories.catalogs.CardStatusRepository;
+import com.bmc.flow.modules.database.entities.records.CardLabelEntity;
+import com.bmc.flow.modules.database.repositories.catalogs.StatusRepository;
 import com.bmc.flow.modules.database.repositories.records.CardRepository;
 import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.smallrye.mutiny.Uni;
+import org.hibernate.reactive.common.ResultSetMapping;
+import org.hibernate.reactive.mutiny.Mutiny;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.validation.Valid;
@@ -28,17 +32,61 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
 
   private final CardRepository cardRepo;
 
-  private final CardStatusRepository cardStatusRepo;
+  private final StatusRepository cardStatusRepo;
 
-  public CardService(final CardRepository cardRepo, final CardStatusRepository cardStatusRepo) {
+
+  private final Mutiny.Session session;
+
+  public CardService(final CardRepository cardRepo, final StatusRepository cardStatusRepo, Mutiny.Session session) {
     super(cardRepo, CardSimpleDto.class);
     this.cardRepo       = cardRepo;
     this.cardStatusRepo = cardStatusRepo;
+    this.session        = session;
+  }
+
+  @Override
+  public Uni<CardSimpleDto> findById(UUID id) {
+    ResultSetMapping<CardLabelDto> resultSetMapping2 = session.getResultSetMapping(CardLabelDto.class, "cardLabelMapping");
+
+    return cardRepo.find("id", id)
+        .project(CardSimpleDto.class)
+        .singleResult().onItem()
+        .ifNotNull().call(card -> session.createNativeQuery(
+                "select cl.card_id, cl.label_id, l.name, l.description, l.color_hex from card_label cl" +
+                    " join label l on l.id = cl.label_id" +
+                    " where cl.card_id= '" + id + "'"
+                , resultSetMapping2)
+            .getResultList()
+            .call(cardLabelDtos -> Uni.createFrom().item(cardLabelDtos
+                .stream()
+                .map(cardLabelDto -> {
+                  if (cardLabelDto.getCardId().equals(card.getId())) {
+                    card.getLabels().add(cardLabelDto);
+                  }
+                  return null;
+                }).toList())));
   }
 
   public Uni<PageResult<CardSimpleDto>> findAllByBoardIdPaged(final UUID boardId, final Pageable pageable) {
+    ResultSetMapping<CardLabelDto> resultSetMapping2 = session.getResultSetMapping(CardLabelDto.class, "cardLabelMapping");
+
     return findAllPaged(cardRepo.findAllByBoardId(boardId, pageable.getSort()), "-all-cards-by-board",
-        pageable.getPage());
+        pageable.getPage())
+        .onItem()
+        .ifNotNull().call(result -> session.createNativeQuery(
+                "select cl.card_id, cl.label_id, l.name, l.description, l.color_hex from card_label cl" +
+                    " join label l on l.id = cl.label_id" +
+                    " where cl.board_id= '" + boardId + "'"
+                , resultSetMapping2)
+            .getResultList()
+            .call(cardLabelDtos -> Uni.createFrom().item(cardLabelDtos
+                .stream()
+                .map(cardLabelDto -> {
+                  result.getResultSet().forEach(cardSimpleDto -> {
+                    if (cardLabelDto.getCardId().equals(cardSimpleDto.getId())) {cardSimpleDto.getLabels().add(cardLabelDto);}
+                  });
+                  return null;
+                }).toList())));
   }
 
   @ReactiveTransactional
@@ -151,7 +199,11 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
     LabelEntity label = new LabelEntity();
     label.setId(UUID.fromString(value));
 
-    toUpdate.getLabels().add(label);
+    CardLabelEntity cardLabel = new CardLabelEntity();
+    cardLabel.setLabel(label);
+    cardLabel.setCard(toUpdate);
+
+    toUpdate.getLabels().add(cardLabel);
   }
 
 }

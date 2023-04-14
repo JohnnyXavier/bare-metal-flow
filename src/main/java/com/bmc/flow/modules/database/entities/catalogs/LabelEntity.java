@@ -1,17 +1,21 @@
 package com.bmc.flow.modules.database.entities.catalogs;
 
 import com.bmc.flow.modules.database.entities.base.BaseCatalogEntity;
-import com.bmc.flow.modules.database.entities.records.*;
+import com.bmc.flow.modules.database.entities.records.AccountEntity;
 import com.bmc.flow.modules.database.entities.records.BoardEntity;
+import com.bmc.flow.modules.database.entities.records.CardLabelEntity;
+import com.bmc.flow.modules.database.entities.records.ProjectEntity;
 import com.bmc.flow.modules.database.entities.records.retro.RetroActionEntity;
 import com.bmc.flow.modules.database.entities.records.retro.RetrospectiveEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +24,8 @@ import java.util.Set;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@NaturalIdCache
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class LabelEntity extends BaseCatalogEntity {
 
   //TODO: choose a better DB dataType for hex. Candidate is bytea(hex format) for postgresql
@@ -28,8 +34,11 @@ public class LabelEntity extends BaseCatalogEntity {
   // @Column(columnDefinition = "varchar", length = 4)
   private String colorHex;
 
-  @ManyToMany(mappedBy = "labels")
-  private Set<CardEntity> cards = new HashSet<>();
+  @NaturalId
+  private String name;
+
+  @OneToMany(mappedBy = "label", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<CardLabelEntity> cards = new HashSet<>();
 
   @ManyToMany(mappedBy = "labels")
   private Set<AccountEntity> accounts = new HashSet<>();

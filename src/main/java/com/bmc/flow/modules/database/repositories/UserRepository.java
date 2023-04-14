@@ -55,8 +55,7 @@ public class UserRepository implements PanacheRepositoryBase<UserEntity, UUID> {
    *         projectent2_.id=$1
    * </pre>
    */
-  public PanacheQuery<UserEntity> findAllByCollectionId(final String collectionName, final UUID collectionId,
-                                                        final Sort sort) {
+  public PanacheQuery<UserEntity> findAllByCollectionId(final String collectionName, final UUID collectionId, final Sort sort) {
     return this.find(String.format(SELECT_DTO + FROM_ENTITY +
             " left join e.%s as collection" +
             " where collection.id =?1", collectionName),

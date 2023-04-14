@@ -6,7 +6,6 @@ import com.bmc.flow.modules.database.entities.catalogs.SeniorityEntity;
 import com.bmc.flow.modules.database.entities.records.*;
 import com.bmc.flow.modules.database.entities.records.retro.RetroActionEntity;
 import com.bmc.flow.modules.database.entities.records.retro.RetrospectiveEntity;
-import com.bmc.flow.modules.database.entities.resourcing.ScheduleEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +17,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 // required for Postgres as 'user' is reserved
@@ -39,33 +39,33 @@ public class UserEntity extends BaseEntity {
   private String                   avatar;
   @Column(columnDefinition = "boolean default true")
   private boolean                  isActive;
-  @ManyToOne
+  @ManyToOne(fetch = LAZY)
   private SeniorityEntity          seniority;
-  @ManyToOne
+  @ManyToOne(fetch = LAZY)
   private DepartmentEntity         department;
-  @OneToOne(mappedBy = "user", cascade = ALL)
-  private ScheduleEntity           userSchedule;
-  @OneToMany(mappedBy = "projectLead", cascade = ALL)
+//  @OneToOne(mappedBy = "user", cascade = ALL, fetch = LAZY)
+//  private ScheduleEntity           userSchedule;
+  @OneToMany(mappedBy = "projectLead", cascade = ALL, fetch = LAZY)
   private Set<ProjectEntity>       projectLead;
-  @OneToMany(mappedBy = "createdBy")
+  @OneToMany(mappedBy = "createdBy", fetch = LAZY)
   private Set<UserEntity>          createdUsers      = new HashSet<>();
-  @ManyToMany(mappedBy = "users")
+  @ManyToMany(mappedBy = "users", fetch = LAZY)
   private Set<AccountEntity>       accounts          = new HashSet<>();
-  @ManyToMany(mappedBy = "users")
+  @ManyToMany(mappedBy = "users", fetch = LAZY)
   private Set<ProjectEntity>       projects          = new HashSet<>();
-  @ManyToMany(mappedBy = "users")
+  @ManyToMany(mappedBy = "users", fetch = LAZY)
   private Set<BoardEntity>         boards            = new HashSet<>();
-  @ManyToMany(mappedBy = "assignees")
+  @ManyToMany(mappedBy = "assignees", fetch = LAZY)
   private Set<CardEntity>          assignedCards     = new HashSet<>();
-  @ManyToMany(mappedBy = "watchers")
+  @ManyToMany(mappedBy = "watchers", fetch = LAZY)
   private Set<CardEntity>          watchingCards     = new HashSet<>();
-  @ManyToMany(mappedBy = "assignedTo")
+  @ManyToMany(mappedBy = "assignedTo", fetch = LAZY)
   private Set<TaskEntity>          tasks             = new HashSet<>();
-  @ManyToMany(mappedBy = "assignedTo")
+  @ManyToMany(mappedBy = "assignedTo", fetch = LAZY)
   private Set<RetroActionEntity>   retroActions      = new HashSet<>();
-  @ManyToMany(mappedBy = "attendingUsers")
+  @ManyToMany(mappedBy = "attendingUsers", fetch = LAZY)
   private Set<RetrospectiveEntity> retroBoards       = new HashSet<>();
-  @ManyToMany(mappedBy = "missingUsers")
+  @ManyToMany(mappedBy = "missingUsers", fetch = LAZY)
   private Set<RetrospectiveEntity> missedRetroBoards = new HashSet<>();
 
 }

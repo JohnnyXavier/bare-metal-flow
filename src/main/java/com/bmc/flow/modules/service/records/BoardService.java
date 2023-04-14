@@ -58,7 +58,7 @@ public class BoardService extends BasicPersistenceService<BoardDto, BoardEntity>
     board.setCreatedBy(boardCreator);
 
     return repository.persist(board)
-                     .replaceWith(findById(board.getId()));
+        .replaceWith(findById(board.getId()));
   }
 
   @Override
@@ -67,6 +67,7 @@ public class BoardService extends BasicPersistenceService<BoardDto, BoardEntity>
       case "name" -> toUpdate.setName(value);
       case "description" -> toUpdate.setDescription(value);
       case "coverImage" -> toUpdate.setCoverImage(value);
+      case "isFavorite" -> toUpdate.setIsFavorite(Boolean.valueOf(value));
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
     }

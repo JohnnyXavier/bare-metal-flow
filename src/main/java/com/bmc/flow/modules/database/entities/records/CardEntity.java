@@ -1,10 +1,14 @@
 package com.bmc.flow.modules.database.entities.records;
 
+import com.bmc.flow.modules.database.dto.records.CardSimpleDto;
 import com.bmc.flow.modules.database.entities.AttachmentEntity;
 import com.bmc.flow.modules.database.entities.ChangeLogCardEntity;
 import com.bmc.flow.modules.database.entities.UserEntity;
-import com.bmc.flow.modules.database.entities.base.BaseRecordEntity;
-import com.bmc.flow.modules.database.entities.catalogs.*;
+import com.bmc.flow.modules.database.entities.base.BaseEntity;
+import com.bmc.flow.modules.database.entities.catalogs.BoardColumnEntity;
+import com.bmc.flow.modules.database.entities.catalogs.CardDifficultyEntity;
+import com.bmc.flow.modules.database.entities.catalogs.CardTypeEntity;
+import com.bmc.flow.modules.database.entities.catalogs.StatusEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +18,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import static javax.persistence.CascadeType.*;
 
@@ -22,16 +27,36 @@ import static javax.persistence.CascadeType.*;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class CardEntity extends BaseRecordEntity {
+@SqlResultSetMapping(name = "cardMapping",
+    classes = {
+        @ConstructorResult(targetClass = CardSimpleDto.class,
+            columns = {
+                @ColumnResult(name = "id", type = UUID.class),
+                @ColumnResult(name = "name"),
+                @ColumnResult(name = "description"),
+                @ColumnResult(name = "created_at", type = LocalDateTime.class)}
+        )}
+)
+public class CardEntity extends BaseEntity {
 
   /**
-   * this should allow to store relative positions of a few thousand cards without triggering a reshuffle.
-   * with a fairly large gap we may not need to trigger a reordering of cards
-   * if we insert at the tail we can go position + gap
-   * if we insert at the head we can go 0 - gap this will give us 2<sup>63</sup>.-1 on each side of
-   * the zero
+   * this should allow to store relative positions of a few thousand cards without triggering a reshuffle. with a fairly large gap we may
+   * not need to trigger a reordering of cards if we insert at the tail we can go position + gap if we insert at the head we can go 0 - gap
+   * this will give us 2<sup>63</sup>.-1 on each side of the zero
    */
-  private Long          position;
+  private Long position;
+
+  @Column(length = 512)
+  private String name;
+
+  @Column(columnDefinition = "text")
+  private String description;
+
+  // FIXME:
+  //  maybe make an attachment entity that will have
+  //  name | type(img/vid/doc/text/link/etc) | url/src @ | sizeX | sizeY | sizeBytes |
+  @Column(length = 1024)
+  private String        coverImage;
   private LocalDateTime dueDate;
   private LocalDateTime completedDate;
   private Duration      estimatedTime;
@@ -73,9 +98,8 @@ public class CardEntity extends BaseRecordEntity {
   @JoinTable(name = "card_users_watchers", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
   private Set<UserEntity> watchers = new HashSet<>();
 
-  @ManyToMany(cascade = {PERSIST, MERGE})
-  @JoinTable(name = "card_labels", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "label_id"))
-  private Set<LabelEntity> labels = new HashSet<>();
+  @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<CardLabelEntity> labels = new HashSet<>();
 
   @ManyToOne
   private BoardEntity board;

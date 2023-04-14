@@ -87,6 +87,10 @@ declare
     lorem_ipsum_20w varchar;
     lorem_ipsum_1p varchar;
     lorem_ipsum_3s varchar;
+    --
+    label_pers uuid;
+    label_be uuid;
+    label_fe uuid;
 begin
 
 -- alpha
@@ -103,7 +107,7 @@ project_alpha_work_client_2 := gen_random_uuid();
 project_alpha_work_client_3 := gen_random_uuid();
 --
 alpha_kanban_board_work_1 := gen_random_uuid();
-alpha_kanban_board_college_1 := gen_random_uuid();
+alpha_kanban_board_college_1 := ''5fca2f0b-0318-4d05-8ee7-e7b9b48bf401'';
 alpha_kanban_board_college_2 := gen_random_uuid();
 --
 alpha_board_col_new := gen_random_uuid();
@@ -168,6 +172,9 @@ lorem_ipsum_20w := ''Lorem ipsum dolor sit amet, consectetur adipiscing elit, se
 lorem_ipsum_3s := ''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pellentesque habitant morbi tristique senectus et netus. Non arcu risus quis varius quam quisque id diam vel.'';
 lorem_ipsum_1p := ''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pellentesque elit ullamcorper dignissim cras. Posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus semper. Libero enim sed faucibus turpis in eu. Et pharetra pharetra massa massa. Sit amet massa vitae tortor condimentum lacinia quis vel. Ultrices eros in cursus turpis massa. Cras semper auctor neque vitae tempus quam pellentesque. Nisl tincidunt eget nullam non. Quam elementum pulvinar etiam non quam. Semper auctor neque vitae tempus. Quis eleifend quam adipiscing vitae. Turpis egestas integer eget aliquet nibh praesent tristique. At tempor commodo ullamcorper a lacus vestibulum sed arcu. Vivamus at augue eget arcu. Eleifend quam adipiscing vitae proin sagittis nisl rhoncus. Enim ut tellus elementum sagittis. Euismod in pellentesque massa placerat duis ultricies lacus. Augue eget arcu dictum varius duis at. Neque egestas congue quisque egestas.'';
 
+label_pers := gen_random_uuid();
+label_be := gen_random_uuid();
+label_fe := gen_random_uuid();
 
 -- first create the default user to use it as creator of the rest of the domain
 insert into users(id, email, call_sign, password, avatar, seniority_id, created_at, updated_at, created_by_id) VALUES
@@ -186,12 +193,12 @@ insert into seniority(id, name, level, description, is_system, created_at, updat
     (gen_random_uuid(), ''guru devops end'', 600, ''devops end houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user),
     (gen_random_uuid(), ''guru admin end'', 600, ''admin/ops houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user);
 
-insert into label(id, color_hex, description, name, created_at, updated_at, created_by_id) VALUES
-    (gen_random_uuid(), ''#0f5772'', ''my personal stuff'', ''personal'', cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''#0f5772'', ''this is a back-end label'', ''back-end'', cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''#bee4ff'', ''this is a front-end label'', ''front-end'', cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''#ffdba3'', ''this is a devops label'', ''devops'', cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''#c37900'', ''this is a qa label'', ''qa'', cre_upd, cre_upd, system_user);
+insert into label(id, color_hex, description, name, created_at, updated_at, created_by_id, is_system) VALUES
+    (label_pers, ''#2c7be5'', ''my personal stuff'', ''personal'', cre_upd, cre_upd, system_user, true),
+    (label_be, ''#27bcfd'', ''this is a back-end label'', ''back-end'', cre_upd, cre_upd, system_user, true),
+    (label_fe, ''#00d27a'', ''this is a front-end label'', ''front-end'', cre_upd, cre_upd, system_user, true),
+    (gen_random_uuid(), ''#ffdba3'', ''this is a devops label'', ''devops'', cre_upd, cre_upd, system_user, true),
+    (gen_random_uuid(), ''#c37900'', ''this is a qa label'', ''qa'', cre_upd, cre_upd, system_user, true);
 
 insert into card_status(id, name, is_system, created_at, updated_at, created_by_id) values
     (card_status_new, ''new'', true, cre_upd, cre_upd, system_user),
@@ -352,6 +359,17 @@ insert into card(id, name, description, cover_image, due_date, board_id, board_c
     (card_trnx_08, ''8th-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_testing, card_status_testing, default_card_type, cre_upd, cre_upd, user_alpha),
     (card_trnx_09, ''9th-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha),
     (card_trnx_10, ''10th-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha);
+
+insert into card_label(card_id, label_id, board_id) VALUES
+    (card_trnx_01, label_be, alpha_kanban_board_college_1),
+    (card_trnx_01, label_pers, alpha_kanban_board_college_1),
+    (card_trnx_01, label_fe, alpha_kanban_board_college_1),
+    (card_trnx_02, label_fe, alpha_kanban_board_college_1),
+    (card_trnx_02, label_pers, alpha_kanban_board_college_1),
+    (card_trnx_04, label_pers, alpha_kanban_board_college_1),
+    (card_trnx_05, label_be, alpha_kanban_board_college_1),
+    (card_trnx_05, label_pers, alpha_kanban_board_college_1),
+    (card_trnx_05, label_fe, alpha_kanban_board_college_1);
 
 insert into project_users(user_id, project_id) VALUES
     (user_alpha, project_alpha_work_client_1),

@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "board")
@@ -22,27 +23,30 @@ import static javax.persistence.CascadeType.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class BoardEntity extends BaseRecordEntity {
 
-  @OneToMany(mappedBy = "board", cascade = ALL)
+  @Column(columnDefinition = "boolean default false")
+  private Boolean isFavorite;
+
+  @OneToMany(mappedBy = "board", cascade = ALL, fetch = LAZY)
   private Set<SprintEntity> sprints = new HashSet<>();
 
-  @OneToMany(mappedBy = "board", cascade = ALL)
+  @OneToMany(mappedBy = "board", cascade = ALL, fetch = LAZY)
   private Set<BoardColumnEntity> boardColumns = new HashSet<>();
 
-  @ManyToMany(cascade = {PERSIST, MERGE})
+  @ManyToMany(cascade = {PERSIST, MERGE}, fetch = LAZY)
   @JoinTable(name = "board_users", joinColumns = @JoinColumn(name = "board_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
   private Set<UserEntity> users = new HashSet<>();
 
-  @ManyToMany(cascade = {PERSIST, MERGE})
+  @ManyToMany(cascade = {PERSIST, MERGE}, fetch = LAZY)
   @JoinTable(name = "board_labels", joinColumns = @JoinColumn(name = "board_id"), inverseJoinColumns = @JoinColumn(name = "label_id"))
   private Set<LabelEntity> labels = new HashSet<>();
 
-  @ManyToOne(cascade = ALL)
+  @ManyToOne(cascade = ALL, fetch = LAZY)
   private BoardTypeEntity boardType;
 
-  @ManyToOne
+  @ManyToOne(fetch = LAZY)
   private ProjectEntity project;
 
-  @ManyToOne
+  @ManyToOne(fetch = LAZY)
   private AccountEntity account;
 
 }

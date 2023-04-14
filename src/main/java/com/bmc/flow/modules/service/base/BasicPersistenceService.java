@@ -57,7 +57,7 @@ public abstract class BasicPersistenceService<D, E> {
    * @param cacheKey     this is so the cacheKey is properly generated and distinct for each service caller
    * @return the count for the given table.
    */
-  @CacheResult(cacheName = "count-all", keyGenerator = CountAllCKGen.class)
+  @CacheResult(cacheName = "count-all", keyGenerator = StringCKGen.class)
   public Uni<Long> countAll(final PanacheQuery<E> panacheQuery, final String cacheKey) {
     Log.debugf("added entry to [count all] cache: %s", cacheKey);
     return panacheQuery.count();
@@ -80,7 +80,7 @@ public abstract class BasicPersistenceService<D, E> {
 
   protected abstract void updateField(final E toUpdate, final String key, final String value);
 
-  @CacheResult(cacheName = "count-all", keyGenerator = CountAllCKGen.class)
+  @CacheResult(cacheName = "count-all", keyGenerator = StringCKGen.class)
   public Uni<Long> countAllByUserId(final UUID userId, final String cacheKey) {
     Log.debugf("added entry to [count all] cache: %s", cacheKey);
     return repository.count("createdBy.id", userId);

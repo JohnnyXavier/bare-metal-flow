@@ -13,6 +13,7 @@ import java.util.Set;
 
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "task")
@@ -33,10 +34,10 @@ public class TaskEntity extends BaseEntity {
   @Column(columnDefinition = "boolean default false")
   private Boolean isCompleted;
 
-  @ManyToOne
+  @ManyToOne(fetch = LAZY)
   private CardEntity card;
 
-  @ManyToMany(cascade = {PERSIST, MERGE})
+  @ManyToMany(cascade = {PERSIST, MERGE}, fetch = LAZY)
   @JoinTable(name = "tasks_users_assigned", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
   private Set<UserEntity> assignedTo = new HashSet<>();
 

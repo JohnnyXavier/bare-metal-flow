@@ -1,6 +1,7 @@
 package com.bmc.flow.modules.resources;
 
 import com.bmc.flow.modules.database.dto.UserDto;
+import com.bmc.flow.modules.database.dto.UserRegistrationDto;
 import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.repositories.UserRepository;
 import com.bmc.flow.modules.resources.base.BasicOpsResource;
@@ -30,7 +31,7 @@ import static javax.ws.rs.core.Response.Status.*;
 @JBossLog
 public class UserResource extends BasicOpsResource<UserDto, UserEntity> {
 
-  private final UserService    userService;
+  private final UserService userService;
 
   private final UserRepository userRepo;
 
@@ -65,20 +66,29 @@ public class UserResource extends BasicOpsResource<UserDto, UserEntity> {
     } else {
       return userService.findAllInCollectionId(collections, collectionId, new Pageable(sortBy, sortDir, pageIx,
               pageSize))
-                 .map(userDtos -> Response.ok(userDtos).build());
+          .map(userDtos -> Response.ok(userDtos).build());
     }
   }
 
+
+  @POST
+  @Path("register")
+  @Consumes("application/json")
+  public Uni<Response> register(final UserRegistrationDto fromDto) {
+    return userService.register(fromDto)
+        .map(newlyCreatedDto -> {
+          Cookie cookie = new Cookie("userId", newlyCreatedDto.getId().toString(), "/", "localhost");
+          return Response.ok(newlyCreatedDto).status(CREATED).cookie(new NewCookie(cookie)).build();
+        })
+        .onFailure(ConstraintViolationException.class).recoverWithItem(ResponseUtils::violationsToResponse)
+        .onFailure(PgException.class).recoverWithItem(ResponseUtils::processPgException)
+        .onFailure().recoverWithItem(ResponseUtils::failToServerError);
+  }
+
+
   @Override
   public Uni<Response> create(final UserDto fromDto) {
-    return userService.create(fromDto)
-               .map(newlyCreatedDto -> {
-                 Cookie cookie = new Cookie("userId", newlyCreatedDto.getId().toString(), "/", "localhost");
-                 return Response.ok(newlyCreatedDto).status(CREATED).cookie(new NewCookie(cookie)).build();
-               })
-               .onFailure(ConstraintViolationException.class).recoverWithItem(ResponseUtils::violationsToResponse)
-               .onFailure(PgException.class).recoverWithItem(ResponseUtils::processPgException)
-               .onFailure().recoverWithItem(ResponseUtils::failToServerError);
+    return Uni.createFrom().item(Response.status(NOT_FOUND).build());
   }
 
 
@@ -107,19 +117,19 @@ public class UserResource extends BasicOpsResource<UserDto, UserEntity> {
     log.infof("password is: %s", password);
 
     return userRepo.find("email", email)
-               .singleResult()
-               .map(userEntity -> {
-                 if (userEntity.getPassword().equals(password)) {
-                   Cookie cookie = new Cookie("userId", userEntity.getId().toString(), "/", "localhost");
-                   return Response.ok().cookie(new NewCookie(cookie)).build();
-                 } else {
-                   return Response.status(UNAUTHORIZED).cookie(new NewCookie("userId", null)).build();
-                 }
-               })
-               .onFailure(ConstraintViolationException.class).recoverWithItem(ResponseUtils::violationsToResponse)
-               .onFailure(PgException.class).recoverWithItem(ResponseUtils::processPgException)
-               .onFailure(NoResultException.class).recoverWithItem(Response.ok("user not found").status(NOT_FOUND).build())
-               .onFailure().recoverWithItem(ResponseUtils::failToServerError);
+        .singleResult()
+        .map(userEntity -> {
+          if (userEntity.getPassword().equals(password)) {
+            Cookie cookie = new Cookie("userId", userEntity.getId().toString(), "/", "localhost");
+            return Response.ok().cookie(new NewCookie(cookie)).build();
+          } else {
+            return Response.status(UNAUTHORIZED).cookie(new NewCookie("userId", null)).build();
+          }
+        })
+        .onFailure(ConstraintViolationException.class).recoverWithItem(ResponseUtils::violationsToResponse)
+        .onFailure(PgException.class).recoverWithItem(ResponseUtils::processPgException)
+        .onFailure(NoResultException.class).recoverWithItem(Response.ok("user not found").status(NOT_FOUND).build())
+        .onFailure().recoverWithItem(ResponseUtils::failToServerError);
   }
 
 

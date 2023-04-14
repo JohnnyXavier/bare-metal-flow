@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static com.bmc.flow.modules.utilities.DataUtils.getImage;
@@ -18,33 +20,38 @@ import static com.bmc.flow.modules.utilities.DataUtils.getImage;
 public class CardSimpleDto extends BaseRecordDto {
 
   @NotNull
-  private UUID          boardId;
-  private LocalDateTime dueDate;
-  private LocalDateTime updatedAt;
-  private Boolean       isCompleted;
-  private UUID          cardTypeId;
-  private UUID          cardStatusId;
-  private UUID          cardDifficultyId;
+  private Boolean            isCompleted;
+  private LocalDateTime      dueDate;
+  private LocalDateTime      updatedAt;
+  private Long               position;
+  private UUID               boardId;
+  private UUID               cardDifficultyId;
+  private UUID               cardStatusId;
+  private UUID               cardTypeId;
+  private List<CardLabelDto> labels = new ArrayList<>();
 
   public CardSimpleDto(final UUID id, final String name, final String description, final String coverImage,
-                       final LocalDateTime dueDate, final LocalDateTime createdAt,final LocalDateTime updatedAt,
+                       final LocalDateTime dueDate, final LocalDateTime createdAt, final LocalDateTime updatedAt,
+                       final Long position,
                        @ProjectedFieldName("createdBy.id") final UUID createdBy,
                        @ProjectedFieldName("board.id") final UUID boardId,
                        @ProjectedFieldName("cardStatus.id") final UUID cardStatusId,
                        @ProjectedFieldName("cardType.id") final UUID cardTypeId,
-                       @ProjectedFieldName("cardDifficulty.id") final UUID cardDifficultyId) {
-    this.id               = id;
-    this.name             = name;
-    this.coverImage       = getImage(coverImage, "CARD");
-    this.description      = description;
-    this.dueDate          = dueDate;
+                       @ProjectedFieldName("cardDifficulty.id") final UUID cardDifficultyId
+  ) {
     this.boardId          = boardId;
+    this.cardDifficultyId = cardDifficultyId;
     this.cardStatusId     = cardStatusId;
     this.cardTypeId       = cardTypeId;
-    this.createdBy        = createdBy;
+    this.coverImage       = getImage(coverImage, "CARD");
     this.createdAt        = createdAt;
+    this.createdBy        = createdBy;
+    this.description      = description;
+    this.dueDate          = dueDate;
+    this.id               = id;
+    this.name             = name;
+    this.position         = position;
     this.updatedAt        = updatedAt;
-    this.cardDifficultyId = cardDifficultyId;
   }
 
 }

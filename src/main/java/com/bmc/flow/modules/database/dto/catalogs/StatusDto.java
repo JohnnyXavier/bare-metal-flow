@@ -12,11 +12,11 @@ import java.util.UUID;
 @Getter
 @Setter
 @RegisterForReflection
-public class CardStatusDto extends BaseCatalogDto {
+public class StatusDto extends BaseCatalogDto {
 
-  public CardStatusDto(final UUID id, final String name, final String description, final Boolean isSystem,
-                       final LocalDateTime createdAt,
-                       @ProjectedFieldName("createdBy.id") final UUID createdBy) {
+  public StatusDto(final UUID id, final String name, final String description, final Boolean isSystem,
+                   final LocalDateTime createdAt,
+                   @ProjectedFieldName("createdBy.id") final UUID createdBy) {
     this.id = id;
     this.name = name;
     this.description = description;

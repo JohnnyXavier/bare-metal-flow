@@ -1,7 +1,9 @@
 package com.bmc.flow.modules.service;
 
 import com.bmc.flow.modules.database.dto.UserDto;
+import com.bmc.flow.modules.database.dto.UserRegistrationDto;
 import com.bmc.flow.modules.database.entities.UserEntity;
+import com.bmc.flow.modules.database.entities.catalogs.BoardColumnEntity;
 import com.bmc.flow.modules.database.entities.catalogs.SeniorityEntity;
 import com.bmc.flow.modules.database.entities.records.*;
 import com.bmc.flow.modules.database.entities.resourcing.ScheduleEntity;
@@ -13,10 +15,7 @@ import com.bmc.flow.modules.database.repositories.resourcing.ShrinkageRepository
 import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
-import com.bmc.flow.modules.service.catalogs.BoardTypeService;
-import com.bmc.flow.modules.service.catalogs.DepartmentService;
-import com.bmc.flow.modules.service.catalogs.LabelService;
-import com.bmc.flow.modules.service.catalogs.SeniorityService;
+import com.bmc.flow.modules.service.catalogs.*;
 import com.bmc.flow.modules.utilities.SecurityUtils;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.smallrye.mutiny.Uni;
@@ -34,24 +33,26 @@ import static java.util.UUID.randomUUID;
 
 @ApplicationScoped
 public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
-  private final UserRepository      userRepo;
-  private final AccountRepository   accountRepo;
-  private final ProjectRepository   projectRepo;
-  private final BoardRepository     boardRepo;
-  private final CardRepository      cardRepo;
-  private final ScheduleRepository  scheduleRepo;
-  private final CommentRepository   commentRepo;
-  private final BoardTypeService    boardTypeService;
-  private final LabelService        labelService;
-  private final ShrinkageRepository shrinkageRepo;
-  private final SeniorityService    seniorityService;
-  private final DepartmentService   departmentService;
-  private final SecurityUtils       secUtils;
+  private final UserRepository        userRepo;
+  private final AccountRepository     accountRepo;
+  private final ProjectRepository     projectRepo;
+  private final BoardRepository       boardRepo;
+  private final BoardColumnRepository boardColumnRepo;
+  private final CardRepository        cardRepo;
+  private final CardStatusService     cardStatusService;
+  private final ScheduleRepository    scheduleRepo;
+  private final CommentRepository     commentRepo;
+  private final BoardTypeService      boardTypeService;
+  private final LabelService          labelService;
+  private final ShrinkageRepository   shrinkageRepo;
+  private final SeniorityService      seniorityService;
+  private final DepartmentService     departmentService;
+  private final SecurityUtils         secUtils;
 
   public UserService(final UserRepository userRepo, final AccountRepository accountRepo,
                      final ProjectRepository projectRepo,
-                     final BoardRepository boardRepo, final CardRepository cardRepo,
-                     final ScheduleRepository scheduleRepo,
+                     final BoardRepository boardRepo, BoardColumnRepository boardColumnRepo, final CardRepository cardRepo,
+                     CardStatusService cardStatusService, final ScheduleRepository scheduleRepo,
                      final CommentRepository commentRepo, final LabelService labelService,
                      final BoardTypeService boardTypeService,
                      final ShrinkageRepository shrinkageRepo, SeniorityService seniorityService,
@@ -61,7 +62,9 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     this.accountRepo       = accountRepo;
     this.projectRepo       = projectRepo;
     this.boardRepo         = boardRepo;
+    this.boardColumnRepo   = boardColumnRepo;
     this.cardRepo          = cardRepo;
+    this.cardStatusService = cardStatusService;
     this.scheduleRepo      = scheduleRepo;
     this.commentRepo       = commentRepo;
     this.boardTypeService  = boardTypeService;
@@ -79,16 +82,21 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
         pageable.getPage());
   }
 
-  @ReactiveTransactional
   @Override
-  public Uni<UserDto> create(@Valid final UserDto userDto) {
+  public Uni<UserDto> create(UserDto fromDto) {
+    //TODO: this is a placeholder for creating a user after registration, maybe not required
+    return null;
+  }
+
+  @ReactiveTransactional
+  public Uni<UserDto> register(@Valid final UserRegistrationDto userRegistrationDto) {
 
     UserEntity newUser = new UserEntity();
     newUser.setId(randomUUID());
-    newUser.setEmail(userDto.getEmail().toLowerCase());
+    newUser.setEmail(userRegistrationDto.getEmail().toLowerCase());
     newUser.setPassword("demo");
-    newUser.setCallSign(userDto.getCallSign());
-    newUser.setAvatar("https://robohash.org/" + newUser.getId() + "?set=set2");
+    newUser.setCallSign(userRegistrationDto.getCallSign());
+    newUser.setAvatar("https://robohash.org/" + newUser.getId() + "?set=set3");
     newUser.setActive(true);
 
     ScheduleEntity userSchedule = new ScheduleEntity();
@@ -100,7 +108,7 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     AccountEntity firstAccount = new AccountEntity();
     firstAccount.setId(randomUUID());
     firstAccount.setDescription("This is your personal account, you can use it to group multiple projects.");
-    firstAccount.setName(newUser.getCallSign() + "'s Personal account");
+    firstAccount.setName(newUser.getCallSign() + "'s account");
     firstAccount.setCreatedBy(newUser);
     firstAccount.setCoverImage("https://robohash.org/" + firstAccount.getId());
     firstAccount.setUsers(Set.of(newUser));
@@ -108,20 +116,33 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     ProjectEntity firstProject = new ProjectEntity();
     firstProject.setId(randomUUID());
     firstProject.setDescription("This is your personal project");
-    firstProject.setName(newUser.getCallSign() + "'s personal project");
+    firstProject.setName(newUser.getCallSign() + "'s project");
     firstProject.setAccount(firstAccount);
     firstProject.setCoverImage("https://robohash.org/" + firstProject.getId());
     firstProject.setUsers(Set.of(newUser));
     firstProject.setProjectLead(newUser);
     firstProject.setCreatedBy(newUser);
 
+    firstAccount.setProjects(Set.of(firstProject));
+
     BoardEntity kanbanBoard = new BoardEntity();
     kanbanBoard.setId(randomUUID());
     kanbanBoard.setDescription("This is your personal Board");
-    kanbanBoard.setName(newUser.getCallSign() + "'s personal board");
+    kanbanBoard.setName(newUser.getCallSign() + "'s board");
     kanbanBoard.setProject(firstProject);
+    kanbanBoard.setAccount(firstAccount);
     kanbanBoard.setUsers(Set.of(newUser));
     kanbanBoard.setCreatedBy(newUser);
+    kanbanBoard.setIsFavorite(true);
+
+    BoardColumnEntity boardColumn = new BoardColumnEntity();
+    boardColumn.setId(randomUUID());
+    boardColumn.setBoard(kanbanBoard);
+    boardColumn.setProject(firstProject);
+    boardColumn.setAccount(firstAccount);
+    boardColumn.setCreatedBy(newUser);
+
+    kanbanBoard.setBoardColumns(Set.of(boardColumn));
 
     CardEntity newCard = new CardEntity();
     newCard.setId(randomUUID());
@@ -130,8 +151,12 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     newCard.setAssignees(Set.of(newUser));
     newCard.setWatchers(Set.of(newUser));
     newCard.setBoard(kanbanBoard);
+    newCard.setBoardColumn(boardColumn);
     newCard.setDueDate(LocalDateTime.of(2025, 10, 10, 10, 10, 10, 10));
     newCard.setCreatedBy(newUser);
+
+
+    boardColumn.setCards(Set.of(newCard));
 
     CommentEntity newComment = new CommentEntity();
     newComment.setId(randomUUID());
@@ -147,27 +172,23 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
         .call(() -> accountRepo.persist(firstAccount))
         .call(() -> projectRepo.persist(firstProject))
         .call(() -> boardRepo.persist(kanbanBoard))
+        .call(() -> boardColumnRepo.persist(boardColumn))
         .call(() -> cardRepo.persist(newCard))
         .call(() -> commentRepo.persist(newComment))
         .call(() -> scheduleRepo.persist(userSchedule))
 
         //update user with attached entities
         .invoke(() -> newUser.setCreatedBy(newUser))
-        .invoke(() -> newUser.setUserSchedule(userSchedule))
+        //        .invoke(() -> newUser.setUserSchedule(userSchedule))
 
         // update entities with existing system data
         .chain(() -> seniorityService.findEntityByName("architect").invoke(newUser::setSeniority))
         .chain(() -> departmentService.findEntityByName("engineering").invoke(newUser::setDepartment))
         .chain(() -> boardTypeService.findEntityByName("kanban").invoke(kanbanBoard::setBoardType))
+        .chain(() -> cardStatusService.findEntityByName("new").invoke(boardColumn::setStatus).invoke(newCard::setCardStatus))
         .chain(() -> shrinkageRepo.findEntityByName("coffee-break-15-min").invoke(shrinkages::add))
         .chain(() -> shrinkageRepo.findEntityByName("personal-break-10-min").invoke(shrinkages::add))
         .chain(() -> shrinkageRepo.findEntityByName("agile-standUp-10-min").invoke(shrinkages::add))
-        .chain(() -> labelService.findEntityByName("personal").invoke(label -> {
-          firstAccount.setLabels(Set.of(label));
-          firstProject.setLabels(Set.of(label));
-          kanbanBoard.setLabels(Set.of(label));
-          newCard.setLabels(Set.of(label));
-        }))
         .replaceWith(findById(newUser.getId()));
   }
 
@@ -175,13 +196,13 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
   @Override
   public Uni<Boolean> deleteById(final UUID userId) {
     return userRepo.find("id =?1 and isActive=?2", userId, true)
-                   .singleResult().onFailure().recoverWithNull()
-                   .onItem().ifNotNull().transform(userToDeactivate -> {
+        .singleResult().onFailure().recoverWithNull()
+        .onItem().ifNotNull().transform(userToDeactivate -> {
           secUtils.obfuscateUser(userToDeactivate);
           userToDeactivate.setActive(false);
           return TRUE;
         })
-                   .onItem().ifNull().continueWith(FALSE);
+        .onItem().ifNull().continueWith(FALSE);
   }
 
   public void updateField(final UserEntity toUpdate, final String key, final String value) {
@@ -190,11 +211,11 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
       case "callSign" -> toUpdate.setCallSign(value);
       case "avatar" -> toUpdate.setAvatar(value);
       case "seniority" -> Optional.ofNullable(value)
-                                  .ifPresent(seniorityId -> {
-                                    SeniorityEntity seniority = new SeniorityEntity();
-                                    seniority.setId(UUID.fromString(seniorityId));
-                                    toUpdate.setSeniority(seniority);
-                                  });
+          .ifPresent(seniorityId -> {
+            SeniorityEntity seniority = new SeniorityEntity();
+            seniority.setId(UUID.fromString(seniorityId));
+            toUpdate.setSeniority(seniority);
+          });
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
     }

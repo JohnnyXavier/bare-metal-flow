@@ -19,12 +19,12 @@ public class LabelDto extends BaseCatalogDto {
   public LabelDto(final UUID id, final String name, final String description, final String colorHex, final Boolean isSystem,
                   final LocalDateTime createdAt,
                   @ProjectedFieldName("createdBy.id") final UUID createdBy) {
-    this.id = id;
-    this.name = name;
+    this.id          = id;
+    this.name        = name;
     this.description = description;
-    this.colorHex = colorHex;
-    this.createdAt = createdAt;
-    this.createdBy = createdBy;
-    this.isSystem = isSystem;
+    this.colorHex    = colorHex;
+    this.createdAt   = createdAt;
+    this.createdBy   = createdBy;
+    this.isSystem    = isSystem;
   }
 }

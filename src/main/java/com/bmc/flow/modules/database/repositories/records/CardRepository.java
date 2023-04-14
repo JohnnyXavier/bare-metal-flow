@@ -14,7 +14,7 @@ import java.util.UUID;
 @ApplicationScoped
 public class CardRepository implements PanacheRepositoryBase<CardEntity, UUID> {
   private static final String SELECT_DTO_SIMPLE = " select e.id, e.name, e.description, e.coverImage, e.dueDate, e.createdAt," +
-      " e.updatedAt, e.createdBy.id, e.board.id, e.cardStatus.id, e.cardType.id, e.cardDifficulty.id";
+      " e.updatedAt, e.position, e.createdBy.id, e.board.id, e.cardStatus.id, e.cardType.id, e.cardDifficulty.id";
   private static final String FROM_ENTITY       = " from CardEntity e";
 
   public Uni<List<CardSimpleDto>> findAllCreatedByUserId(final UUID userId) {
