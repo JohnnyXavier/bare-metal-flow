@@ -27,4 +27,5 @@ public class StatusEntity extends BaseCatalogEntity {
   @OneToMany(mappedBy = "status", cascade = ALL)
   private Set<BoardColumnEntity> boardColumns = new HashSet<>();
 
+
 }

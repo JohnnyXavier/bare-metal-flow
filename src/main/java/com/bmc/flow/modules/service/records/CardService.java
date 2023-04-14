@@ -16,7 +16,6 @@ import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.smallrye.mutiny.Uni;
-import org.hibernate.reactive.common.ResultSetMapping;
 import org.hibernate.reactive.mutiny.Mutiny;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -46,16 +45,11 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
 
   @Override
   public Uni<CardSimpleDto> findById(UUID id) {
-    ResultSetMapping<CardLabelDto> resultSetMapping2 = session.getResultSetMapping(CardLabelDto.class, "cardLabelMapping");
-
     return cardRepo.find("id", id)
         .project(CardSimpleDto.class)
         .singleResult().onItem()
-        .ifNotNull().call(card -> session.createNativeQuery(
-                "select cl.card_id, cl.label_id, l.name, l.description, l.color_hex from card_label cl" +
-                    " join label l on l.id = cl.label_id" +
-                    " where cl.card_id= '" + id + "'"
-                , resultSetMapping2)
+        .ifNotNull().call(card -> session.createNamedQuery("CardLabel.findAllByCardId", CardLabelDto.class)
+            .setParameter("id", id)
             .getResultList()
             .call(cardLabelDtos -> Uni.createFrom().item(cardLabelDtos
                 .stream()
@@ -68,16 +62,11 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
   }
 
   public Uni<PageResult<CardSimpleDto>> findAllByBoardIdPaged(final UUID boardId, final Pageable pageable) {
-    ResultSetMapping<CardLabelDto> resultSetMapping2 = session.getResultSetMapping(CardLabelDto.class, "cardLabelMapping");
-
     return findAllPaged(cardRepo.findAllByBoardId(boardId, pageable.getSort()), "-all-cards-by-board",
         pageable.getPage())
         .onItem()
-        .ifNotNull().call(result -> session.createNativeQuery(
-                "select cl.card_id, cl.label_id, l.name, l.description, l.color_hex from card_label cl" +
-                    " join label l on l.id = cl.label_id" +
-                    " where cl.board_id= '" + boardId + "'"
-                , resultSetMapping2)
+        .ifNotNull().call(result -> session.createNamedQuery("CardLabel.findAllByBoardId", CardLabelDto.class)
+            .setParameter("boardId", boardId)
             .getResultList()
             .call(cardLabelDtos -> Uni.createFrom().item(cardLabelDtos
                 .stream()

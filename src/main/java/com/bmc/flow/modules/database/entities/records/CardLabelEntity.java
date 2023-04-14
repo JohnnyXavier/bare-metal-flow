@@ -15,7 +15,19 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name = "card_label")
 @Getter
 @Setter
-@SqlResultSetMapping(name = "cardLabelMapping",
+@NamedNativeQuery(name = "CardLabel.findAllByBoardId",
+    query = "select cl.card_id, cl.label_id, l.name, l.description, l.color_hex" +
+        " from card_label cl" +
+        " join label l on l.id = cl.label_id" +
+        " where cl.board_id = :boardId",
+    resultSetMapping = "Mapping.CardLabelDto")
+@NamedNativeQuery(name = "CardLabel.findAllByCardId",
+    query = "select cl.card_id, cl.label_id, l.name, l.description, l.color_hex" +
+        " from card_label cl" +
+        " join label l on l.id = cl.label_id" +
+        " where cl.card_id = :id",
+    resultSetMapping = "Mapping.CardLabelDto")
+@SqlResultSetMapping(name = "Mapping.CardLabelDto",
     classes = {
         @ConstructorResult(targetClass = CardLabelDto.class,
             columns = {
