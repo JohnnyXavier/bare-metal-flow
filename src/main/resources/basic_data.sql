@@ -91,6 +91,10 @@ declare
     label_pers uuid;
     label_be uuid;
     label_fe uuid;
+    label_devops uuid;
+    label_qa uuid;
+    label_urgent uuid;
+    label_important uuid;
 begin
 
 -- alpha
@@ -175,6 +179,10 @@ lorem_ipsum_1p := ''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
 label_pers := gen_random_uuid();
 label_be := gen_random_uuid();
 label_fe := gen_random_uuid();
+label_devops := gen_random_uuid();
+label_qa := gen_random_uuid();
+label_urgent := gen_random_uuid();
+label_important := gen_random_uuid();
 
 -- first create the default user to use it as creator of the rest of the domain
 insert into users(id, email, call_sign, password, avatar, seniority_id, created_at, updated_at, created_by_id) VALUES
@@ -194,11 +202,13 @@ insert into seniority(id, name, level, description, is_system, created_at, updat
     (gen_random_uuid(), ''guru admin end'', 600, ''admin/ops houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user);
 
 insert into label(id, color_hex, description, name, created_at, updated_at, created_by_id, is_system) VALUES
-    (label_pers, ''#2c7be5'', ''my personal stuff'', ''personal'', cre_upd, cre_upd, system_user, true),
-    (label_be, ''#27bcfd'', ''this is a back-end label'', ''back-end'', cre_upd, cre_upd, system_user, true),
-    (label_fe, ''#00d27a'', ''this is a front-end label'', ''front-end'', cre_upd, cre_upd, system_user, true),
-    (gen_random_uuid(), ''#ffdba3'', ''this is a devops label'', ''devops'', cre_upd, cre_upd, system_user, true),
-    (gen_random_uuid(), ''#c37900'', ''this is a qa label'', ''qa'', cre_upd, cre_upd, system_user, true);
+    (label_pers, ''#576CBC'', ''my personal stuff'', ''personal'', cre_upd, cre_upd, system_user, true),
+    (label_be, ''#B2A4FF'', ''this is a back-end label'', ''back-end'', cre_upd, cre_upd, system_user, true),
+    (label_fe, ''#655DBB'', ''this is a front-end label'', ''front-end'', cre_upd, cre_upd, system_user, true),
+    (label_devops, ''#0E8388'', ''this is a devops label'', ''devops'', cre_upd, cre_upd, system_user, true),
+    (label_qa, ''#C8B6A6'', ''this is a qa label'', ''qa'', cre_upd, cre_upd, system_user, true),
+    (label_urgent, ''#CC3636'', ''this is an URGENT label'', ''URGENT'', cre_upd, cre_upd, system_user, true),
+    (label_important, ''#ECA869'', ''this is an important label'', ''important'', cre_upd, cre_upd, system_user, true);
 
 insert into card_status(id, name, is_system, created_at, updated_at, created_by_id) values
     (card_status_new, ''new'', true, cre_upd, cre_upd, system_user),
@@ -349,16 +359,16 @@ insert into board_column(id, created_at, updated_at, created_by_id, account_id, 
 
 
 insert into card(id, name, description, cover_image, due_date, board_id, board_column_id, card_status_id, card_type_id, created_at, updated_at, created_by_id) values
-    (card_trnx_01, ''1st-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_02, lorem_ipsum_3s, lorem_ipsum_10w, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_03, ''3rd-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_04, ''This is a fine nice demonstration card name'', ''the description of this card is a bit longer than the default'', robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_05, lorem_ipsum_20w, lorem_ipsum_3s, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_in_pro, card_status_in_progress, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_06, ''6th-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_in_pro, card_status_in_progress, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_07, ''7th-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_testing, card_status_testing, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_08, ''8th-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_testing, card_status_testing, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_09, ''9th-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha),
-    (card_trnx_10, ''10th-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha);
+    (card_trnx_01, ''1st-card'', default_description, ''https://loremflickr.com/g/800/600/paris?lock=1'', make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_02, lorem_ipsum_3s, lorem_ipsum_10w, ''https://loremflickr.com/g/800/600/car?lock=2'', make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_03, ''3rd-card'', default_description, ''https://loremflickr.com/g/800/600/forest?lock=1'', make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_04, ''This is a fine nice demonstration card name'', ''the description of this card is a bit longer than the default'', ''https://loremflickr.com/g/320/700/paris?lock=3'', make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_new, card_status_new, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_05, lorem_ipsum_20w, lorem_ipsum_3s, ''https://loremflickr.com/g/600/700/paris?lock=8'', make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_in_pro, card_status_in_progress, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_06, ''6th-card'', default_description, ''https://loremflickr.com/g/500/700/car?lock=3'', make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_in_pro, card_status_in_progress, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_07, ''7th-card'', default_description, ''https://loremflickr.com/g/640/640/dog?lock=3'', make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_testing, card_status_testing, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_08, ''8th-card'', default_description, ''https://loremflickr.com/g/200/200/tree?lock=3'', make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_testing, card_status_testing, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_09, ''9th-card'', default_description, ''https://loremflickr.com/g/800/400/computer?lock=3'', make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha),
+    (card_trnx_10, ''10th-card'', default_description, ''https://loremflickr.com/g/200/400/paris?lock=30'', make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha);
 
 insert into card_label(card_id, label_id, board_id) VALUES
     (card_trnx_01, label_be, alpha_kanban_board_college_1),
@@ -366,10 +376,16 @@ insert into card_label(card_id, label_id, board_id) VALUES
     (card_trnx_01, label_fe, alpha_kanban_board_college_1),
     (card_trnx_02, label_fe, alpha_kanban_board_college_1),
     (card_trnx_02, label_pers, alpha_kanban_board_college_1),
+    (card_trnx_03, label_qa, alpha_kanban_board_college_1),
+    (card_trnx_03, label_devops, alpha_kanban_board_college_1),
+    (card_trnx_03, label_be, alpha_kanban_board_college_1),
     (card_trnx_04, label_pers, alpha_kanban_board_college_1),
     (card_trnx_05, label_be, alpha_kanban_board_college_1),
     (card_trnx_05, label_pers, alpha_kanban_board_college_1),
-    (card_trnx_05, label_fe, alpha_kanban_board_college_1);
+    (card_trnx_05, label_fe, alpha_kanban_board_college_1),
+    (card_trnx_05, label_urgent, alpha_kanban_board_college_1),
+    (card_trnx_08, label_devops, alpha_kanban_board_college_1),
+    (card_trnx_08, label_important, alpha_kanban_board_college_1);
 
 insert into project_users(user_id, project_id) VALUES
     (user_alpha, project_alpha_work_client_1),
@@ -390,5 +406,12 @@ insert into board_users(board_id, user_id) VALUES
     (alpha_kanban_board_college_1, user_three),
     (alpha_kanban_board_college_2, user_two),
     (alpha_kanban_board_college_2, user_alpha);
+
+insert into comment(id, created_at, updated_at, comment, created_by_id, card_id) values
+    (gen_random_uuid(), cre_upd, cre_upd, ''a comment'', user_alpha, card_trnx_01),
+    (gen_random_uuid(), cre_upd, cre_upd, ''another comment'', user_alpha, card_trnx_01),
+    (gen_random_uuid(), cre_upd, cre_upd, ''yet another one comment'', user_alpha, card_trnx_01),
+    (gen_random_uuid(), cre_upd, cre_upd, ''how come this is a comment'', user_alpha, card_trnx_01),
+    (gen_random_uuid(), cre_upd, cre_upd, ''we did not see it comment!'', user_alpha, card_trnx_01);
 end;
 ';

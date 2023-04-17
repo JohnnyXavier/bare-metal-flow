@@ -64,9 +64,8 @@ quarkus: # persistence configuration
     db-kind: postgresql
     username: xavier
     password: xavier
-    metrics:
-      enabled: true
   hibernate-orm:
+    statistics: true
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     sql-load-script: basic_data.sql
     log:
@@ -96,6 +95,11 @@ quarkus: # persistence configuration
         level: INFO
       "com.bmc":
         level: DEBUG
+      "org.hibernate.stat":
+        level: DEBUG
+      "org.hibernate.SQL":
+        level: DEBUG
+
     console:
       async: true
 

@@ -49,6 +49,9 @@ public class UserEntity extends BaseEntity {
   private Set<ProjectEntity>       projectLead;
   @OneToMany(mappedBy = "createdBy", fetch = LAZY)
   private Set<UserEntity>          createdUsers      = new HashSet<>();
+  @OneToMany(mappedBy = "createdBy", fetch = LAZY)
+  private Set<CommentEntity> comments = new HashSet<>();
+
   @ManyToMany(mappedBy = "users", fetch = LAZY)
   private Set<AccountEntity>       accounts          = new HashSet<>();
   @ManyToMany(mappedBy = "users", fetch = LAZY)
@@ -67,5 +70,4 @@ public class UserEntity extends BaseEntity {
   private Set<RetrospectiveEntity> retroBoards       = new HashSet<>();
   @ManyToMany(mappedBy = "missingUsers", fetch = LAZY)
   private Set<RetrospectiveEntity> missedRetroBoards = new HashSet<>();
-
 }
