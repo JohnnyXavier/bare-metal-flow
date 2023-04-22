@@ -4,11 +4,10 @@ import com.bmc.flow.modules.database.dto.records.CardLabelDto;
 import com.bmc.flow.modules.database.dto.records.CardSimpleDto;
 import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.catalogs.CardDifficultyEntity;
-import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
 import com.bmc.flow.modules.database.entities.catalogs.StatusEntity;
 import com.bmc.flow.modules.database.entities.records.BoardEntity;
 import com.bmc.flow.modules.database.entities.records.CardEntity;
-import com.bmc.flow.modules.database.entities.records.CardLabelEntity;
+import com.bmc.flow.modules.database.repositories.catalogs.CardLabelRepository;
 import com.bmc.flow.modules.database.repositories.catalogs.StatusRepository;
 import com.bmc.flow.modules.database.repositories.records.CardRepository;
 import com.bmc.flow.modules.resources.base.Pageable;
@@ -20,6 +19,7 @@ import org.hibernate.reactive.mutiny.Mutiny;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,18 +29,21 @@ import static java.util.UUID.randomUUID;
 @ApplicationScoped
 public class CardService extends BasicPersistenceService<CardSimpleDto, CardEntity> {
 
-  private final CardRepository cardRepo;
+  private final CardRepository        cardRepo;
+  private final CardLabelRepository   cardLabelRepo;
+  private final StatusRepository      cardStatusRepo;
+  private final Mutiny.Session        session;
+  private final Mutiny.SessionFactory sessionFactory;
 
-  private final StatusRepository cardStatusRepo;
-
-
-  private final Mutiny.Session session;
-
-  public CardService(final CardRepository cardRepo, final StatusRepository cardStatusRepo, Mutiny.Session session) {
+  public CardService(final CardRepository cardRepo, CardLabelRepository cardLabelRepo, final StatusRepository cardStatusRepo,
+                     Mutiny.Session session,
+                     Mutiny.SessionFactory sessionFactory) {
     super(cardRepo, CardSimpleDto.class);
     this.cardRepo       = cardRepo;
+    this.cardLabelRepo  = cardLabelRepo;
     this.cardStatusRepo = cardStatusRepo;
     this.session        = session;
+    this.sessionFactory = sessionFactory;
   }
 
   @Override
@@ -178,21 +181,29 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
   }
 
   private void removeLabel(final CardEntity toUpdate, final String value) {
-    LabelEntity label = new LabelEntity();
-    label.setId(UUID.fromString(value));
-
-    toUpdate.getLabels().remove(label);
+    sessionFactory.withTransaction(txSession ->
+            txSession
+                .createNativeQuery("delete from card_label where card_id =?1 and label_id =?2")
+                .setParameter(1, toUpdate.getId())
+                .setParameter(2, UUID.fromString(value))
+                .executeUpdate()
+        ).subscribe()
+        .with(System.out::println);
   }
 
   private void addLabel(final CardEntity toUpdate, final String value) {
-    LabelEntity label = new LabelEntity();
-    label.setId(UUID.fromString(value));
-
-    CardLabelEntity cardLabel = new CardLabelEntity();
-    cardLabel.setLabel(label);
-    cardLabel.setCard(toUpdate);
-
-    toUpdate.getLabels().add(cardLabel);
+    sessionFactory.withTransaction(txSession ->
+            txSession
+                .createNativeQuery("insert into card_label(card_id, label_id, board_id, created_by_id, created_at) VALUES" +
+                    " (?1, ?2, ?3, ?4, ?5 )")
+                .setParameter(1, toUpdate.getId())
+                .setParameter(2, value)
+                .setParameter(3, toUpdate.getBoard().getId())
+                .setParameter(4, toUpdate.getCreatedBy().getId())
+                .setParameter(5, LocalDateTime.now())
+                .executeUpdate())
+        .subscribe()
+        .with(System.out::println);
   }
 
 }

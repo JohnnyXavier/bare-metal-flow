@@ -3,13 +3,16 @@ package com.bmc.flow.modules.service.catalogs;
 import com.bmc.flow.modules.database.dto.catalogs.LabelDto;
 import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
 import com.bmc.flow.modules.database.repositories.catalogs.LabelRepository;
+import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
+import com.bmc.flow.modules.service.base.PageResult;
 import com.bmc.flow.modules.service.utils.CreationUtils;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.smallrye.mutiny.Uni;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.validation.Valid;
+import java.util.UUID;
 
 @ApplicationScoped
 public class LabelService extends BasicPersistenceService<LabelDto, LabelEntity> {
@@ -28,7 +31,11 @@ public class LabelService extends BasicPersistenceService<LabelDto, LabelEntity>
     newLabel.setColorHex(labelDto.getColorHex());
 
     return labelRepo.persist(newLabel)
-                    .replaceWith(findById(newLabel.getId()));
+        .replaceWith(findById(newLabel.getId()));
+  }
+
+  public Uni<PageResult<LabelDto>> findAllByCardIdPaged(final UUID cardId, final Pageable pageable) {
+    return findAllPaged(labelRepo.findAllByCardId(cardId, pageable.getSort()), "labels-in-card-" + cardId, pageable.getPage());
   }
 
   @Override

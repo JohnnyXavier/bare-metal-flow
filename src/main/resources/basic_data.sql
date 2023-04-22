@@ -119,7 +119,7 @@ alpha_board_col_in_pro := gen_random_uuid();
 alpha_board_col_testing := gen_random_uuid();
 alpha_board_col_done := gen_random_uuid();
 --
-card_trnx_01 := gen_random_uuid();
+card_trnx_01 := ''fb90e4cf-c725-426a-9066-07ae2577a3aa'';
 card_trnx_02 := gen_random_uuid();
 card_trnx_03 := gen_random_uuid();
 card_trnx_04 := gen_random_uuid();
@@ -342,14 +342,14 @@ insert into project(id, name, account_id, description, cover_image, created_at, 
     (project_alpha_work_client_2, ''android client'', account_alpha_work, ''mobile client projects'', robohash || project_alpha_work_client_2, cre_upd, cre_upd, user_alpha),
     (project_alpha_work_client_3, ''running & co'', account_alpha_work, ''running & co projects'', robohash || project_alpha_work_client_3, cre_upd, cre_upd, user_alpha);
 
-insert into board(id, name, description, cover_image, board_type_id, project_id, created_at, updated_at, created_by_id) values
-    (alpha_kanban_board_work_1, ''burger shop online'', default_description, robohash_default, board_type_kanban, project_alpha_work_client_1, cre_upd, cre_upd, user_alpha),
-    (gen_random_uuid(), ''payment points'', default_description, robohash_default, board_type_kanban, project_alpha_work_client_1, cre_upd, cre_upd, user_alpha),
-    (gen_random_uuid(), ''world cup 2023'', default_description, robohash_default, board_type_kanban, project_alpha_work_client_2, cre_upd, cre_upd, user_alpha),
-    (gen_random_uuid(), ''marathon 2023'', default_description, robohash_default, board_type_kanban, project_alpha_work_client_3, cre_upd, cre_upd, user_alpha),
-    (gen_random_uuid(), ''arduino'', default_description, robohash_default, board_type_kanban, project_alpha_hobbies, cre_upd, cre_upd, user_alpha),
-    (alpha_kanban_board_college_1, ''electronics'', default_description, robohash_default, board_type_kanban, project_alpha_college, cre_upd, cre_upd, user_alpha),
-    (alpha_kanban_board_college_2, ''mechanics'', default_description, robohash_default, board_type_kanban, project_alpha_college, cre_upd, cre_upd, user_alpha);
+insert into board(id, name, is_favorite, description, cover_image, board_type_id, project_id, created_at, updated_at, created_by_id) values
+    (alpha_kanban_board_work_1, ''burger shop online'', true, default_description, robohash_default, board_type_kanban, project_alpha_work_client_1, cre_upd, cre_upd, user_alpha),
+    (gen_random_uuid(), ''payment points'', false, default_description, robohash_default, board_type_kanban, project_alpha_work_client_1, cre_upd, cre_upd, user_alpha),
+    (gen_random_uuid(), ''world cup 2023'', true, default_description, robohash_default, board_type_kanban, project_alpha_work_client_2, cre_upd, cre_upd, user_alpha),
+    (gen_random_uuid(), ''marathon 2023'', false, default_description, robohash_default, board_type_kanban, project_alpha_work_client_3, cre_upd, cre_upd, user_alpha),
+    (gen_random_uuid(), ''arduino'', false, default_description, robohash_default, board_type_kanban, project_alpha_hobbies, cre_upd, cre_upd, user_alpha),
+    (alpha_kanban_board_college_1, ''electronics'', true, default_description, robohash_default, board_type_kanban, project_alpha_college, cre_upd, cre_upd, user_alpha),
+    (alpha_kanban_board_college_2, ''mechanics'', false, default_description, robohash_default, board_type_kanban, project_alpha_college, cre_upd, cre_upd, user_alpha);
 
 insert into board_column(id, created_at, updated_at, created_by_id, account_id, board_id, project_id, status_id) values
     (alpha_board_col_new, cre_upd, cre_upd, user_alpha, account_alpha_university, alpha_kanban_board_college_1, project_alpha_college, card_status_new),
@@ -370,22 +370,22 @@ insert into card(id, name, description, cover_image, due_date, board_id, board_c
     (card_trnx_09, ''9th-card'', default_description, ''https://loremflickr.com/g/800/400/computer?lock=3'', make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha),
     (card_trnx_10, ''10th-card'', default_description, ''https://loremflickr.com/g/200/400/paris?lock=30'', make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha);
 
-insert into card_label(card_id, label_id, board_id) VALUES
-    (card_trnx_01, label_be, alpha_kanban_board_college_1),
-    (card_trnx_01, label_pers, alpha_kanban_board_college_1),
-    (card_trnx_01, label_fe, alpha_kanban_board_college_1),
-    (card_trnx_02, label_fe, alpha_kanban_board_college_1),
-    (card_trnx_02, label_pers, alpha_kanban_board_college_1),
-    (card_trnx_03, label_qa, alpha_kanban_board_college_1),
-    (card_trnx_03, label_devops, alpha_kanban_board_college_1),
-    (card_trnx_03, label_be, alpha_kanban_board_college_1),
-    (card_trnx_04, label_pers, alpha_kanban_board_college_1),
-    (card_trnx_05, label_be, alpha_kanban_board_college_1),
-    (card_trnx_05, label_pers, alpha_kanban_board_college_1),
-    (card_trnx_05, label_fe, alpha_kanban_board_college_1),
-    (card_trnx_05, label_urgent, alpha_kanban_board_college_1),
-    (card_trnx_08, label_devops, alpha_kanban_board_college_1),
-    (card_trnx_08, label_important, alpha_kanban_board_college_1);
+insert into card_label(card_id, label_id, board_id, created_at, created_by_id) VALUES
+    (card_trnx_01, label_be, alpha_kanban_board_college_1, cre_upd, user_alpha),
+    (card_trnx_01, label_pers, alpha_kanban_board_college_1, cre_upd, user_alpha),
+    (card_trnx_01, label_fe, alpha_kanban_board_college_1, cre_upd, user_alpha),
+    (card_trnx_02, label_fe, alpha_kanban_board_college_1, cre_upd, user_alpha),
+    (card_trnx_02, label_pers, alpha_kanban_board_college_1, cre_upd, user_alpha),
+    (card_trnx_03, label_qa, alpha_kanban_board_college_1, cre_upd, user_alpha),
+    (card_trnx_03, label_devops, alpha_kanban_board_college_1, cre_upd, user_alpha),
+    (card_trnx_03, label_be, alpha_kanban_board_college_1, cre_upd, user_alpha),
+    (card_trnx_04, label_pers, alpha_kanban_board_college_1, cre_upd, user_alpha),
+    (card_trnx_05, label_be, alpha_kanban_board_college_1, cre_upd, user_alpha),
+    (card_trnx_05, label_pers, alpha_kanban_board_college_1, cre_upd, user_alpha),
+    (card_trnx_05, label_fe, alpha_kanban_board_college_1, cre_upd, user_alpha),
+    (card_trnx_05, label_urgent, alpha_kanban_board_college_1, cre_upd, user_alpha),
+    (card_trnx_08, label_devops, alpha_kanban_board_college_1, cre_upd, user_alpha),
+    (card_trnx_08, label_important, alpha_kanban_board_college_1, cre_upd, user_alpha);
 
 insert into project_users(user_id, project_id) VALUES
     (user_alpha, project_alpha_work_client_1),

@@ -1,12 +1,15 @@
 package com.bmc.flow.modules.database.entities.records;
 
 import com.bmc.flow.modules.database.dto.records.CardLabelDto;
+import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
 import com.bmc.flow.modules.database.entities.ids.CardLabelId;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static javax.persistence.FetchType.LAZY;
@@ -57,4 +60,13 @@ public class CardLabelEntity {
   @OneToOne(fetch = LAZY)
   private BoardEntity board;
 
+  @ManyToOne(fetch = LAZY)
+  private UserEntity createdBy;
+
+  @CreationTimestamp
+  @Column(updatable = false)
+  private LocalDateTime createdAt;
+
+  // there is no need to have an "updatedAt" field given that no field here is updatable
+  // either it is and entry on the db, or it is not
 }
