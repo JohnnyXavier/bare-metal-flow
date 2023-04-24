@@ -290,9 +290,9 @@ update users set seniority_id = (select id from seniority where name = ''archite
 where id = system_user;
 
 insert into users(id, email, call_sign, avatar, department_id, seniority_id, password, created_at, updated_at, created_by_id) VALUES
-    (user_two, ''maverick@demo.com'', ''maverick'', robohash || user_two || ''?set=set2'', department_eng, seniority_sr, ''maverick'', cre_upd, cre_upd, system_user),
-    (user_three, ''goose@demo.com'', ''goose'', robohash || seniority_jr || ''?set=set2'', department_eng, seniority_jr, ''goose'', cre_upd, cre_upd, system_user),
-    (user_four, ''iceman@demo.com'', ''iceman'', robohash || seniority_sr || ''?set=set2'', department_eng, seniority_jr, ''iceman'', cre_upd, cre_upd, system_user);
+    (user_two, ''maverick@demo.com'', ''maverick'', robohash || user_two || ''?set=set3'', department_eng, seniority_sr, ''maverick'', cre_upd, cre_upd, system_user),
+    (user_three, ''goose@demo.com'', ''goose'', robohash || seniority_jr || ''?set=set3'', department_eng, seniority_jr, ''goose'', cre_upd, cre_upd, system_user),
+    (user_four, ''iceman@demo.com'', ''iceman'', robohash || seniority_sr || ''?set=set3'', department_eng, seniority_jr, ''iceman'', cre_upd, cre_upd, system_user);
 
 insert into account(id, name, description, cover_image, created_at, updated_at, created_by_id) VALUES
     (account_one, ''default-account'', ''system default account'', robohash || account_one, cre_upd, cre_upd, system_user),
@@ -327,7 +327,7 @@ insert into project_users(user_id, project_id) VALUES
 
 -- Alpha data
 insert into users(id, email, call_sign, avatar, department_id, seniority_id, password, created_at, updated_at, created_by_id) VALUES
-    (user_alpha, ''alpha@demo.com'', ''alpha'', ''https://robohash.org/alpha?set=set2'', department_eng, seniority_sr, ''alpha'', cre_upd, cre_upd, user_alpha);
+    (user_alpha, ''alpha@demo.com'', ''alpha'', ''https://robohash.org/alpha?set=set3'', department_eng, seniority_sr, ''alpha'', cre_upd, cre_upd, user_alpha);
 
 insert into account(id, name, description, cover_image, created_at, updated_at, created_by_id) VALUES
     (account_alpha_personal, ''personal account'', ''another demo pre created account'', robohash || account_alpha_personal, cre_upd, cre_upd, user_alpha),
@@ -406,6 +406,14 @@ insert into board_users(board_id, user_id) VALUES
     (alpha_kanban_board_college_1, user_three),
     (alpha_kanban_board_college_2, user_two),
     (alpha_kanban_board_college_2, user_alpha);
+
+insert into card_users_assigned(card_id, user_id) values
+    (card_trnx_01, user_two);
+
+insert into card_users_watchers(card_id, user_id) values
+    (card_trnx_01, user_alpha),
+    (card_trnx_01, user_four);
+
 
 insert into comment(id, created_at, updated_at, comment, created_by_id, card_id) values
     (gen_random_uuid(), cre_upd, cre_upd, ''a comment'', user_alpha, card_trnx_01),

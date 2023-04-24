@@ -110,7 +110,7 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     firstAccount.setDescription("This is your personal account, you can use it to group multiple projects.");
     firstAccount.setName(newUser.getCallSign() + "'s account");
     firstAccount.setCreatedBy(newUser);
-    firstAccount.setCoverImage("https://robohash.org/" + firstAccount.getId());
+    firstAccount.setCoverImage("https://loremflickr.com/g/800/400/computer");
     firstAccount.setUsers(Set.of(newUser));
 
     ProjectEntity firstProject = new ProjectEntity();
@@ -118,7 +118,7 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     firstProject.setDescription("This is your personal project");
     firstProject.setName(newUser.getCallSign() + "'s project");
     firstProject.setAccount(firstAccount);
-    firstProject.setCoverImage("https://robohash.org/" + firstProject.getId());
+    firstProject.setCoverImage("https://loremflickr.com/g/800/400/car");
     firstProject.setUsers(Set.of(newUser));
     firstProject.setProjectLead(newUser);
     firstProject.setCreatedBy(newUser);
@@ -128,6 +128,7 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     BoardEntity kanbanBoard = new BoardEntity();
     kanbanBoard.setId(randomUUID());
     kanbanBoard.setDescription("This is your personal Board");
+    kanbanBoard.setCoverImage("https://loremflickr.com/g/800/400/sports");
     kanbanBoard.setName(newUser.getCallSign() + "'s board");
     kanbanBoard.setProject(firstProject);
     kanbanBoard.setAccount(firstAccount);
@@ -148,6 +149,7 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     newCard.setId(randomUUID());
     newCard.setDescription("This is a default card description");
     newCard.setName(newUser.getCallSign() + "'s default card");
+    newCard.setCoverImage("https://loremflickr.com/g/800/400/game");
     newCard.setAssignees(Set.of(newUser));
     newCard.setWatchers(Set.of(newUser));
     newCard.setBoard(kanbanBoard);
@@ -160,7 +162,7 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
 
     CommentEntity newComment = new CommentEntity();
     newComment.setId(randomUUID());
-    newComment.setComment("this is a default comment, it can be formatted with markdown");
+    newComment.setComment("this is a default comment, add as many as you like!");
     newComment.setCard(newCard);
     newComment.setCreatedBy(newUser);
 

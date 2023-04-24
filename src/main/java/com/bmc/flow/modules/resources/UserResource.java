@@ -40,7 +40,7 @@ public class UserResource extends BasicOpsResource<UserDto, UserEntity> {
       new SimpleImmutableEntry<>("account", "accounts"),
       new SimpleImmutableEntry<>("board", "boards"),
       new SimpleImmutableEntry<>("sprint", "sprints"),
-      new SimpleImmutableEntry<>("assignedCard", "assignedCard"),
+      new SimpleImmutableEntry<>("assignedCard", "assignedCards"),
       new SimpleImmutableEntry<>("watchingCard", "watchingCards"),
       new SimpleImmutableEntry<>("department", "departments"),
       new SimpleImmutableEntry<>("retroBoard", "retroBoards")
