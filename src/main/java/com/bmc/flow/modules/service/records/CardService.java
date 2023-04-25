@@ -146,17 +146,23 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
   }
 
   private void removeWatcher(final CardEntity toUpdate, final String value) {
-    UserEntity user = new UserEntity();
-    user.setId(UUID.fromString(value));
-
-    toUpdate.getWatchers().remove(user);
+    sessionFactory.withTransaction(txSession ->
+        txSession.createNativeQuery("delete from card_users_watchers where card_id=?1 and user_id=?2")
+            .setParameter(1, toUpdate.getId())
+            .setParameter(2, UUID.fromString(value))
+            .executeUpdate()
+    ).subscribe().with(System.out::println);
   }
 
   private void addWatcher(final CardEntity toUpdate, final String value) {
-    UserEntity user = new UserEntity();
-    user.setId(UUID.fromString(value));
+    sessionFactory.withTransaction(txSession ->
+        txSession.createNativeQuery("insert into card_users_watchers(card_id, user_id) VALUES " +
+                " (?1, ?2)")
+            .setParameter(1, toUpdate.getId())
+            .setParameter(2, UUID.fromString(value))
+            .executeUpdate()
+    ).subscribe().with(System.out::println);
 
-    toUpdate.getWatchers().add(user);
   }
 
   private void setDifficulty(final CardEntity toUpdate, final String value) {
