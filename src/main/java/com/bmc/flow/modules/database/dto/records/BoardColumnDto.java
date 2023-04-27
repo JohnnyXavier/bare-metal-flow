@@ -15,21 +15,23 @@ import java.util.UUID;
 @RegisterForReflection
 public class BoardColumnDto extends BaseDto {
 
+  private UUID   boardId;
+  private String name;
   @NotNull
   private UUID   statusId;
-  private UUID   boardId;
   private String statusName;
 
-  public BoardColumnDto(final UUID id, final LocalDateTime createdAt,
+  public BoardColumnDto(final UUID id, final LocalDateTime createdAt, final String name,
                         @ProjectedFieldName("createdBy.id") final UUID createdBy,
                         @ProjectedFieldName("board.id") final UUID boardId,
                         @ProjectedFieldName("status.id") final UUID statusId,
                         @ProjectedFieldName("status.name") final String statusName) {
-    this.id         = id;
-    this.statusId   = statusId;
     this.boardId    = boardId;
-    this.statusName = statusName;
-    this.createdBy  = createdBy;
     this.createdAt  = createdAt;
+    this.createdBy  = createdBy;
+    this.id         = id;
+    this.name       = name;
+    this.statusId   = statusId;
+    this.statusName = statusName;
   }
 }

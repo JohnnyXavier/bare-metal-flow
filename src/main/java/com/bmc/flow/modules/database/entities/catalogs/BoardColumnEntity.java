@@ -25,6 +25,8 @@ import static javax.persistence.CascadeType.ALL;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class BoardColumnEntity extends BaseEntity {
 
+  private String name;
+
   @ManyToOne
   private StatusEntity status;
 

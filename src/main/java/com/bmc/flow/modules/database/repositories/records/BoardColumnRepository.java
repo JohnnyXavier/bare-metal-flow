@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @ApplicationScoped
 public class BoardColumnRepository implements PanacheRepositoryBase<BoardColumnEntity, UUID> {
-  private static final String SELECT_DTO  = " select e.id, e.createdAt, e.createdBy.id, e.board.id, e.status.id, e.status.name";
+  private static final String SELECT_DTO  = " select e.id, e.name, e.createdAt, e.createdBy.id, e.board.id, e.status.id, e.status.name";
   private static final String FROM_ENTITY = " from BoardColumnEntity e";
 
 }

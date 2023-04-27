@@ -3,6 +3,7 @@ package com.bmc.flow.modules.service.records;
 import com.bmc.flow.modules.database.dto.records.CardLabelDto;
 import com.bmc.flow.modules.database.dto.records.CardSimpleDto;
 import com.bmc.flow.modules.database.entities.UserEntity;
+import com.bmc.flow.modules.database.entities.catalogs.BoardColumnEntity;
 import com.bmc.flow.modules.database.entities.catalogs.CardDifficultyEntity;
 import com.bmc.flow.modules.database.entities.catalogs.StatusEntity;
 import com.bmc.flow.modules.database.entities.records.BoardEntity;
@@ -90,23 +91,22 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
     BoardEntity board = new BoardEntity();
     board.setId(cardSimpleDto.getBoardId());
 
+    BoardColumnEntity boardColumn = new BoardColumnEntity();
+    boardColumn.setId(cardSimpleDto.getBoardColumnId());
+
+    StatusEntity status = new StatusEntity();
+    status.setId(cardSimpleDto.getCardStatusId());
+
     CardEntity newCard = new CardEntity();
     newCard.setId(randomUUID());
     newCard.setName(cardSimpleDto.getName());
-    newCard.setDescription(cardSimpleDto.getDescription());
     newCard.setCreatedBy(cardCreator);
-    newCard.setDueDate(cardSimpleDto.getDueDate());
     newCard.setBoard(board);
-
-    Optional.ofNullable(cardSimpleDto.getCardStatusId())
-        .ifPresent(statusId -> {
-          StatusEntity cardStatus = new StatusEntity();
-          cardStatus.setId(statusId);
-          newCard.setCardStatus(cardStatus);
-        });
+    newCard.setBoardColumn(boardColumn);
+    newCard.setCardStatus(status);
 
     return cardRepo.persist(newCard)
-        //.invoke(() -> newCard.setBoard(board))
+        .chain(() -> cardStatusRepo.findById(cardSimpleDto.getCardStatusId()).invoke(newCard::setCardStatus))
         .replaceWith(findById(newCard.getId()));
   }
 
@@ -132,17 +132,22 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
   }
 
   private void removeAssignee(final CardEntity toUpdate, final String value) {
-    UserEntity user = new UserEntity();
-    user.setId(UUID.fromString(value));
-
-    toUpdate.getAssignees().remove(user);
+    sessionFactory.withTransaction(txSession ->
+        txSession.createNativeQuery("insert into card_users_assigned(card_id, user_id) VALUES " +
+                " (?1, ?2)")
+            .setParameter(1, toUpdate.getId())
+            .setParameter(2, UUID.fromString(value))
+            .executeUpdate()
+    ).subscribe().with(System.out::println);
   }
 
   private void addAssignee(final CardEntity toUpdate, final String value) {
-    UserEntity user = new UserEntity();
-    user.setId(UUID.fromString(value));
-
-    toUpdate.getAssignees().add(user);
+    sessionFactory.withTransaction(txSession ->
+        txSession.createNativeQuery("delete from card_users_assigned where card_id=?1 and user_id=?2")
+            .setParameter(1, toUpdate.getId())
+            .setParameter(2, UUID.fromString(value))
+            .executeUpdate()
+    ).subscribe().with(System.out::println);
   }
 
   private void removeWatcher(final CardEntity toUpdate, final String value) {

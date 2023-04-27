@@ -351,11 +351,11 @@ insert into board(id, name, is_favorite, description, cover_image, board_type_id
     (alpha_kanban_board_college_1, ''electronics'', true, default_description, robohash_default, board_type_kanban, project_alpha_college, cre_upd, cre_upd, user_alpha),
     (alpha_kanban_board_college_2, ''mechanics'', false, default_description, robohash_default, board_type_kanban, project_alpha_college, cre_upd, cre_upd, user_alpha);
 
-insert into board_column(id, created_at, updated_at, created_by_id, account_id, board_id, project_id, status_id) values
-    (alpha_board_col_new, cre_upd, cre_upd, user_alpha, account_alpha_university, alpha_kanban_board_college_1, project_alpha_college, card_status_new),
-    (alpha_board_col_in_pro, cre_upd, cre_upd, user_alpha, account_alpha_university, alpha_kanban_board_college_1, project_alpha_college, card_status_in_progress),
-    (alpha_board_col_testing, cre_upd, cre_upd, user_alpha, account_alpha_university, alpha_kanban_board_college_1, project_alpha_college, card_status_testing),
-    (alpha_board_col_done, cre_upd, cre_upd, user_alpha, account_alpha_university, alpha_kanban_board_college_1, project_alpha_college, card_status_done);
+insert into board_column(id, name, created_at, updated_at, created_by_id, account_id, board_id, project_id, status_id) values
+    (alpha_board_col_new, ''new'', cre_upd, cre_upd, user_alpha, account_alpha_university, alpha_kanban_board_college_1, project_alpha_college, card_status_new),
+    (alpha_board_col_in_pro, ''in progress'', cre_upd, cre_upd, user_alpha, account_alpha_university, alpha_kanban_board_college_1, project_alpha_college, card_status_in_progress),
+    (alpha_board_col_testing, ''testing'', cre_upd, cre_upd, user_alpha, account_alpha_university, alpha_kanban_board_college_1, project_alpha_college, card_status_testing),
+    (alpha_board_col_done, ''done'', cre_upd, cre_upd, user_alpha, account_alpha_university, alpha_kanban_board_college_1, project_alpha_college, card_status_done);
 
 
 insert into card(id, name, description, cover_image, due_date, board_id, board_column_id, card_status_id, card_type_id, created_at, updated_at, created_by_id) values

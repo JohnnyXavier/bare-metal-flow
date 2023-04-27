@@ -11,6 +11,7 @@ import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.smallrye.mutiny.Uni;
+import org.hibernate.reactive.mutiny.Mutiny;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.validation.Valid;
@@ -23,9 +24,14 @@ public class BoardColumnService extends BasicPersistenceService<BoardColumnDto, 
 
   private final BoardColumnRepository repository;
 
-  public BoardColumnService(final BoardColumnRepository repository) {
+  private final Mutiny.SessionFactory sessionFactory;
+  private final Mutiny.Session        session;
+
+  public BoardColumnService(final BoardColumnRepository repository, Mutiny.SessionFactory sessionFactory, Mutiny.Session session) {
     super(repository, BoardColumnDto.class);
-    this.repository = repository;
+    this.repository     = repository;
+    this.sessionFactory = sessionFactory;
+    this.session        = session;
   }
 
   public Uni<PageResult<BoardColumnDto>> findAllByBoardIdPaged(final UUID boardId, final Pageable pageable) {
@@ -55,6 +61,21 @@ public class BoardColumnService extends BasicPersistenceService<BoardColumnDto, 
 
   @Override
   protected void updateField(final BoardColumnEntity toUpdate, final String key, final String value) {
-    throw new IllegalStateException("Unexpected value: " + key);
+    switch (key) {
+      case "name" -> toUpdate.setName(value);
+      case "status" -> setStatus(toUpdate, UUID.fromString(value));
+      default -> throw new IllegalStateException("Unexpected value: " + key);
+    }
   }
+
+  private void setStatus(final BoardColumnEntity toUpdate, final UUID uuid) {
+    session.withTransaction(transaction -> {
+      StatusEntity status = new StatusEntity();
+      status.setId(uuid);
+      toUpdate.setStatus(status);
+      return null;
+    });
+  }
+
+
 }

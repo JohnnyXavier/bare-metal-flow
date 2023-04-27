@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.bmc.flow.modules.utilities.DataUtils.getImage;
-
 @Getter
 @Setter
 @RegisterForReflection
@@ -46,7 +44,7 @@ public class CardSimpleDto extends BaseRecordDto {
     this.cardDifficultyId = cardDifficultyId;
     this.cardStatusId     = cardStatusId;
     this.cardTypeId       = cardTypeId;
-    this.coverImage       = getImage(coverImage, "CARD");
+    this.coverImage       = coverImage;
     this.createdAt        = createdAt;
     this.createdBy        = createdBy;
     this.description      = description;
