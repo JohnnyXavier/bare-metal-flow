@@ -2,15 +2,15 @@ package com.bmc.flow.modules.service.records.retro;
 
 import com.bmc.flow.modules.database.dto.records.retro.RetroCardDto;
 import com.bmc.flow.modules.database.entities.UserEntity;
-import com.bmc.flow.modules.database.entities.records.retro.RetrospectiveEntity;
 import com.bmc.flow.modules.database.entities.records.retro.RetroCardEntity;
+import com.bmc.flow.modules.database.entities.records.retro.RetrospectiveEntity;
 import com.bmc.flow.modules.database.repositories.records.retro.RetroCardRepository;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +31,7 @@ public class RetroCardService extends BasicPersistenceService<RetroCardDto, Retr
     return repository.findAllByRetroBoardId(retroBoardId);
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<RetroCardDto> create(@Valid final RetroCardDto retroCardDto) {
     UserEntity cardCreator = new UserEntity();
     cardCreator.setId(retroCardDto.getCreatedBy());

@@ -5,8 +5,8 @@ import com.bmc.flow.modules.database.entities.catalogs.StatusEntity;
 import com.bmc.flow.modules.resources.base.BasicCatalogResource;
 import com.bmc.flow.modules.service.catalogs.CardStatusService;
 
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
 
 @Path("/v1/cardStatus")
 @Produces("application/json")

@@ -7,11 +7,11 @@ import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
 import com.bmc.flow.modules.service.utils.CreationUtils;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -24,7 +24,7 @@ public class LabelService extends BasicPersistenceService<LabelDto, LabelEntity>
     this.labelRepo = labelRepo;
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<LabelDto> create(@Valid final LabelDto labelDto) {
     LabelEntity newLabel = new LabelEntity();
     CreationUtils.createBaseCatalogEntity(newLabel, labelDto);

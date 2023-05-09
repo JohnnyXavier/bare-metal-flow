@@ -3,7 +3,7 @@ package com.bmc.flow.modules.database.repositories.catalogs;
 import com.bmc.flow.modules.database.entities.records.CardLabelEntity;
 import io.quarkus.hibernate.reactive.panache.PanacheRepositoryBase;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.util.UUID;
 
 @ApplicationScoped

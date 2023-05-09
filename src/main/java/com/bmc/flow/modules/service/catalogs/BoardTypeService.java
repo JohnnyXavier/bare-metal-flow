@@ -5,11 +5,10 @@ import com.bmc.flow.modules.database.entities.catalogs.BoardTypeEntity;
 import com.bmc.flow.modules.database.repositories.catalogs.BoardTypeRepository;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.utils.CreationUtils;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 
 @ApplicationScoped
 public class BoardTypeService extends BasicPersistenceService<BoardTypeDto, BoardTypeEntity> {
@@ -21,7 +20,7 @@ public class BoardTypeService extends BasicPersistenceService<BoardTypeDto, Boar
     this.boardTypeRepo = boardTypeRepo;
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<BoardTypeDto> create(@Valid final BoardTypeDto boardTypeDto) {
     BoardTypeEntity newBoardType = new BoardTypeEntity();
     CreationUtils.createBaseCatalogEntity(newBoardType, boardTypeDto);

@@ -6,11 +6,10 @@ import com.bmc.flow.modules.database.repositories.catalogs.DepartmentRepository;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.utils.CreationUtils;
 import io.quarkus.cache.CacheResult;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 
 @ApplicationScoped
 public class DepartmentService extends BasicPersistenceService<DepartmentDto, DepartmentEntity> {
@@ -22,7 +21,7 @@ public class DepartmentService extends BasicPersistenceService<DepartmentDto, De
     this.departmentRepo = departmentRepo;
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<DepartmentDto> create(@Valid final DepartmentDto departmentDto) {
     DepartmentEntity newDepartment = new DepartmentEntity();
     CreationUtils.createBaseCatalogEntity(newDepartment, departmentDto);

@@ -6,15 +6,15 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.pgclient.PgException;
 import lombok.extern.jbosslog.JBossLog;
 
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
-import javax.validation.ConstraintViolationException;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceException;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static javax.ws.rs.core.Response.Status.*;
+import static jakarta.ws.rs.core.Response.Status.*;
 
 @Produces("application/json")
 @JBossLog

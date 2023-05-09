@@ -5,14 +5,14 @@ import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import io.smallrye.mutiny.Uni;
 import io.vertx.pgclient.PgException;
 
-import javax.persistence.NoResultException;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
+import jakarta.persistence.NoResultException;
+import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Response;
 
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 
 public abstract class BasicCatalogResource<D, E> extends BasicOpsResource<D, E> {
 

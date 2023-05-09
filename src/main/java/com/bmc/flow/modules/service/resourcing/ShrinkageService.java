@@ -4,11 +4,10 @@ import com.bmc.flow.modules.database.dto.resourcing.ShrinkageDto;
 import com.bmc.flow.modules.database.entities.resourcing.ShrinkageEntity;
 import com.bmc.flow.modules.database.repositories.resourcing.ShrinkageRepository;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 
 import static java.lang.Boolean.FALSE;
 import static java.util.UUID.randomUUID;
@@ -23,7 +22,7 @@ public class ShrinkageService extends BasicPersistenceService<ShrinkageDto, Shri
     this.shrinkageRepo = shrinkageRepo;
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<ShrinkageDto> create(@Valid final ShrinkageDto shrinkageDto) {
     ShrinkageEntity newShrinkage = new ShrinkageEntity();
     newShrinkage.setId(randomUUID());

@@ -4,12 +4,12 @@ import com.bmc.flow.modules.resources.base.Pageable;
 import io.quarkus.cache.CacheResult;
 import io.quarkus.hibernate.reactive.panache.PanacheQuery;
 import io.quarkus.hibernate.reactive.panache.PanacheRepositoryBase;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.quarkus.logging.Log;
 import io.quarkus.panache.common.Page;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
-import javax.validation.Valid;
 import java.util.UUID;
 
 public abstract class BasicPersistenceService<D, E> {
@@ -35,7 +35,7 @@ public abstract class BasicPersistenceService<D, E> {
                .singleResult();
   }
 
-  //FIXME: create a CatalogPersistence Service so we put findAll there
+  //FIXME: create a CatalogPersistence Service, so we put findAll there
   // we don't want to expose a findAll for every card or every user, being it paged or not
   public Uni<PageResult<D>> findAll(final Pageable pageable) {
     return this.findAllPaged(repository.findAll(pageable.getSort()), "-find-all", pageable.getPage());
@@ -65,7 +65,7 @@ public abstract class BasicPersistenceService<D, E> {
 
   public abstract Uni<D> create(@Valid final D fromDto);
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<Void> update(final UUID id, final String key, final String value) {
     return repository.findById(id)
                .onItem().ifNull().fail()
@@ -73,7 +73,7 @@ public abstract class BasicPersistenceService<D, E> {
                .replaceWith(Uni.createFrom().voidItem());
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<Boolean> deleteById(final UUID idToDelete) {
     return repository.deleteById(idToDelete);
   }

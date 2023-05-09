@@ -1,11 +1,11 @@
-package com.bmc.flow.modules.resources.records;
+package com.bmc.flow.modules.resources;
 
-import com.bmc.flow.modules.database.dto.records.CommentDto;
-import com.bmc.flow.modules.database.entities.records.CommentEntity;
+import com.bmc.flow.modules.database.dto.ChangeLogCardDto;
+import com.bmc.flow.modules.database.entities.ChangelogEntity;
 import com.bmc.flow.modules.resources.base.BasicOpsResource;
 import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.resources.utils.ResponseUtils;
-import com.bmc.flow.modules.service.records.CommentService;
+import com.bmc.flow.modules.service.ChangeLogService;
 import io.smallrye.mutiny.Uni;
 
 import jakarta.validation.constraints.NotNull;
@@ -16,27 +16,26 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
 import java.util.UUID;
 
-@Path("/v1/comments")
+@Path("/v1/changelog")
 @Produces("application/json")
-public class CommentResource extends BasicOpsResource<CommentDto, CommentEntity> {
+public class ChangeLogResource extends BasicOpsResource<ChangeLogCardDto, ChangelogEntity> {
 
-  private final CommentService commentService;
+  private final ChangeLogService changeLogService;
 
-  public CommentResource(final CommentService commentService) {
-    super(commentService);
-    this.commentService = commentService;
+  public ChangeLogResource(ChangeLogService changeLogService) {
+    super(changeLogService);
+    this.changeLogService = changeLogService;
   }
 
   @GET
-  @Path("card/{id}")
-  public Uni<Response> findCommentsByCardId(final UUID id,
+  @Path("card/{cardId}")
+  public Uni<Response> findCardsByBoardId(final UUID cardId,
                                           @QueryParam(value = "sortBy") @NotNull final String sortBy,
                                           @QueryParam(value = "sortDir") final String sortDir,
                                           @QueryParam(value = "pageIx") final Integer pageIx,
                                           @QueryParam(value = "pageSize") @NotNull final Integer pageSize) {
-    return commentService.findAllByCardIdPaged(id, new Pageable(sortBy, sortDir, pageIx, pageSize))
-        .map(resultDtos -> Response.ok(resultDtos).build())
+    return changeLogService.findAllByCardId(cardId, new Pageable(sortBy, sortDir, pageIx, pageSize))
+        .map(changeLogDtos -> Response.ok(changeLogDtos).build())
         .onFailure().recoverWithItem(ResponseUtils::failToServerError);
   }
-
 }

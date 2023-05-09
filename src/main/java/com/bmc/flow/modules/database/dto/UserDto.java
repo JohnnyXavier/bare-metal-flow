@@ -5,8 +5,8 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -27,7 +27,6 @@ public class UserDto {
   private String        email;
   private Boolean       isActive;
   private UUID          seniorityId;
-
 
   public UserDto(final UUID id, final String email, final String callSign,
                  final String avatar, final Boolean isActive, final LocalDateTime createdAt,

@@ -10,7 +10,7 @@ import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
 import io.smallrye.mutiny.Uni;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;

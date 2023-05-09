@@ -10,11 +10,11 @@ import com.bmc.flow.modules.database.repositories.records.SprintRepository;
 import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -33,7 +33,7 @@ public class SprintService extends BasicPersistenceService<SprintDto, SprintEnti
   }
 
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<SprintDto> create(@Valid final SprintDto boardDto) {
     UserEntity sprintCreator = new UserEntity();
     sprintCreator.setId(boardDto.getCreatedBy());

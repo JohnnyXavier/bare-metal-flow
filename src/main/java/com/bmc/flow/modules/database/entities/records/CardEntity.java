@@ -2,7 +2,7 @@ package com.bmc.flow.modules.database.entities.records;
 
 import com.bmc.flow.modules.database.dto.records.CardSimpleDto;
 import com.bmc.flow.modules.database.entities.AttachmentEntity;
-import com.bmc.flow.modules.database.entities.ChangeLogCardEntity;
+import com.bmc.flow.modules.database.entities.ChangelogEntity;
 import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.base.BaseEntity;
 import com.bmc.flow.modules.database.entities.catalogs.BoardColumnEntity;
@@ -13,14 +13,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import static javax.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "card")
@@ -80,7 +80,7 @@ public class CardEntity extends BaseEntity {
   private Set<SprintEntity> sprint;
 
   @OneToMany(mappedBy = "card", cascade = ALL)
-  private Set<ChangeLogCardEntity> changelog = new HashSet<>();
+  private Set<ChangelogEntity> changelog = new HashSet<>();
 
   @OneToMany(mappedBy = "card", cascade = ALL)
   private Set<CardBugReport> bugReports = new HashSet<>();

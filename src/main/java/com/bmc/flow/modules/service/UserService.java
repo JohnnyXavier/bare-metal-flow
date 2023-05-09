@@ -17,11 +17,11 @@ import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
 import com.bmc.flow.modules.service.catalogs.*;
 import com.bmc.flow.modules.utilities.SecurityUtils;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
@@ -88,7 +88,7 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     return null;
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<UserDto> register(@Valid final UserRegistrationDto userRegistrationDto) {
 
     UserEntity newUser = new UserEntity();
@@ -194,7 +194,7 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
         .replaceWith(findById(newUser.getId()));
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   @Override
   public Uni<Boolean> deleteById(final UUID userId) {
     return userRepo.find("id =?1 and isActive=?2", userId, true)

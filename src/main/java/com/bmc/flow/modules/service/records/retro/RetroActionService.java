@@ -2,15 +2,15 @@ package com.bmc.flow.modules.service.records.retro;
 
 import com.bmc.flow.modules.database.dto.records.retro.RetroActionDto;
 import com.bmc.flow.modules.database.entities.UserEntity;
-import com.bmc.flow.modules.database.entities.records.retro.RetrospectiveEntity;
 import com.bmc.flow.modules.database.entities.records.retro.RetroActionEntity;
+import com.bmc.flow.modules.database.entities.records.retro.RetrospectiveEntity;
 import com.bmc.flow.modules.database.repositories.records.retro.RetroActionRepository;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,7 +36,7 @@ public class RetroActionService extends BasicPersistenceService<RetroActionDto, 
     return repository.findAllByProjectId(projectId);
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<RetroActionDto> create(@Valid final RetroActionDto retroActionDto) {
     UserEntity cardCreator = new UserEntity();
     cardCreator.setId(retroActionDto.getCreatedBy());

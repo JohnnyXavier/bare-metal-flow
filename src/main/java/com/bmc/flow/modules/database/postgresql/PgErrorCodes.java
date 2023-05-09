@@ -1,10 +1,10 @@
 package com.bmc.flow.modules.database.postgresql;
 
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status;
 import java.util.HashMap;
 import java.util.Map;
 
-import static javax.ws.rs.core.Response.Status.*;
+import static jakarta.ws.rs.core.Response.Status.*;
 
 /**
  * Postgresql error codes.

@@ -10,7 +10,7 @@ import com.bmc.flow.modules.service.records.CardService;
 import com.bmc.flow.modules.service.records.ProjectService;
 import io.smallrye.mutiny.Uni;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;

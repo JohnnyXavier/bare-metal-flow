@@ -6,11 +6,10 @@ import com.bmc.flow.modules.database.repositories.catalogs.SeniorityRepository;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.utils.CreationUtils;
 import io.quarkus.cache.CacheResult;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 
 @ApplicationScoped
 public class SeniorityService extends BasicPersistenceService<SeniorityDto, SeniorityEntity> {
@@ -22,7 +21,7 @@ public class SeniorityService extends BasicPersistenceService<SeniorityDto, Seni
     this.seniorityRepo = seniorityRepo;
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<SeniorityDto> create(@Valid final SeniorityDto seniorityDto) {
     SeniorityEntity newSeniority = new SeniorityEntity();
     CreationUtils.createBaseCatalogEntity(newSeniority, seniorityDto);

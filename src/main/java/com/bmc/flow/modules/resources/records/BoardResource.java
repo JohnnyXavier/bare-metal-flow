@@ -8,16 +8,16 @@ import com.bmc.flow.modules.resources.utils.ResponseUtils;
 import com.bmc.flow.modules.service.records.BoardService;
 import io.smallrye.mutiny.Uni;
 
-import javax.persistence.NoResultException;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
+import jakarta.persistence.NoResultException;
+import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Response;
 import java.util.UUID;
 
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 
 @Path("/v1/board")
 @Produces("application/json")

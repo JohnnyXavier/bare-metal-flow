@@ -7,11 +7,11 @@ import com.bmc.flow.modules.database.repositories.records.AccountRepository;
 import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
@@ -27,7 +27,7 @@ public class AccountService extends BasicPersistenceService<AccountDto, AccountE
   }
 
 
-  @ReactiveTransactional
+  @WithTransaction
   @Override
   public Uni<AccountDto> create(@Valid final AccountDto accountDto) {
     UserEntity accountCreator = new UserEntity();

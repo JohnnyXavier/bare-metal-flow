@@ -8,11 +8,11 @@ import com.bmc.flow.modules.database.repositories.resourcing.ScheduleRepository;
 import com.bmc.flow.modules.database.repositories.resourcing.ShrinkageRepository;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import io.quarkus.cache.CacheResult;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -32,7 +32,7 @@ public class ScheduleService extends BasicPersistenceService<ScheduleDto, Schedu
     this.shrinkageRepo = shrinkageRepo;
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<ScheduleDto> create(@Valid final ScheduleDto scheduleDto) {
     ScheduleEntity newSchedule = new ScheduleEntity();
     newSchedule.setId(randomUUID());

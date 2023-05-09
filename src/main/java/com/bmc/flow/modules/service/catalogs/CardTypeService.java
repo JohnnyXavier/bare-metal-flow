@@ -5,11 +5,10 @@ import com.bmc.flow.modules.database.entities.catalogs.CardTypeEntity;
 import com.bmc.flow.modules.database.repositories.catalogs.CardTypeRepository;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.utils.CreationUtils;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 
 @ApplicationScoped
 public class CardTypeService extends BasicPersistenceService<CardTypeDto, CardTypeEntity> {
@@ -21,7 +20,7 @@ public class CardTypeService extends BasicPersistenceService<CardTypeDto, CardTy
     this.cardTypeRepo = cardTypeRepo;
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<CardTypeDto> create(@Valid final CardTypeDto cardTypeDto) {
     CardTypeEntity newCardType = new CardTypeEntity();
     CreationUtils.createBaseCatalogEntity(newCardType, cardTypeDto);

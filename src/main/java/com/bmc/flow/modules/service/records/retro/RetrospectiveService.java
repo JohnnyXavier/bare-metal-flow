@@ -6,11 +6,11 @@ import com.bmc.flow.modules.database.entities.records.retro.RetrospectiveEntity;
 import com.bmc.flow.modules.database.repositories.records.SprintRepository;
 import com.bmc.flow.modules.database.repositories.records.retro.RetrospectiveRepository;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +38,7 @@ public class RetrospectiveService extends BasicPersistenceService<RetrospectiveD
     return repository.findBySprintId(sprintBoardId);
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<RetrospectiveDto> create(@Valid final RetrospectiveDto retrospectiveDto) {
     UserEntity cardCreator = new UserEntity();
     cardCreator.setId(retrospectiveDto.getCreatedBy());

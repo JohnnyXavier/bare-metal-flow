@@ -10,7 +10,7 @@ import java.util.List;
  * A temporary class for paged results waiting for Q team to provide one on the framework
  * While simple, it is made "à la Spring Page" so it can be easily discarded once a -Paged Response- is available.
  *
- * @param <D> The "D"to that will be at the core of the result.
+ * @param <D> The Dto that will be at the core of the result.
  */
 @Setter
 @Getter

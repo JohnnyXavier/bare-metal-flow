@@ -5,8 +5,8 @@ import com.bmc.flow.modules.database.entities.catalogs.DepartmentEntity;
 import com.bmc.flow.modules.resources.base.BasicCatalogResource;
 import com.bmc.flow.modules.service.catalogs.DepartmentService;
 
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
 
 @Path("/v1/department")
 @Produces("application/json")

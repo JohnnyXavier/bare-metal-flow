@@ -8,11 +8,11 @@ import com.bmc.flow.modules.database.repositories.records.ProjectRepository;
 import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
@@ -36,7 +36,7 @@ public class ProjectService extends BasicPersistenceService<ProjectDto, ProjectE
                               pageable.getPage());
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<ProjectDto> create(@Valid final ProjectDto projectDto) {
     UserEntity projectCreator = new UserEntity();
     projectCreator.setId(projectDto.getCreatedBy());

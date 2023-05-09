@@ -9,24 +9,30 @@ import com.bmc.flow.modules.database.repositories.records.BoardRepository;
 import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
+import lombok.extern.jbosslog.JBossLog;
+import org.hibernate.reactive.mutiny.Mutiny;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.Valid;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
 
 @ApplicationScoped
+@JBossLog
 public class BoardService extends BasicPersistenceService<BoardDto, BoardEntity> {
 
-  private final BoardRepository repository;
+  private final BoardRepository       repository;
+  private final Mutiny.SessionFactory sessionFactory;
 
-  public BoardService(final BoardRepository repository) {
+  public BoardService(final BoardRepository repository, Mutiny.SessionFactory sessionFactory) {
     super(repository, BoardDto.class);
-    this.repository = repository;
+    this.repository     = repository;
+    this.sessionFactory = sessionFactory;
   }
 
   public Uni<List<BoardDto>> getAllByProjectId(final UUID projectId) {
@@ -38,7 +44,7 @@ public class BoardService extends BasicPersistenceService<BoardDto, BoardEntity>
         pageable.getPage());
   }
 
-  @ReactiveTransactional
+  @WithTransaction
   public Uni<BoardDto> create(@Valid final BoardDto boardDto) {
     UserEntity boardCreator = new UserEntity();
     boardCreator.setId(boardDto.getCreatedBy());
@@ -68,8 +74,39 @@ public class BoardService extends BasicPersistenceService<BoardDto, BoardEntity>
       case "description" -> toUpdate.setDescription(value);
       case "coverImage" -> toUpdate.setCoverImage(value);
       case "isFavorite" -> toUpdate.setIsFavorite(Boolean.valueOf(value));
+      case "addMember" -> addMember(toUpdate, value);
+      case "removeMember" -> removeMember(toUpdate, value);
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
     }
   }
+
+  private void addMember(BoardEntity toUpdate, String value) {
+    sessionFactory.withTransaction((session, transaction) ->
+            session.createNativeQuery("insert into board_users(board_id, user_id) VALUES  (?1, ?2)")
+                .setParameter(1, toUpdate.getId())
+                .setParameter(2, UUID.fromString(value))
+                .executeUpdate()
+                .chain(() -> session.createNativeQuery("update board set updated_at = ?1 where id = ?2")
+                    .setParameter(1, LocalDateTime.now())
+                    .setParameter(2, toUpdate.getId())
+                    .executeUpdate()))
+        .subscribe()
+        .with(log::info, log::error);
+  }
+
+  private void removeMember(BoardEntity toUpdate, String value) {
+    sessionFactory.withTransaction((session, transaction) ->
+            session.createNativeQuery("delete from board_users where user_id = ?1 and board_id = ?2")
+                .setParameter(1, UUID.fromString(value))
+                .setParameter(2, toUpdate.getId())
+                .executeUpdate()
+                .chain(() -> session.createNativeQuery("update board set updated_at = ?1 where id = ?2")
+                    .setParameter(1, LocalDateTime.now())
+                    .setParameter(2, toUpdate.getId())
+                    .executeUpdate()))
+        .subscribe()
+        .with(log::info, log::error);
+  }
+
 }

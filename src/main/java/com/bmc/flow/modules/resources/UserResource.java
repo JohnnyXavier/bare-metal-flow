@@ -12,19 +12,19 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.pgclient.PgException;
 import lombok.extern.jbosslog.JBossLog;
 
-import javax.persistence.NoResultException;
-import javax.validation.ConstraintViolationException;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
+import jakarta.persistence.NoResultException;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Cookie;
+import jakarta.ws.rs.core.NewCookie;
+import jakarta.ws.rs.core.Response;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Map;
 import java.util.UUID;
 
 import static java.util.Map.ofEntries;
-import static javax.ws.rs.core.Response.Status.*;
+import static jakarta.ws.rs.core.Response.Status.*;
 
 @Path("v1/users")
 @Produces("application/json")

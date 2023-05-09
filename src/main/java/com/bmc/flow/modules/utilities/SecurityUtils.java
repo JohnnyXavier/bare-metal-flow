@@ -2,7 +2,7 @@ package com.bmc.flow.modules.utilities;
 
 import com.bmc.flow.modules.database.entities.UserEntity;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.Random;
 
