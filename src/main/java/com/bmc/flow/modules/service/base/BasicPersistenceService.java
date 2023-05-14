@@ -4,6 +4,7 @@ import com.bmc.flow.modules.resources.base.Pageable;
 import io.quarkus.cache.CacheResult;
 import io.quarkus.hibernate.reactive.panache.PanacheQuery;
 import io.quarkus.hibernate.reactive.panache.PanacheRepositoryBase;
+import io.quarkus.hibernate.reactive.panache.common.WithSession;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.quarkus.logging.Log;
 import io.quarkus.panache.common.Page;
@@ -12,6 +13,7 @@ import jakarta.validation.Valid;
 
 import java.util.UUID;
 
+@WithSession
 public abstract class BasicPersistenceService<D, E> {
 
   private PanacheRepositoryBase<E, UUID> repository;

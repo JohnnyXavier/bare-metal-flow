@@ -65,7 +65,7 @@ quarkus: # persistence configuration
     username: xavier
     password: xavier
   hibernate-orm:
-    statistics: true
+#    statistics: true
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     sql-load-script: basic_data.sql
     log:

@@ -24,14 +24,12 @@ public class BoardColumnService extends BasicPersistenceService<BoardColumnDto, 
 
   private final BoardColumnRepository repository;
 
-  private final Mutiny.SessionFactory sessionFactory;
-  private final Mutiny.Session        session;
+  private final Mutiny.SessionFactory sf;
 
-  public BoardColumnService(final BoardColumnRepository repository, Mutiny.SessionFactory sessionFactory, Mutiny.Session session) {
+  public BoardColumnService(final BoardColumnRepository repository, Mutiny.SessionFactory sf) {
     super(repository, BoardColumnDto.class);
-    this.repository     = repository;
-    this.sessionFactory = sessionFactory;
-    this.session        = session;
+    this.repository = repository;
+    this.sf         = sf;
   }
 
   public Uni<PageResult<BoardColumnDto>> findAllByBoardIdPaged(final UUID boardId, final Pageable pageable) {
@@ -69,13 +67,8 @@ public class BoardColumnService extends BasicPersistenceService<BoardColumnDto, 
   }
 
   private void setStatus(final BoardColumnEntity toUpdate, final UUID uuid) {
-    session.withTransaction(transaction -> {
-      StatusEntity status = new StatusEntity();
-      status.setId(uuid);
-      toUpdate.setStatus(status);
-      return null;
-    });
+    StatusEntity status = new StatusEntity();
+    status.setId(uuid);
+    toUpdate.setStatus(status);
   }
-
-
 }

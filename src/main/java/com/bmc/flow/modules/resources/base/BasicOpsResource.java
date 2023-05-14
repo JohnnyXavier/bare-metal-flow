@@ -2,15 +2,16 @@ package com.bmc.flow.modules.resources.base;
 
 import com.bmc.flow.modules.resources.utils.ResponseUtils;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
+import io.quarkus.hibernate.reactive.panache.common.WithSession;
 import io.smallrye.mutiny.Uni;
 import io.vertx.pgclient.PgException;
-import lombok.extern.jbosslog.JBossLog;
-
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
+import lombok.extern.jbosslog.JBossLog;
+
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ import static jakarta.ws.rs.core.Response.Status.*;
 
 @Produces("application/json")
 @JBossLog
+@WithSession
 public abstract class BasicOpsResource<D, E> {
 
   private final BasicPersistenceService<D, E> basicPersistenceService;

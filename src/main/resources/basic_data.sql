@@ -370,22 +370,22 @@ insert into card(id, name, description, cover_image, due_date, board_id, board_c
     (card_trnx_09, ''9th-card'', default_description, ''https://loremflickr.com/g/800/400/computer?lock=3'', make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha),
     (card_trnx_10, ''10th-card'', default_description, ''https://loremflickr.com/g/200/400/paris?lock=30'', make_timestamp(2023, 10, 01, 00, 00, 00), alpha_kanban_board_college_1, alpha_board_col_done, card_status_done, default_card_type, cre_upd, cre_upd, user_alpha);
 
-insert into card_label(card_id, label_id, board_id, created_at, created_by_id) VALUES
-    (card_trnx_01, label_be, alpha_kanban_board_college_1, cre_upd, user_alpha),
-    (card_trnx_01, label_pers, alpha_kanban_board_college_1, cre_upd, user_alpha),
-    (card_trnx_01, label_fe, alpha_kanban_board_college_1, cre_upd, user_alpha),
-    (card_trnx_02, label_fe, alpha_kanban_board_college_1, cre_upd, user_alpha),
-    (card_trnx_02, label_pers, alpha_kanban_board_college_1, cre_upd, user_alpha),
-    (card_trnx_03, label_qa, alpha_kanban_board_college_1, cre_upd, user_alpha),
-    (card_trnx_03, label_devops, alpha_kanban_board_college_1, cre_upd, user_alpha),
-    (card_trnx_03, label_be, alpha_kanban_board_college_1, cre_upd, user_alpha),
-    (card_trnx_04, label_pers, alpha_kanban_board_college_1, cre_upd, user_alpha),
-    (card_trnx_05, label_be, alpha_kanban_board_college_1, cre_upd, user_alpha),
-    (card_trnx_05, label_pers, alpha_kanban_board_college_1, cre_upd, user_alpha),
-    (card_trnx_05, label_fe, alpha_kanban_board_college_1, cre_upd, user_alpha),
-    (card_trnx_05, label_urgent, alpha_kanban_board_college_1, cre_upd, user_alpha),
-    (card_trnx_08, label_devops, alpha_kanban_board_college_1, cre_upd, user_alpha),
-    (card_trnx_08, label_important, alpha_kanban_board_college_1, cre_upd, user_alpha);
+-- insert into card_label(card_id, label_id, board_id, created_at, created_by_id) VALUES
+--     (card_trnx_01, label_be, alpha_kanban_board_college_1, cre_upd, user_alpha),
+--     (card_trnx_01, label_pers, alpha_kanban_board_college_1, cre_upd, user_alpha),
+--     (card_trnx_01, label_fe, alpha_kanban_board_college_1, cre_upd, user_alpha),
+--     (card_trnx_02, label_fe, alpha_kanban_board_college_1, cre_upd, user_alpha),
+--     (card_trnx_02, label_pers, alpha_kanban_board_college_1, cre_upd, user_alpha),
+--     (card_trnx_03, label_qa, alpha_kanban_board_college_1, cre_upd, user_alpha),
+--     (card_trnx_03, label_devops, alpha_kanban_board_college_1, cre_upd, user_alpha),
+--     (card_trnx_03, label_be, alpha_kanban_board_college_1, cre_upd, user_alpha),
+--     (card_trnx_04, label_pers, alpha_kanban_board_college_1, cre_upd, user_alpha),
+--     (card_trnx_05, label_be, alpha_kanban_board_college_1, cre_upd, user_alpha),
+--     (card_trnx_05, label_pers, alpha_kanban_board_college_1, cre_upd, user_alpha),
+--     (card_trnx_05, label_fe, alpha_kanban_board_college_1, cre_upd, user_alpha),
+--     (card_trnx_05, label_urgent, alpha_kanban_board_college_1, cre_upd, user_alpha),
+--     (card_trnx_08, label_devops, alpha_kanban_board_college_1, cre_upd, user_alpha),
+--     (card_trnx_08, label_important, alpha_kanban_board_college_1, cre_upd, user_alpha);
 
 insert into project_users(user_id, project_id) VALUES
     (user_alpha, project_alpha_work_client_1),

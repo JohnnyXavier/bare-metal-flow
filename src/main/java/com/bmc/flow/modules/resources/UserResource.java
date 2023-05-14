@@ -10,8 +10,6 @@ import com.bmc.flow.modules.resources.utils.ResponseUtils;
 import com.bmc.flow.modules.service.UserService;
 import io.smallrye.mutiny.Uni;
 import io.vertx.pgclient.PgException;
-import lombok.extern.jbosslog.JBossLog;
-
 import jakarta.persistence.NoResultException;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.constraints.NotNull;
@@ -19,12 +17,14 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Cookie;
 import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
+import lombok.extern.jbosslog.JBossLog;
+
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Map;
 import java.util.UUID;
 
-import static java.util.Map.ofEntries;
 import static jakarta.ws.rs.core.Response.Status.*;
+import static java.util.Map.ofEntries;
 
 @Path("v1/users")
 @Produces("application/json")
