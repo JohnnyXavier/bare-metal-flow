@@ -9,18 +9,16 @@ import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 import java.util.UUID;
 
 @ApplicationScoped
 public class ChangeLogService extends BasicPersistenceService<ChangeLogCardDto, ChangelogEntity> {
 
-  @Inject
-  protected ChangeLogRepository repository;
+  private final ChangeLogRepository repository;
   private final UserRepository      userRepository;
 
-  public ChangeLogService(final ChangeLogRepository repository, UserRepository userRepository) {
+  public ChangeLogService(final ChangeLogRepository repository, final UserRepository userRepository) {
     super(repository, ChangeLogCardDto.class);
     this.repository     = repository;
     this.userRepository = userRepository;

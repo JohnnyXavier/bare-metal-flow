@@ -4,11 +4,11 @@ import com.bmc.flow.modules.database.dto.records.CardLabelDto;
 import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
 import com.bmc.flow.modules.database.entities.ids.CardLabelId;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -57,7 +57,7 @@ public class CardLabelEntity {
   @MapsId("labelId")
   private LabelEntity label;
 
-  @OneToOne(fetch = LAZY)
+  @ManyToOne(fetch = LAZY)
   private BoardEntity board;
 
   @ManyToOne(fetch = LAZY)

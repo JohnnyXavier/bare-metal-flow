@@ -5,11 +5,11 @@ import com.bmc.flow.modules.database.entities.base.BaseRecordEntity;
 import com.bmc.flow.modules.database.entities.catalogs.BoardColumnEntity;
 import com.bmc.flow.modules.database.entities.catalogs.BoardTypeEntity;
 import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,6 +31,9 @@ public class BoardEntity extends BaseRecordEntity {
 
   @OneToMany(mappedBy = "board", cascade = ALL, fetch = LAZY)
   private Set<BoardColumnEntity> boardColumns = new HashSet<>();
+
+  @OneToMany(mappedBy = "board", cascade = ALL, fetch = LAZY)
+  private Set<CardLabelEntity> cardLabels = new HashSet<>();
 
   @ManyToMany(cascade = {PERSIST, MERGE}, fetch = LAZY)
   @JoinTable(name = "board_users", joinColumns = @JoinColumn(name = "board_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
