@@ -14,6 +14,8 @@ import jakarta.validation.Valid;
 
 import java.util.UUID;
 
+import static com.bmc.flow.modules.service.reflection.MethodNames.*;
+
 @ApplicationScoped
 public class LabelService extends BasicPersistenceService<LabelDto, LabelEntity> {
 
@@ -39,14 +41,15 @@ public class LabelService extends BasicPersistenceService<LabelDto, LabelEntity>
   }
 
   @Override
-  protected void updateField(final LabelEntity toUpdate, final String key, final String value) {
-    switch (key) {
-      case "name" -> toUpdate.setName(value);
-      case "description" -> toUpdate.setDescription(value);
-      case "colorHex" -> toUpdate.setColorHex(value);
+  @WithTransaction
+  protected Uni<Void> update(final LabelEntity toUpdate, final String key, final String value) {
+    return switch (key) {
+      case "name" -> updateInplace(toUpdate, SET_NAME, value);
+      case "description" -> updateInplace(toUpdate, SET_DESCRIPTION, value);
+      case "colorHex" -> updateInplace(toUpdate, SET_COLOR_HEX, value);
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
-    }
+    };
   }
 
   public Uni<LabelEntity> findEntityByName(final String name) {

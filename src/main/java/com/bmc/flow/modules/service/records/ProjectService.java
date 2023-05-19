@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 
 import java.util.UUID;
 
+import static com.bmc.flow.modules.service.reflection.MethodNames.*;
 import static java.util.UUID.randomUUID;
 
 @ApplicationScoped
@@ -33,7 +34,7 @@ public class ProjectService extends BasicPersistenceService<ProjectDto, ProjectE
 
   public Uni<PageResult<ProjectDto>> findAllByAccountIdPaged(final UUID userId, final Pageable pageable) {
     return super.findAllPaged(projectRepo.findAllByAccountId(userId, pageable.getSort()), "-all-projects-by-account",
-                              pageable.getPage());
+        pageable.getPage());
   }
 
   @WithTransaction
@@ -52,17 +53,18 @@ public class ProjectService extends BasicPersistenceService<ProjectDto, ProjectE
     newProject.setCreatedBy(projectCreator);
 
     return projectRepo.persist(newProject)
-                      .replaceWith(findById(newProject.getId()));
+        .replaceWith(findById(newProject.getId()));
   }
 
   @Override
-  protected void updateField(final ProjectEntity toUpdate, final String key, final String value) {
-    switch (key) {
-      case "name" -> toUpdate.setName(value);
-      case "description" -> toUpdate.setDescription(value);
-      case "coverImage" -> toUpdate.setCoverImage(value);
+  @WithTransaction
+  protected Uni<Void> update(final ProjectEntity toUpdate, final String key, final String value) {
+    return switch (key) {
+      case "name" -> updateInplace(toUpdate, SET_NAME, value);
+      case "description" -> updateInplace(toUpdate, SET_DESCRIPTION, value);
+      case "coverImage" -> updateInplace(toUpdate, SET_COVER_IMAGE, value);
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
-    }
+    };
   }
 }

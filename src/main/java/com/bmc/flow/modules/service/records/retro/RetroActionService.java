@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+import static com.bmc.flow.modules.service.reflection.MethodNames.SET_ACTION_TO_TAKE;
 import static java.util.UUID.randomUUID;
 
 @ApplicationScoped
@@ -51,16 +52,17 @@ public class RetroActionService extends BasicPersistenceService<RetroActionDto, 
     newCard.setRetroBoard(board);
 
     return repository.persist(newCard)
-                     .replaceWith(findById(newCard.getId()));
+        .replaceWith(findById(newCard.getId()));
   }
 
   @Override
-  protected void updateField(final RetroActionEntity toUpdate, final String key, final String value) {
-    if (key.equals("actionToTake")) {
-      toUpdate.setActionToTake(value);
-    } else {
-      throw new IllegalStateException("Unexpected value: " + key);
-    }
+  @WithTransaction
+  protected Uni<Void> update(final RetroActionEntity toUpdate, final String key, final String value) {
+    return switch (key) {
+      case "actionToTake" -> updateInplace(toUpdate, SET_ACTION_TO_TAKE, value);
+
+      default -> throw new IllegalStateException("Unexpected value: " + key);
+    };
   }
 
 }

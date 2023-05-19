@@ -11,6 +11,9 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
 
+import static com.bmc.flow.modules.service.reflection.MethodNames.SET_DESCRIPTION;
+import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
+
 @ApplicationScoped
 public class DepartmentService extends BasicPersistenceService<DepartmentDto, DepartmentEntity> {
 
@@ -35,13 +38,14 @@ public class DepartmentService extends BasicPersistenceService<DepartmentDto, De
     return departmentRepo.findEntityByName(name);
   }
 
-  @Override
-  protected void updateField(final DepartmentEntity toUpdate, final String key, final String value) {
-    switch (key) {
-      case "name" -> toUpdate.setName(value);
-      case "description" -> toUpdate.setDescription(value);
+   @Override
+  @WithTransaction
+  protected Uni<Void> update(final DepartmentEntity toUpdate, final String key, final String value) {
+    return switch (key) {
+      case "name" -> updateInplace(toUpdate, SET_NAME, value);
+      case "description" -> updateInplace(toUpdate, SET_DESCRIPTION, value);
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
-    }
+    };
   }
 }

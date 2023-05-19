@@ -17,6 +17,7 @@ import org.hibernate.reactive.mutiny.Mutiny;
 
 import java.util.UUID;
 
+import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
 import static java.util.UUID.randomUUID;
 
 @ApplicationScoped
@@ -58,17 +59,21 @@ public class BoardColumnService extends BasicPersistenceService<BoardColumnDto, 
   }
 
   @Override
-  protected void updateField(final BoardColumnEntity toUpdate, final String key, final String value) {
-    switch (key) {
-      case "name" -> toUpdate.setName(value);
+  @WithTransaction
+  protected Uni<Void> update(final BoardColumnEntity toUpdate, final String key, final String value) {
+    return switch (key) {
+      case "name" -> updateInplace(toUpdate, SET_NAME, value);
       case "status" -> setStatus(toUpdate, UUID.fromString(value));
+
       default -> throw new IllegalStateException("Unexpected value: " + key);
-    }
+    };
   }
 
-  private void setStatus(final BoardColumnEntity toUpdate, final UUID uuid) {
+  private Uni<Void> setStatus(final BoardColumnEntity toUpdate, final UUID uuid) {
     StatusEntity status = new StatusEntity();
     status.setId(uuid);
     toUpdate.setStatus(status);
+
+    return Uni.createFrom().voidItem();
   }
 }

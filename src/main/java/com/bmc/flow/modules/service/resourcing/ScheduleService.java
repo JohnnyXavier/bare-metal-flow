@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.bmc.flow.modules.service.reflection.MethodNames.SET_HOURS_A_DAY;
 import static java.util.UUID.randomUUID;
 
 @ApplicationScoped
@@ -39,16 +40,17 @@ public class ScheduleService extends BasicPersistenceService<ScheduleDto, Schedu
     newSchedule.setHoursADay(scheduleDto.getHoursADay());
 
     return scheduleRepo.persist(newSchedule)
-               .replaceWith(findById(newSchedule.getId()));
+        .replaceWith(findById(newSchedule.getId()));
   }
 
   @Override
-  protected void updateField(final ScheduleEntity toUpdate, final String key, final String value) {
-    if (key.equals("hoursADay")) {
-      toUpdate.setHoursADay(Short.parseShort(value));
-    } else {
-      throw new IllegalStateException("Unexpected value: " + key);
-    }
+  @WithTransaction
+  protected Uni<Void> update(final ScheduleEntity toUpdate, final String key, final String value) {
+    return switch (key) {
+      case "hoursADay" -> updateInplace(toUpdate, SET_HOURS_A_DAY, Short.parseShort(value));
+
+      default -> throw new IllegalStateException("Unexpected value: " + key);
+    };
   }
 
   public Uni<ScheduleDto> findByUserId(final UUID userId) {
@@ -59,27 +61,27 @@ public class ScheduleService extends BasicPersistenceService<ScheduleDto, Schedu
   public Uni<FullScheduleDto> findFullByUserId(final UUID userId) {
     FullScheduleDto fullScheduleDto = new FullScheduleDto();
     return scheduleRepo.findFullByUserId(userId)
-               .invoke(scheduleEntity -> {
-                 fullScheduleDto.setId(scheduleEntity.getId());
-                 fullScheduleDto.setHoursADay(scheduleEntity.getHoursADay());
-                 fullScheduleDto.setCreatedAt(scheduleEntity.getCreatedAt());
-                 fullScheduleDto.setCreatedBy(scheduleEntity.getCreatedBy().getId());
+        .invoke(scheduleEntity -> {
+          fullScheduleDto.setId(scheduleEntity.getId());
+          fullScheduleDto.setHoursADay(scheduleEntity.getHoursADay());
+          fullScheduleDto.setCreatedAt(scheduleEntity.getCreatedAt());
+          fullScheduleDto.setCreatedBy(scheduleEntity.getCreatedBy().getId());
 
-                 Set<ShrinkageDto> shrinkageDtos =
-                     scheduleEntity.getShrinkages()
-                         .stream()
-                         .map(entity ->
-                                  new ShrinkageDto(entity.getId(), entity.getName(), "", entity.getDurationInMin(),
-                                      (entity.getPercentage() == null ? 0 : entity.getPercentage()),
-                                      entity.getIsSystem(),
-                                      entity.getCreatedAt(), entity.getCreatedBy().getId())
-                         )
-                         .collect(Collectors.toSet());
+          Set<ShrinkageDto> shrinkageDtos =
+              scheduleEntity.getShrinkages()
+                  .stream()
+                  .map(entity ->
+                      new ShrinkageDto(entity.getId(), entity.getName(), "", entity.getDurationInMin(),
+                          (entity.getPercentage() == null ? 0 : entity.getPercentage()),
+                          entity.getIsSystem(),
+                          entity.getCreatedAt(), entity.getCreatedBy().getId())
+                  )
+                  .collect(Collectors.toSet());
 
-                 fullScheduleDto.setShrinkages(shrinkageDtos);
-                 fullScheduleDto.setTotalShrinkageTime();
+          fullScheduleDto.setShrinkages(shrinkageDtos);
+          fullScheduleDto.setTotalShrinkageTime();
 
-               }).replaceWith(fullScheduleDto);
+        }).replaceWith(fullScheduleDto);
 
   }
 }

@@ -7,6 +7,7 @@ import com.bmc.flow.modules.database.repositories.UserRepository;
 import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -35,7 +36,9 @@ public class ChangeLogService extends BasicPersistenceService<ChangeLogCardDto, 
   }
 
   @Override
-  protected void updateField(final ChangelogEntity toUpdate, final String key, final String value) {
+  @WithTransaction
+  protected Uni<Void> update(final ChangelogEntity toUpdate, final String key, final String value) {
     // there is no updating of any field for a changeLog
+    return Uni.createFrom().voidItem();
   }
 }

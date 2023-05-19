@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static com.bmc.flow.modules.service.reflection.MethodNames.*;
 import static java.util.UUID.randomUUID;
 
 @ApplicationScoped
@@ -27,12 +28,12 @@ import static java.util.UUID.randomUUID;
 public class BoardService extends BasicPersistenceService<BoardDto, BoardEntity> {
 
   private final BoardRepository       repository;
-  private final Mutiny.SessionFactory sessionFactory;
+  private final Mutiny.SessionFactory sf;
 
-  public BoardService(final BoardRepository repository, Mutiny.SessionFactory sessionFactory) {
+  public BoardService(final BoardRepository repository, Mutiny.SessionFactory sf) {
     super(repository, BoardDto.class);
-    this.repository     = repository;
-    this.sessionFactory = sessionFactory;
+    this.repository = repository;
+    this.sf         = sf;
   }
 
   public Uni<List<BoardDto>> getAllByProjectId(final UUID projectId) {
@@ -68,21 +69,22 @@ public class BoardService extends BasicPersistenceService<BoardDto, BoardEntity>
   }
 
   @Override
-  protected void updateField(final BoardEntity toUpdate, final String key, final String value) {
-    switch (key) {
-      case "name" -> toUpdate.setName(value);
-      case "description" -> toUpdate.setDescription(value);
-      case "coverImage" -> toUpdate.setCoverImage(value);
-      case "isFavorite" -> toUpdate.setIsFavorite(Boolean.valueOf(value));
+  @WithTransaction
+  protected Uni<Void> update(final BoardEntity toUpdate, final String key, final String value) {
+    return switch (key) {
+      case "name" -> updateInplace(toUpdate, SET_NAME, value);
+      case "description" -> updateInplace(toUpdate, SET_DESCRIPTION, value);
+      case "coverImage" -> updateInplace(toUpdate, SET_COVER_IMAGE, value);
+      case "isFavorite" -> updateInplace(toUpdate, SET_IS_FAVORITE, Boolean.valueOf(value));
       case "addMember" -> addMember(toUpdate, value);
       case "removeMember" -> removeMember(toUpdate, value);
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
-    }
+    };
   }
 
-  private void addMember(BoardEntity toUpdate, String value) {
-    sessionFactory.withTransaction((session, transaction) ->
+  private Uni<Void> addMember(BoardEntity toUpdate, String value) {
+    return sf.withTransaction((session, transaction) ->
             session.createNativeQuery("insert into board_users(board_id, user_id) VALUES  (?1, ?2)")
                 .setParameter(1, toUpdate.getId())
                 .setParameter(2, UUID.fromString(value))
@@ -91,12 +93,11 @@ public class BoardService extends BasicPersistenceService<BoardDto, BoardEntity>
                     .setParameter(1, LocalDateTime.now())
                     .setParameter(2, toUpdate.getId())
                     .executeUpdate()))
-        .subscribe()
-        .with(log::info, log::error);
+        .replaceWithVoid();
   }
 
-  private void removeMember(BoardEntity toUpdate, String value) {
-    sessionFactory.withTransaction((session, transaction) ->
+  private Uni<Void> removeMember(BoardEntity toUpdate, String value) {
+    return sf.withTransaction((session, transaction) ->
             session.createNativeQuery("delete from board_users where user_id = ?1 and board_id = ?2")
                 .setParameter(1, UUID.fromString(value))
                 .setParameter(2, toUpdate.getId())
@@ -105,8 +106,6 @@ public class BoardService extends BasicPersistenceService<BoardDto, BoardEntity>
                     .setParameter(1, LocalDateTime.now())
                     .setParameter(2, toUpdate.getId())
                     .executeUpdate()))
-        .subscribe()
-        .with(log::info, log::error);
+        .replaceWithVoid();
   }
-
 }

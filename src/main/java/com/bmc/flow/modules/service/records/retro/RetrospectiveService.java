@@ -26,7 +26,7 @@ public class RetrospectiveService extends BasicPersistenceService<RetrospectiveD
 
   public RetrospectiveService(final RetrospectiveRepository repository, final SprintRepository sprintRepository) {
     super(repository, RetrospectiveDto.class);
-    this.repository = repository;
+    this.repository       = repository;
     this.sprintRepository = sprintRepository;
   }
 
@@ -48,14 +48,16 @@ public class RetrospectiveService extends BasicPersistenceService<RetrospectiveD
     newRetroBoard.setCreatedBy(cardCreator);
 
     return sprintRepository.findById(retrospectiveDto.getSprintBoardId())
-                           .onItem()
-                           .invoke(newRetroBoard::setSprintBoard)
-                           .replaceWith(repository.persist(newRetroBoard)
-                                                       .replaceWith(findById(newRetroBoard.getId())));
+        .onItem()
+        .invoke(newRetroBoard::setSprintBoard)
+        .replaceWith(repository.persist(newRetroBoard)
+            .replaceWith(findById(newRetroBoard.getId())));
   }
 
   @Override
-  protected void updateField(final RetrospectiveEntity toUpdate, final String key, final String value) {
+  @WithTransaction
+  protected Uni<Void> update(final RetrospectiveEntity toUpdate, final String key, final String value) {
     // nothing to update here
+    return Uni.createFrom().voidItem();
   }
 }

@@ -53,7 +53,7 @@ public class ResponseUtils {
 
   public static Response processPgException(final Throwable throwable) {
     PgException pgEx = ((PgException) throwable);
-    String pgErrCode = pgEx.getCode();
+    String pgErrCode = pgEx.getSqlState();
     String pgErr = pgEx.getDetail() == null ? pgEx.getErrorMessage() : pgEx.getDetail();
 
     log.errorf(":::pgErrorCode: [%s] - errorDetail: [%s]", pgErrCode, pgErr);

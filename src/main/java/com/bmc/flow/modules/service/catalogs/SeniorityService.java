@@ -11,6 +11,8 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
 
+import static com.bmc.flow.modules.service.reflection.MethodNames.*;
+
 @ApplicationScoped
 public class SeniorityService extends BasicPersistenceService<SeniorityDto, SeniorityEntity> {
 
@@ -29,7 +31,7 @@ public class SeniorityService extends BasicPersistenceService<SeniorityDto, Seni
     newSeniority.setLevel(seniorityDto.getLevel());
 
     return seniorityRepo.persist(newSeniority)
-                        .replaceWith(findById(newSeniority.getId()));
+        .replaceWith(findById(newSeniority.getId()));
   }
 
   @CacheResult(cacheName = "seniority-by-name")
@@ -38,13 +40,14 @@ public class SeniorityService extends BasicPersistenceService<SeniorityDto, Seni
   }
 
   @Override
-  protected void updateField(final SeniorityEntity toUpdate, final String key, final String value) {
-    switch (key) {
-      case "name" -> toUpdate.setName(value);
-      case "description" -> toUpdate.setDescription(value);
-      case "level" -> toUpdate.setLevel(Short.parseShort(value));
+  @WithTransaction
+  protected Uni<Void> update(final SeniorityEntity toUpdate, final String key, final String value) {
+    return switch (key) {
+      case "name" -> updateInplace(toUpdate, SET_NAME, value);
+      case "description" -> updateInplace(toUpdate, SET_DESCRIPTION, value);
+      case "level" -> updateInplace(toUpdate, SET_LEVEL, Short.parseShort(value));
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
-    }
+    };
   }
 }

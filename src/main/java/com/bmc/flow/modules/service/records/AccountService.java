@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 
 import java.util.UUID;
 
+import static com.bmc.flow.modules.service.reflection.MethodNames.*;
 import static java.util.UUID.randomUUID;
 
 @ApplicationScoped
@@ -40,7 +41,7 @@ public class AccountService extends BasicPersistenceService<AccountDto, AccountE
     newAccount.setCreatedBy(accountCreator);
 
     return accountRepo.persist(newAccount)
-                      .replaceWith(findById(newAccount.getId()));
+        .replaceWith(findById(newAccount.getId()));
   }
 
   public Uni<PageResult<AccountDto>> findAllByUserIdPaged(final UUID userId, final Pageable pageable) {
@@ -48,14 +49,14 @@ public class AccountService extends BasicPersistenceService<AccountDto, AccountE
         pageable.getPage());
   }
 
-  protected void updateField(final AccountEntity toUpdate, final String key, final String value) {
-    switch (key) {
-      case "name" -> toUpdate.setName(value);
-      case "description" -> toUpdate.setDescription(value);
-      case "coverImage" -> toUpdate.setCoverImage(value);
+  protected Uni<Void> update(final AccountEntity toUpdate, final String key, final String value) {
+    return switch (key) {
+      case "name" -> updateInplace(toUpdate, SET_NAME, value);
+      case "description" -> updateInplace(toUpdate, SET_DESCRIPTION, value);
+      case "coverImage" -> updateInplace(toUpdate, SET_COVER_IMAGE, value);
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
-    }
+    };
   }
 
 }

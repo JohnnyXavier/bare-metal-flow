@@ -10,6 +10,9 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
 
+import static com.bmc.flow.modules.service.reflection.MethodNames.SET_DESCRIPTION;
+import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
+
 @ApplicationScoped
 public class BoardTypeService extends BasicPersistenceService<BoardTypeDto, BoardTypeEntity> {
 
@@ -26,7 +29,7 @@ public class BoardTypeService extends BasicPersistenceService<BoardTypeDto, Boar
     CreationUtils.createBaseCatalogEntity(newBoardType, boardTypeDto);
 
     return boardTypeRepo.persist(newBoardType)
-                        .replaceWith(findById(newBoardType.getId()));
+        .replaceWith(findById(newBoardType.getId()));
   }
 
 
@@ -36,12 +39,18 @@ public class BoardTypeService extends BasicPersistenceService<BoardTypeDto, Boar
 
 
   @Override
-  protected void updateField(final BoardTypeEntity toUpdate, final String key, final String value) {
-    switch (key) {
-      case "name" -> toUpdate.setName(value);
-      case "description" -> toUpdate.setDescription(value);
+  @WithTransaction
+  protected Uni<Void> update(final BoardTypeEntity toUpdate, final String key, final String value) {
+    return updateInPlace(toUpdate, key, value);
+  }
+
+  protected Uni<Void> updateInPlace(final BoardTypeEntity toUpdate, final String key, final String value) {
+    return switch (key) {
+      case "name" -> updateInplace(toUpdate, SET_NAME, value);
+      case "description" -> updateInplace(toUpdate, SET_DESCRIPTION, value);
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
-    }
+    };
   }
+
 }

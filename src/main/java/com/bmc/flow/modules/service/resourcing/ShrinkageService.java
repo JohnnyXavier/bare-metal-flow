@@ -9,6 +9,7 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
 
+import static com.bmc.flow.modules.service.reflection.MethodNames.*;
 import static java.lang.Boolean.FALSE;
 import static java.util.UUID.randomUUID;
 
@@ -32,17 +33,18 @@ public class ShrinkageService extends BasicPersistenceService<ShrinkageDto, Shri
     newShrinkage.setIsSystem(FALSE);
 
     return shrinkageRepo.persist(newShrinkage)
-                        .replaceWith(findById(newShrinkage.getId()));
+        .replaceWith(findById(newShrinkage.getId()));
   }
 
   @Override
-  protected void updateField(final ShrinkageEntity toUpdate, final String key, final String value) {
-    switch (key) {
-      case "name" -> toUpdate.setName(value);
-      case "duration" -> toUpdate.setDurationInMin(Short.valueOf(value));
-      case "percentage" -> toUpdate.setPercentage(Short.valueOf(value));
+  @WithTransaction
+  protected Uni<Void> update(final ShrinkageEntity toUpdate, final String key, final String value) {
+    return switch (key) {
+      case "name" -> updateInplace(toUpdate, SET_NAME, value);
+      case "duration" -> updateInplace(toUpdate, SET_DURATION_IN_MIN, Short.valueOf(value));
+      case "percentage" -> updateInplace(toUpdate, SET_PERCENTAGE, Short.valueOf(value));
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
-    }
+    };
   }
 }

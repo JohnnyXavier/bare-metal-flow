@@ -8,6 +8,7 @@ import io.vertx.pgclient.PgException;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.jbosslog.JBossLog;
@@ -50,7 +51,7 @@ public abstract class BasicOpsResource<D, E> {
   @PUT
   @Path("{idToUpdate}")
   @Consumes("application/x-www-form-urlencoded")
-  public Uni<Response> update(final UUID idToUpdate, @FormParam("field") final String field, @FormParam("value") final String value) {
+  public Uni<Response> update(@NotNull final UUID idToUpdate, @FormParam("field") final String field, @FormParam("value") final String value) {
     return basicPersistenceService.update(idToUpdate, field, value)
                                   .replaceWith(Response.accepted()::build)
                                   .onFailure(PersistenceException.class).recoverWithItem(ResponseUtils::persistenceExResponse)

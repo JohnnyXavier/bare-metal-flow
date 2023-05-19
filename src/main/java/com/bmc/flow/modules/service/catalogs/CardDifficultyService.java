@@ -10,6 +10,9 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
 
+import static com.bmc.flow.modules.service.reflection.MethodNames.SET_DESCRIPTION;
+import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
+
 @ApplicationScoped
 public class CardDifficultyService extends BasicPersistenceService<CardDifficultyDto, CardDifficultyEntity> {
 
@@ -29,16 +32,17 @@ public class CardDifficultyService extends BasicPersistenceService<CardDifficult
     newCardDifficulty.setLevel(cardDifficultyDto.getLevel());
 
     return cardDifficultyRepo.persist(newCardDifficulty)
-                             .replaceWith(findById(newCardDifficulty.getId()));
+        .replaceWith(findById(newCardDifficulty.getId()));
   }
 
   @Override
-  protected void updateField(final CardDifficultyEntity toUpdate, final String key, final String value) {
-    switch (key) {
-      case "name" -> toUpdate.setName(value);
-      case "description" -> toUpdate.setDescription(value);
+  @WithTransaction
+  protected Uni<Void> update(final CardDifficultyEntity toUpdate, final String key, final String value) {
+    return switch (key) {
+      case "name" -> updateInplace(toUpdate, SET_NAME, value);
+      case "description" -> updateInplace(toUpdate, SET_DESCRIPTION, value);
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
-    }
+    };
   }
 }

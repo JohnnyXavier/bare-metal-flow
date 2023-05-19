@@ -8,9 +8,10 @@ import com.bmc.flow.modules.database.repositories.records.CommentRepository;
 import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.base.BasicPersistenceService;
 import com.bmc.flow.modules.service.base.PageResult;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
-
 import jakarta.enterprise.context.ApplicationScoped;
+
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
@@ -49,7 +50,8 @@ public class CommentService extends BasicPersistenceService<CommentDto, CommentE
   }
 
   @Override
-  protected void updateField(CommentEntity toUpdate, String key, String value) {
-
+  @WithTransaction
+  protected Uni<Void> update(CommentEntity toUpdate, String key, String value) {
+    return Uni.createFrom().voidItem();
   }
 }

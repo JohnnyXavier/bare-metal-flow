@@ -97,8 +97,8 @@ quarkus: # persistence configuration
         level: DEBUG
       "org.hibernate.stat":
         level: DEBUG
-      "org.hibernate.SQL":
-        level: DEBUG
+#      "org.hibernate.SQL":
+#        level: DEBUG
 
     console:
       async: true

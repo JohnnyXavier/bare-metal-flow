@@ -14,6 +14,8 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+import static com.bmc.flow.modules.service.reflection.MethodNames.SET_COMMENT;
+import static com.bmc.flow.modules.service.reflection.MethodNames.SET_VOTES;
 import static java.util.UUID.randomUUID;
 
 @ApplicationScoped
@@ -46,16 +48,17 @@ public class RetroCardService extends BasicPersistenceService<RetroCardDto, Retr
     newCard.setRetroBoard(board);
 
     return repository.persist(newCard)
-                     .replaceWith(findById(newCard.getId()));
+        .replaceWith(findById(newCard.getId()));
   }
 
   @Override
-  protected void updateField(final RetroCardEntity toUpdate, final String key, final String value) {
-    switch (key) {
-      case "comment" -> toUpdate.setComment(value);
-      case "votes" -> toUpdate.setVotes(Short.parseShort(value));
+  @WithTransaction
+  protected Uni<Void> update(final RetroCardEntity toUpdate, final String key, final String value) {
+    return switch (key) {
+      case "comment" -> updateInplace(toUpdate, SET_COMMENT, value);
+      case "votes" -> updateInplace(toUpdate, SET_VOTES, Short.parseShort(value));
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
-    }
+    };
   }
 }
