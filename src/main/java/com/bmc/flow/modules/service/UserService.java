@@ -34,6 +34,7 @@ import static java.util.UUID.randomUUID;
 
 @ApplicationScoped
 public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
+
     private final UserRepository        userRepo;
     private final AccountRepository     accountRepo;
     private final ProjectRepository     projectRepo;
@@ -50,14 +51,12 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     private final DepartmentService     departmentService;
     private final SecurityUtils         secUtils;
 
-    public UserService(final UserRepository userRepo, final AccountRepository accountRepo,
-                       final ProjectRepository projectRepo,
-                       final BoardRepository boardRepo, BoardColumnRepository boardColumnRepo, final CardRepository cardRepo,
-                       CardStatusService cardStatusService, final ScheduleRepository scheduleRepo,
-                       final CommentRepository commentRepo, final LabelService labelService,
-                       final BoardTypeService boardTypeService,
-                       final ShrinkageRepository shrinkageRepo, SeniorityService seniorityService,
-                       DepartmentService departmentService, final SecurityUtils secUtils) {
+    public UserService(final UserRepository userRepo, final AccountRepository accountRepo, final ProjectRepository projectRepo,
+                       final BoardRepository boardRepo, final BoardColumnRepository boardColumnRepo, final CardRepository cardRepo,
+                       final CardStatusService cardStatusService, final ScheduleRepository scheduleRepo,
+                       final CommentRepository commentRepo, final LabelService labelService, final BoardTypeService boardTypeService,
+                       final ShrinkageRepository shrinkageRepo, final SeniorityService seniorityService,
+                       final DepartmentService departmentService, final SecurityUtils secUtils) {
         super(userRepo, UserDto.class);
         this.userRepo          = userRepo;
         this.accountRepo       = accountRepo;
@@ -157,7 +156,6 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
         newCard.setBoardColumn(boardColumn);
         newCard.setDueDate(LocalDateTime.of(2025, 10, 10, 10, 10, 10, 10));
         newCard.setCreatedBy(newUser);
-
 
         boardColumn.setCards(Set.of(newCard));
 

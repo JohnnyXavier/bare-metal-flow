@@ -16,29 +16,29 @@ import java.util.UUID;
 @ApplicationScoped
 public class ChangeLogService extends BasicPersistenceService<ChangeLogCardDto, ChangelogEntity> {
 
-  private final ChangeLogRepository repository;
-  private final UserRepository      userRepository;
+    private final ChangeLogRepository repository;
+    private final UserRepository      userRepository;
 
-  public ChangeLogService(final ChangeLogRepository repository, final UserRepository userRepository) {
-    super(repository, ChangeLogCardDto.class);
-    this.repository     = repository;
-    this.userRepository = userRepository;
-  }
+    public ChangeLogService(final ChangeLogRepository repository, final UserRepository userRepository) {
+        super(repository, ChangeLogCardDto.class);
+        this.repository     = repository;
+        this.userRepository = userRepository;
+    }
 
-  public Uni<PageResult<ChangeLogCardDto>> findAllByCardId(final UUID cardId, final Pageable pageable) {
-    return findAllPaged(repository.find("card.id", pageable.getSort(), cardId), "all-changelog-by-card-id", pageable.getPage());
-  }
+    public Uni<PageResult<ChangeLogCardDto>> findAllByCardId(final UUID cardId, final Pageable pageable) {
+        return findAllPaged(repository.find("card.id", pageable.getSort(), cardId), "all-changelog-by-card-id", pageable.getPage());
+    }
 
-  @Override
-  public Uni<ChangeLogCardDto> create(final ChangeLogCardDto fromDto) {
-    // there is no creation of a changeLog via a DTO
-    return null;
-  }
+    @Override
+    public Uni<ChangeLogCardDto> create(final ChangeLogCardDto fromDto) {
+        // there is no creation of a changeLog via a DTO
+        return null;
+    }
 
-  @Override
-  @WithTransaction
-  protected Uni<Void> update(final ChangelogEntity toUpdate, final String key, final String value) {
-    // there is no updating of any field for a changeLog
-    return Uni.createFrom().voidItem();
-  }
+    @Override
+    @WithTransaction
+    protected Uni<Void> update(final ChangelogEntity toUpdate, final String key, final String value) {
+        // there is no updating of any field for a changeLog
+        return Uni.createFrom().voidItem();
+    }
 }
