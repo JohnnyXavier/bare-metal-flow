@@ -44,9 +44,9 @@ public class LabelService extends BasicPersistenceService<LabelDto, LabelEntity>
   @WithTransaction
   protected Uni<Void> update(final LabelEntity toUpdate, final String key, final String value) {
     return switch (key) {
-      case "name" -> updateInplace(toUpdate, SET_NAME, value);
-      case "description" -> updateInplace(toUpdate, SET_DESCRIPTION, value);
-      case "colorHex" -> updateInplace(toUpdate, SET_COLOR_HEX, value);
+      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+      case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
+      case "colorHex" -> updateInPlace(toUpdate, SET_COLOR_HEX, value);
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
     };

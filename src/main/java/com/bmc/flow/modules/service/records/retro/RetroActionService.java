@@ -59,7 +59,7 @@ public class RetroActionService extends BasicPersistenceService<RetroActionDto, 
   @WithTransaction
   protected Uni<Void> update(final RetroActionEntity toUpdate, final String key, final String value) {
     return switch (key) {
-      case "actionToTake" -> updateInplace(toUpdate, SET_ACTION_TO_TAKE, value);
+      case "actionToTake" -> updateInPlace(toUpdate, SET_ACTION_TO_TAKE, value);
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
     };

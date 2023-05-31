@@ -127,11 +127,11 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
     @WithTransaction
     protected Uni<Void> update(final CardEntity toUpdate, final String key, final String value) {
         return switch (key) {
-            case "name" -> updateInplace(toUpdate, SET_NAME, value);
-            case "description" -> updateInplace(toUpdate, SET_DESCRIPTION, value);
-            case "coverImage" -> updateInplace(toUpdate, SET_COVER_IMAGE, value);
-            case "dueDate" -> updateInplace(toUpdate, SET_DUE_DATE, value == null ? null : parse(value));
-            case "completedDate" -> updateInplace(toUpdate, SET_COMPLETED_DATE, value == null ? null : parse(value));
+            case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+            case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
+            case "coverImage" -> updateInPlace(toUpdate, SET_COVER_IMAGE, value);
+            case "dueDate" -> updateInPlace(toUpdate, SET_DUE_DATE, value == null ? null : parse(value));
+            case "completedDate" -> updateInPlace(toUpdate, SET_COMPLETED_DATE, value == null ? null : parse(value));
             case "status" -> setStatus(toUpdate, value);
             case "difficulty" -> setDifficulty(toUpdate, value);
             case "addLabel" -> addLabel(toUpdate, value);

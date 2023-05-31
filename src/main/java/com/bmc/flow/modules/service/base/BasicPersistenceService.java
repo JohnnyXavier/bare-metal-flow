@@ -23,7 +23,7 @@ public abstract class BasicPersistenceService<D, E> {
     private Class<D>                       dtoClass;
 
     /**
-     * This no arg ctor required for quarkus CDI. Do not delete
+     * This no arg ctor is required by quarkus CDI. Do not delete
      */
     protected BasicPersistenceService() {
     }
@@ -128,7 +128,7 @@ public abstract class BasicPersistenceService<D, E> {
      */
     @WithTransaction
     @SneakyThrows
-    protected Uni<Void> updateInplace(final E toUpdate, final MethodNames methods, final Object value) {
+    protected Uni<Void> updateInPlace(final E toUpdate, final MethodNames methods, final Object value) {
         Method m = toUpdate.getClass().getMethod(methods.getMethodName(), value.getClass());
         m.invoke(toUpdate, value);
 

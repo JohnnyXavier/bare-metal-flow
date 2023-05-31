@@ -40,9 +40,9 @@ public class ShrinkageService extends BasicPersistenceService<ShrinkageDto, Shri
   @WithTransaction
   protected Uni<Void> update(final ShrinkageEntity toUpdate, final String key, final String value) {
     return switch (key) {
-      case "name" -> updateInplace(toUpdate, SET_NAME, value);
-      case "duration" -> updateInplace(toUpdate, SET_DURATION_IN_MIN, Short.valueOf(value));
-      case "percentage" -> updateInplace(toUpdate, SET_PERCENTAGE, Short.valueOf(value));
+      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+      case "duration" -> updateInPlace(toUpdate, SET_DURATION_IN_MIN, Short.valueOf(value));
+      case "percentage" -> updateInPlace(toUpdate, SET_PERCENTAGE, Short.valueOf(value));
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
     };

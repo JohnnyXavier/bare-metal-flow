@@ -60,9 +60,9 @@ public class ProjectService extends BasicPersistenceService<ProjectDto, ProjectE
   @WithTransaction
   protected Uni<Void> update(final ProjectEntity toUpdate, final String key, final String value) {
     return switch (key) {
-      case "name" -> updateInplace(toUpdate, SET_NAME, value);
-      case "description" -> updateInplace(toUpdate, SET_DESCRIPTION, value);
-      case "coverImage" -> updateInplace(toUpdate, SET_COVER_IMAGE, value);
+      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+      case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
+      case "coverImage" -> updateInPlace(toUpdate, SET_COVER_IMAGE, value);
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
     };

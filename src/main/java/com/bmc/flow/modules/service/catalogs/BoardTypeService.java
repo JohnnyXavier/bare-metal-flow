@@ -46,8 +46,8 @@ public class BoardTypeService extends BasicPersistenceService<BoardTypeDto, Boar
 
   protected Uni<Void> updateInPlace(final BoardTypeEntity toUpdate, final String key, final String value) {
     return switch (key) {
-      case "name" -> updateInplace(toUpdate, SET_NAME, value);
-      case "description" -> updateInplace(toUpdate, SET_DESCRIPTION, value);
+      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+      case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
     };

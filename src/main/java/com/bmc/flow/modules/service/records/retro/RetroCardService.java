@@ -55,8 +55,8 @@ public class RetroCardService extends BasicPersistenceService<RetroCardDto, Retr
   @WithTransaction
   protected Uni<Void> update(final RetroCardEntity toUpdate, final String key, final String value) {
     return switch (key) {
-      case "comment" -> updateInplace(toUpdate, SET_COMMENT, value);
-      case "votes" -> updateInplace(toUpdate, SET_VOTES, Short.parseShort(value));
+      case "comment" -> updateInPlace(toUpdate, SET_COMMENT, value);
+      case "votes" -> updateInPlace(toUpdate, SET_VOTES, Short.parseShort(value));
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
     };

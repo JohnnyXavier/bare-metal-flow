@@ -208,9 +208,9 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
 
     public Uni<Void> update(final UserEntity toUpdate, final String key, final String value) {
         return switch (key) {
-            case "email" -> updateInplace(toUpdate, SET_EMAIL, value.toLowerCase());
-            case "callSign" -> updateInplace(toUpdate, SET_CALL_SIGN, value);
-            case "avatar" -> updateInplace(toUpdate, SET_AVATAR, value);
+            case "email" -> updateInPlace(toUpdate, SET_EMAIL, value.toLowerCase());
+            case "callSign" -> updateInPlace(toUpdate, SET_CALL_SIGN, value);
+            case "avatar" -> updateInPlace(toUpdate, SET_AVATAR, value);
             case "seniority" -> setSeniority(toUpdate, value);
 
             default -> throw new IllegalStateException("Unexpected value: " + key);

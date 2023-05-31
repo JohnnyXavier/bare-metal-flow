@@ -43,9 +43,9 @@ public class SeniorityService extends BasicPersistenceService<SeniorityDto, Seni
   @WithTransaction
   protected Uni<Void> update(final SeniorityEntity toUpdate, final String key, final String value) {
     return switch (key) {
-      case "name" -> updateInplace(toUpdate, SET_NAME, value);
-      case "description" -> updateInplace(toUpdate, SET_DESCRIPTION, value);
-      case "level" -> updateInplace(toUpdate, SET_LEVEL, Short.parseShort(value));
+      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+      case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
+      case "level" -> updateInPlace(toUpdate, SET_LEVEL, Short.parseShort(value));
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
     };

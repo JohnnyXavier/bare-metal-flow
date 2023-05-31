@@ -29,11 +29,11 @@ public class ChangeLogResource extends BasicOpsResource<ChangeLogCardDto, Change
 
   @GET
   @Path("card/{cardId}")
-  public Uni<Response> findCardsByBoardId(final UUID cardId,
-                                          @QueryParam(value = "sortBy") @NotNull final String sortBy,
-                                          @QueryParam(value = "sortDir") final String sortDir,
-                                          @QueryParam(value = "pageIx") final Integer pageIx,
-                                          @QueryParam(value = "pageSize") @NotNull final Integer pageSize) {
+  public Uni<Response> findChangelogByCardId(final UUID cardId,
+                                             @QueryParam(value = "sortBy") @NotNull final String sortBy,
+                                             @QueryParam(value = "sortDir") final String sortDir,
+                                             @QueryParam(value = "pageIx") final Integer pageIx,
+                                             @QueryParam(value = "pageSize") @NotNull final Integer pageSize) {
     return changeLogService.findAllByCardId(cardId, new Pageable(sortBy, sortDir, pageIx, pageSize))
         .map(changeLogDtos -> Response.ok(changeLogDtos).build())
         .onFailure().recoverWithItem(ResponseUtils::failToServerError);

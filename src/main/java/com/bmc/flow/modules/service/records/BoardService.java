@@ -72,10 +72,10 @@ public class BoardService extends BasicPersistenceService<BoardDto, BoardEntity>
   @WithTransaction
   protected Uni<Void> update(final BoardEntity toUpdate, final String key, final String value) {
     return switch (key) {
-      case "name" -> updateInplace(toUpdate, SET_NAME, value);
-      case "description" -> updateInplace(toUpdate, SET_DESCRIPTION, value);
-      case "coverImage" -> updateInplace(toUpdate, SET_COVER_IMAGE, value);
-      case "isFavorite" -> updateInplace(toUpdate, SET_IS_FAVORITE, Boolean.valueOf(value));
+      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+      case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
+      case "coverImage" -> updateInPlace(toUpdate, SET_COVER_IMAGE, value);
+      case "isFavorite" -> updateInPlace(toUpdate, SET_IS_FAVORITE, Boolean.valueOf(value));
       case "addMember" -> addMember(toUpdate, value);
       case "removeMember" -> removeMember(toUpdate, value);
 

@@ -47,7 +47,7 @@ public class ScheduleService extends BasicPersistenceService<ScheduleDto, Schedu
   @WithTransaction
   protected Uni<Void> update(final ScheduleEntity toUpdate, final String key, final String value) {
     return switch (key) {
-      case "hoursADay" -> updateInplace(toUpdate, SET_HOURS_A_DAY, Short.parseShort(value));
+      case "hoursADay" -> updateInPlace(toUpdate, SET_HOURS_A_DAY, Short.parseShort(value));
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
     };

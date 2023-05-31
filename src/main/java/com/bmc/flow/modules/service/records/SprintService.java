@@ -92,12 +92,12 @@ public class SprintService extends BasicPersistenceService<SprintDto, SprintEnti
     @WithTransaction
     protected Uni<Void> update(final SprintEntity toUpdate, final String key, final String value) {
         return switch (key) {
-            case "name" -> updateInplace(toUpdate, SET_NAME, value);
-            case "fromDate" -> updateInplace(toUpdate, SET_FROM_DATE, parse(value));
-            case "startDate" -> updateInplace(toUpdate, SET_START_DATE, parse(value));
-            case "endDate" -> updateInplace(toUpdate, SET_END_DATE, parse(value));
-            case "closeDate" -> updateInplace(toUpdate, SET_CLOSE_DATE, parse(value));
-            case "goal" -> updateInplace(toUpdate, SET_GOAL, value);
+            case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+            case "fromDate" -> updateInPlace(toUpdate, SET_FROM_DATE, parse(value));
+            case "startDate" -> updateInPlace(toUpdate, SET_START_DATE, parse(value));
+            case "endDate" -> updateInPlace(toUpdate, SET_END_DATE, parse(value));
+            case "closeDate" -> updateInPlace(toUpdate, SET_CLOSE_DATE, parse(value));
+            case "goal" -> updateInPlace(toUpdate, SET_GOAL, value);
 
             default -> throw new IllegalStateException("Unexpected value: " + key);
         };

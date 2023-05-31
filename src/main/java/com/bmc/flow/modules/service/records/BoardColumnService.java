@@ -62,7 +62,7 @@ public class BoardColumnService extends BasicPersistenceService<BoardColumnDto, 
   @WithTransaction
   protected Uni<Void> update(final BoardColumnEntity toUpdate, final String key, final String value) {
     return switch (key) {
-      case "name" -> updateInplace(toUpdate, SET_NAME, value);
+      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
       case "status" -> setStatus(toUpdate, UUID.fromString(value));
 
       default -> throw new IllegalStateException("Unexpected value: " + key);
