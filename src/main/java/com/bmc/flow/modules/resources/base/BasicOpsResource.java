@@ -32,7 +32,6 @@ public abstract class BasicOpsResource<D, E> {
   @GET
   @Path("{id}")
   public Uni<Response> findById(final UUID id) {
-    log.infof("calling findById on is %s", id );
     return basicPersistenceService.findById(id)
                                   .map(resultDto -> Response.ok(resultDto).build())
                                   .onFailure(NoResultException.class).recoverWithItem(Response.status(NOT_FOUND)::build)
