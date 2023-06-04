@@ -13,13 +13,13 @@ public class CreationUtils {
   }
 
   public static void createBaseCatalogEntity(BaseCatalogEntity CatalogEntity, BaseCatalogDto CatalogDto) {
-    UserEntity seniorityCreator = new UserEntity();
-    seniorityCreator.setId(CatalogDto.getCreatedBy());
+    UserEntity creator = new UserEntity();
+    creator.setId(CatalogDto.getCreatedBy());
 
     CatalogEntity.setId(randomUUID());
     CatalogEntity.setName(CatalogDto.getName());
     CatalogEntity.setDescription(CatalogDto.getDescription());
-    CatalogEntity.setCreatedBy(seniorityCreator);
+    CatalogEntity.setCreatedBy(creator);
     CatalogEntity.setIsSystem(FALSE);
   }
 }

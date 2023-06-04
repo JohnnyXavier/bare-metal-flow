@@ -28,8 +28,8 @@ public class AccountService extends BasicPersistenceService<AccountDto, AccountE
   }
 
 
-  @WithTransaction
   @Override
+  @WithTransaction
   public Uni<AccountDto> create(@Valid final AccountDto accountDto) {
     UserEntity accountCreator = new UserEntity();
     accountCreator.setId(accountDto.getCreatedBy());
@@ -41,7 +41,7 @@ public class AccountService extends BasicPersistenceService<AccountDto, AccountE
     newAccount.setCreatedBy(accountCreator);
 
     return accountRepo.persist(newAccount)
-        .replaceWith(findById(newAccount.getId()));
+                      .replaceWith(findById(newAccount.getId()));
   }
 
   public Uni<PageResult<AccountDto>> findAllByUserIdPaged(final UUID userId, final Pageable pageable) {
@@ -49,6 +49,8 @@ public class AccountService extends BasicPersistenceService<AccountDto, AccountE
         pageable.getPage());
   }
 
+  @Override
+  @WithTransaction
   protected Uni<Void> update(final AccountEntity toUpdate, final String key, final String value) {
     return switch (key) {
       case "name" -> updateInPlace(toUpdate, SET_NAME, value);

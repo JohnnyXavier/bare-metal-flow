@@ -26,6 +26,7 @@ public class LabelService extends BasicPersistenceService<LabelDto, LabelEntity>
     this.labelRepo = labelRepo;
   }
 
+  @Override
   @WithTransaction
   public Uni<LabelDto> create(@Valid final LabelDto labelDto) {
     LabelEntity newLabel = new LabelEntity();

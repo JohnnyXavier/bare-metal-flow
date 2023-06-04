@@ -23,6 +23,7 @@ public class CardTypeService extends BasicPersistenceService<CardTypeDto, CardTy
     this.cardTypeRepo = cardTypeRepo;
   }
 
+  @Override
   @WithTransaction
   public Uni<CardTypeDto> create(@Valid final CardTypeDto cardTypeDto) {
     CardTypeEntity newCardType = new CardTypeEntity();

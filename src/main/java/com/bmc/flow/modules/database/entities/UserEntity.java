@@ -27,8 +27,6 @@ import static jakarta.persistence.FetchType.LAZY;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class UserEntity extends BaseEntity {
 
-  public static final String FIELD_NAME = "user";
-
   private String password;
 
   @NotNull

@@ -18,16 +18,16 @@ import static com.bmc.flow.modules.utilities.DataUtils.getImage;
 @RegisterForReflection
 public class CardDetailDto extends BaseRecordDto {
 
-  @NotNull
-  private UUID          boardId;
-  private LocalDateTime dueDate;
-  private LocalDateTime completedDate;
+  private Boolean       isCompleted;
   private Duration      estimatedTime;
   private Duration      loggedTime;
-  private Boolean       isCompleted;
-  private UUID          cardTypeId;
-  private UUID          cardStatusId;
+  private LocalDateTime completedDate;
+  private LocalDateTime dueDate;
+  @NotNull
+  private UUID          boardId;
   private UUID          cardDifficultyId;
+  private UUID          cardStatusId;
+  private UUID          cardTypeId;
 
 
   public CardDetailDto(final UUID id, final String name, final String description, final String coverImage,

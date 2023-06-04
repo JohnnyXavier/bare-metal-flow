@@ -42,6 +42,7 @@ public class CommentService extends BasicPersistenceService<CommentDto, CommentE
     }
 
     @Override
+    @WithTransaction
     public Uni<CommentDto> create(CommentDto fromDto) {
         CommentEntity comment = new CommentEntity();
         comment.setId(randomUUID());

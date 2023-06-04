@@ -76,7 +76,7 @@ public abstract class BasicPersistenceService<D, E> {
             .chain(entityToUpdate -> update(entityToUpdate, key, value));
     }
 
-    protected abstract Uni<Void> update(E toUpdate, final String key, final String value);
+    protected abstract Uni<Void> update(final E toUpdate, final String key, final String value);
 
     /**
      * TODO: Article about reflection
