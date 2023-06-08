@@ -6,7 +6,6 @@ import com.bmc.flow.modules.resources.base.BasicOpsResource;
 import com.bmc.flow.modules.resources.base.Pageable;
 import com.bmc.flow.modules.service.records.ProjectService;
 import io.smallrye.mutiny.Uni;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

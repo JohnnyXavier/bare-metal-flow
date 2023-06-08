@@ -16,41 +16,41 @@ import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
 @ApplicationScoped
 public class BoardTypeService extends BasicPersistenceService<BoardTypeDto, BoardTypeEntity> {
 
-  private final BoardTypeRepository boardTypeRepo;
+    private final BoardTypeRepository boardTypeRepo;
 
-  public BoardTypeService(final BoardTypeRepository boardTypeRepo) {
-    super(boardTypeRepo, BoardTypeDto.class);
-    this.boardTypeRepo = boardTypeRepo;
-  }
+    public BoardTypeService(final BoardTypeRepository boardTypeRepo) {
+        super(boardTypeRepo, BoardTypeDto.class);
+        this.boardTypeRepo = boardTypeRepo;
+    }
 
-  @WithTransaction
-  public Uni<BoardTypeDto> create(@Valid final BoardTypeDto boardTypeDto) {
-    BoardTypeEntity newBoardType = new BoardTypeEntity();
-    CreationUtils.createBaseCatalogEntity(newBoardType, boardTypeDto);
+    @WithTransaction
+    public Uni<BoardTypeDto> create(@Valid final BoardTypeDto boardTypeDto) {
+        BoardTypeEntity newBoardType = new BoardTypeEntity();
+        CreationUtils.createBaseCatalogEntity(newBoardType, boardTypeDto);
 
-    return boardTypeRepo.persist(newBoardType)
-        .replaceWith(findById(newBoardType.getId()));
-  }
-
-
-  public Uni<BoardTypeEntity> findEntityByName(final String name) {
-    return boardTypeRepo.findEntityByName(name);
-  }
+        return boardTypeRepo.persist(newBoardType)
+                            .replaceWith(findById(newBoardType.getId()));
+    }
 
 
-  @Override
-  @WithTransaction
-  protected Uni<Void> update(final BoardTypeEntity toUpdate, final String key, final String value) {
-    return updateInPlace(toUpdate, key, value);
-  }
+    public Uni<BoardTypeEntity> findEntityByName(final String name) {
+        return boardTypeRepo.findEntityByName(name);
+    }
 
-  protected Uni<Void> updateInPlace(final BoardTypeEntity toUpdate, final String key, final String value) {
-    return switch (key) {
-      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
-      case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
 
-      default -> throw new IllegalStateException("Unexpected value: " + key);
-    };
-  }
+    @Override
+    @WithTransaction
+    protected Uni<Void> update(final BoardTypeEntity toUpdate, final String key, final String value) {
+        return updateInPlace(toUpdate, key, value);
+    }
+
+    protected Uni<Void> updateInPlace(final BoardTypeEntity toUpdate, final String key, final String value) {
+        return switch (key) {
+            case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+            case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
+
+            default -> throw new IllegalStateException("Unexpected value: " + key);
+        };
+    }
 
 }

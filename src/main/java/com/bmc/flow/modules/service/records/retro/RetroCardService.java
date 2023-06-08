@@ -21,44 +21,44 @@ import static java.util.UUID.randomUUID;
 @ApplicationScoped
 public class RetroCardService extends BasicPersistenceService<RetroCardDto, RetroCardEntity> {
 
-  private final RetroCardRepository repository;
+    private final RetroCardRepository repository;
 
 
-  public RetroCardService(final RetroCardRepository repository) {
-    super(repository, RetroCardDto.class);
-    this.repository = repository;
-  }
+    public RetroCardService(final RetroCardRepository repository) {
+        super(repository, RetroCardDto.class);
+        this.repository = repository;
+    }
 
-  public Uni<List<RetroCardDto>> findAllByRetroBoardId(final UUID retroBoardId) {
-    return repository.findAllByRetroBoardId(retroBoardId);
-  }
+    public Uni<List<RetroCardDto>> findAllByRetroBoardId(final UUID retroBoardId) {
+        return repository.findAllByRetroBoardId(retroBoardId);
+    }
 
-  @WithTransaction
-  public Uni<RetroCardDto> create(@Valid final RetroCardDto retroCardDto) {
-    UserEntity cardCreator = new UserEntity();
-    cardCreator.setId(retroCardDto.getCreatedBy());
+    @WithTransaction
+    public Uni<RetroCardDto> create(@Valid final RetroCardDto retroCardDto) {
+        UserEntity cardCreator = new UserEntity();
+        cardCreator.setId(retroCardDto.getCreatedBy());
 
-    RetrospectiveEntity board = new RetrospectiveEntity();
-    board.setId(retroCardDto.getRetroBoardId());
+        RetrospectiveEntity board = new RetrospectiveEntity();
+        board.setId(retroCardDto.getRetroBoardId());
 
-    RetroCardEntity newCard = new RetroCardEntity();
-    newCard.setId(randomUUID());
-    newCard.setComment(retroCardDto.getComment());
-    newCard.setCreatedBy(cardCreator);
-    newCard.setRetroBoard(board);
+        RetroCardEntity newCard = new RetroCardEntity();
+        newCard.setId(randomUUID());
+        newCard.setComment(retroCardDto.getComment());
+        newCard.setCreatedBy(cardCreator);
+        newCard.setRetroBoard(board);
 
-    return repository.persist(newCard)
-        .replaceWith(findById(newCard.getId()));
-  }
+        return repository.persist(newCard)
+                         .replaceWith(findById(newCard.getId()));
+    }
 
-  @Override
-  @WithTransaction
-  protected Uni<Void> update(final RetroCardEntity toUpdate, final String key, final String value) {
-    return switch (key) {
-      case "comment" -> updateInPlace(toUpdate, SET_COMMENT, value);
-      case "votes" -> updateInPlace(toUpdate, SET_VOTES, Short.parseShort(value));
+    @Override
+    @WithTransaction
+    protected Uni<Void> update(final RetroCardEntity toUpdate, final String key, final String value) {
+        return switch (key) {
+            case "comment" -> updateInPlace(toUpdate, SET_COMMENT, value);
+            case "votes" -> updateInPlace(toUpdate, SET_VOTES, Short.parseShort(value));
 
-      default -> throw new IllegalStateException("Unexpected value: " + key);
-    };
-  }
+            default -> throw new IllegalStateException("Unexpected value: " + key);
+        };
+    }
 }

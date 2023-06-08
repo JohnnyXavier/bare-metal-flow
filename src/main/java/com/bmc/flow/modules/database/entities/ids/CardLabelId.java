@@ -1,11 +1,10 @@
 package com.bmc.flow.modules.database.entities.ids;
 
 import com.bmc.flow.modules.database.entities.records.CardLabelEntity;
+import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
-import jakarta.persistence.Embeddable;
 
 import java.io.Serializable;
 import java.util.UUID;

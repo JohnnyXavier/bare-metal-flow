@@ -16,33 +16,33 @@ import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
 @ApplicationScoped
 public class CardDifficultyService extends BasicPersistenceService<CardDifficultyDto, CardDifficultyEntity> {
 
-  private final CardDifficultyRepository cardDifficultyRepo;
+    private final CardDifficultyRepository cardDifficultyRepo;
 
-  public CardDifficultyService(final CardDifficultyRepository cardDifficultyRepo) {
-    super(cardDifficultyRepo, CardDifficultyDto.class);
-    this.cardDifficultyRepo = cardDifficultyRepo;
-  }
+    public CardDifficultyService(final CardDifficultyRepository cardDifficultyRepo) {
+        super(cardDifficultyRepo, CardDifficultyDto.class);
+        this.cardDifficultyRepo = cardDifficultyRepo;
+    }
 
-  @WithTransaction
-  @Override
-  public Uni<CardDifficultyDto> create(@Valid final CardDifficultyDto cardDifficultyDto) {
-    CardDifficultyEntity newCardDifficulty = new CardDifficultyEntity();
-    CreationUtils.createBaseCatalogEntity(newCardDifficulty, cardDifficultyDto);
+    @WithTransaction
+    @Override
+    public Uni<CardDifficultyDto> create(@Valid final CardDifficultyDto cardDifficultyDto) {
+        CardDifficultyEntity newCardDifficulty = new CardDifficultyEntity();
+        CreationUtils.createBaseCatalogEntity(newCardDifficulty, cardDifficultyDto);
 
-    newCardDifficulty.setLevel(cardDifficultyDto.getLevel());
+        newCardDifficulty.setLevel(cardDifficultyDto.getLevel());
 
-    return cardDifficultyRepo.persist(newCardDifficulty)
-        .replaceWith(findById(newCardDifficulty.getId()));
-  }
+        return cardDifficultyRepo.persist(newCardDifficulty)
+                                 .replaceWith(findById(newCardDifficulty.getId()));
+    }
 
-  @Override
-  @WithTransaction
-  protected Uni<Void> update(final CardDifficultyEntity toUpdate, final String key, final String value) {
-    return switch (key) {
-      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
-      case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
+    @Override
+    @WithTransaction
+    protected Uni<Void> update(final CardDifficultyEntity toUpdate, final String key, final String value) {
+        return switch (key) {
+            case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+            case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
 
-      default -> throw new IllegalStateException("Unexpected value: " + key);
-    };
-  }
+            default -> throw new IllegalStateException("Unexpected value: " + key);
+        };
+    }
 }

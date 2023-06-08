@@ -3,11 +3,10 @@ package com.bmc.flow.modules.database.dto.resourcing;
 import com.bmc.flow.modules.database.dto.base.BaseCatalogDto;
 import io.quarkus.hibernate.reactive.panache.common.ProjectedFieldName;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import lombok.Getter;
-import lombok.Setter;
-
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

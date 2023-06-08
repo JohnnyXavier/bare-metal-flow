@@ -16,32 +16,31 @@ import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
 @ApplicationScoped
 public class CardTypeService extends BasicPersistenceService<CardTypeDto, CardTypeEntity> {
 
-  private final CardTypeRepository cardTypeRepo;
+    private final CardTypeRepository cardTypeRepo;
 
-  public CardTypeService(final CardTypeRepository cardTypeRepo) {
-    super(cardTypeRepo, CardTypeDto.class);
-    this.cardTypeRepo = cardTypeRepo;
-  }
+    public CardTypeService(final CardTypeRepository cardTypeRepo) {
+        super(cardTypeRepo, CardTypeDto.class);
+        this.cardTypeRepo = cardTypeRepo;
+    }
 
-  @Override
-  @WithTransaction
-  public Uni<CardTypeDto> create(@Valid final CardTypeDto cardTypeDto) {
-    CardTypeEntity newCardType = new CardTypeEntity();
-    CreationUtils.createBaseCatalogEntity(newCardType, cardTypeDto);
+    @Override
+    @WithTransaction
+    public Uni<CardTypeDto> create(@Valid final CardTypeDto cardTypeDto) {
+        CardTypeEntity newCardType = new CardTypeEntity();
+        CreationUtils.createBaseCatalogEntity(newCardType, cardTypeDto);
 
-    return cardTypeRepo.persist(newCardType)
-        .replaceWith(findById(newCardType.getId()));
-  }
+        return cardTypeRepo.persist(newCardType)
+                           .replaceWith(findById(newCardType.getId()));
+    }
 
-  @Override
-  @WithTransaction
-  protected Uni<Void> update(final CardTypeEntity toUpdate, final String key, final String value) {
-    return switch (key) {
-      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
-      case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
+    @Override
+    @WithTransaction
+    protected Uni<Void> update(final CardTypeEntity toUpdate, final String key, final String value) {
+        return switch (key) {
+            case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+            case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
 
-
-      default -> throw new IllegalStateException("Unexpected value: " + key);
-    };
-  }
+            default -> throw new IllegalStateException("Unexpected value: " + key);
+        };
+    }
 }

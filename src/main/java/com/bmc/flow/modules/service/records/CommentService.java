@@ -22,9 +22,12 @@ import static java.util.UUID.randomUUID;
 @ApplicationScoped
 public class CommentService extends BasicPersistenceService<CommentDto, CommentEntity> {
 
-    private final CommentRepository   commentRepo;
-    private final CardRepository      cardRepo;
-    private final UserRepository      userRepo;
+    private final CommentRepository commentRepo;
+
+    private final CardRepository cardRepo;
+
+    private final UserRepository userRepo;
+
     private final ChangeLogRepository changeLogRepo;
 
     public CommentService(CommentRepository commentRepo, CardRepository cardRepo, UserRepository userRepo,
@@ -55,12 +58,12 @@ public class CommentService extends BasicPersistenceService<CommentDto, CommentE
         changelog.setChangeTo(fromDto.getComment());
 
         return userRepo.findById(fromDto.getCreatedBy())
-            .onItem().ifNotNull()
-            .invoke(comment::setCreatedBy).invoke(changelog::setCreatedBy)
-            .chain(() -> cardRepo.findById(fromDto.getCardId()).invoke(comment::setCard).invoke(changelog::setCard))
-            .call(() -> commentRepo.persist(comment))
-            .call(() -> changeLogRepo.persist(changelog))
-            .replaceWith(findById(comment.getId()));
+                       .onItem().ifNotNull()
+                       .invoke(comment::setCreatedBy).invoke(changelog::setCreatedBy)
+                       .chain(() -> cardRepo.findById(fromDto.getCardId()).invoke(comment::setCard).invoke(changelog::setCard))
+                       .call(() -> commentRepo.persist(comment))
+                       .call(() -> changeLogRepo.persist(changelog))
+                       .replaceWith(findById(comment.getId()));
     }
 
     @Override

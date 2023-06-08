@@ -19,42 +19,42 @@ import static com.bmc.flow.modules.service.reflection.MethodNames.*;
 @ApplicationScoped
 public class LabelService extends BasicPersistenceService<LabelDto, LabelEntity> {
 
-  private final LabelRepository labelRepo;
+    private final LabelRepository labelRepo;
 
-  public LabelService(final LabelRepository labelRepo) {
-    super(labelRepo, LabelDto.class);
-    this.labelRepo = labelRepo;
-  }
+    public LabelService(final LabelRepository labelRepo) {
+        super(labelRepo, LabelDto.class);
+        this.labelRepo = labelRepo;
+    }
 
-  @Override
-  @WithTransaction
-  public Uni<LabelDto> create(@Valid final LabelDto labelDto) {
-    LabelEntity newLabel = new LabelEntity();
-    CreationUtils.createBaseCatalogEntity(newLabel, labelDto);
-    newLabel.setColorHex(labelDto.getColorHex());
+    @Override
+    @WithTransaction
+    public Uni<LabelDto> create(@Valid final LabelDto labelDto) {
+        LabelEntity newLabel = new LabelEntity();
+        CreationUtils.createBaseCatalogEntity(newLabel, labelDto);
+        newLabel.setColorHex(labelDto.getColorHex());
 
-    return labelRepo.persist(newLabel)
-        .replaceWith(findById(newLabel.getId()));
-  }
+        return labelRepo.persist(newLabel)
+                        .replaceWith(findById(newLabel.getId()));
+    }
 
-  public Uni<PageResult<LabelDto>> findAllByCardIdPaged(final UUID cardId, final Pageable pageable) {
-    return findAllPaged(labelRepo.findAllByCardId(cardId, pageable.getSort()), "labels-in-card-" + cardId, pageable.getPage());
-  }
+    public Uni<PageResult<LabelDto>> findAllByCardIdPaged(final UUID cardId, final Pageable pageable) {
+        return findAllPaged(labelRepo.findAllByCardId(cardId, pageable.getSort()), "labels-in-card-" + cardId, pageable.getPage());
+    }
 
-  @Override
-  @WithTransaction
-  protected Uni<Void> update(final LabelEntity toUpdate, final String key, final String value) {
-    return switch (key) {
-      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
-      case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
-      case "colorHex" -> updateInPlace(toUpdate, SET_COLOR_HEX, value);
+    @Override
+    @WithTransaction
+    protected Uni<Void> update(final LabelEntity toUpdate, final String key, final String value) {
+        return switch (key) {
+            case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+            case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
+            case "colorHex" -> updateInPlace(toUpdate, SET_COLOR_HEX, value);
 
-      default -> throw new IllegalStateException("Unexpected value: " + key);
-    };
-  }
+            default -> throw new IllegalStateException("Unexpected value: " + key);
+        };
+    }
 
-  public Uni<LabelEntity> findEntityByName(final String name) {
-    return labelRepo.findEntityByName(name);
+    public Uni<LabelEntity> findEntityByName(final String name) {
+        return labelRepo.findEntityByName(name);
 
-  }
+    }
 }

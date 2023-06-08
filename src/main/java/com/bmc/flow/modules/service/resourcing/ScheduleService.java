@@ -23,65 +23,65 @@ import static java.util.UUID.randomUUID;
 @ApplicationScoped
 public class ScheduleService extends BasicPersistenceService<ScheduleDto, ScheduleEntity> {
 
-  private final ScheduleRepository scheduleRepo;
+    private final ScheduleRepository scheduleRepo;
 
-  private final ShrinkageRepository shrinkageRepo;
+    private final ShrinkageRepository shrinkageRepo;
 
-  public ScheduleService(final ScheduleRepository scheduleRepo, final ShrinkageRepository shrinkageRepo) {
-    super(scheduleRepo, ScheduleDto.class);
-    this.scheduleRepo  = scheduleRepo;
-    this.shrinkageRepo = shrinkageRepo;
-  }
+    public ScheduleService(final ScheduleRepository scheduleRepo, final ShrinkageRepository shrinkageRepo) {
+        super(scheduleRepo, ScheduleDto.class);
+        this.scheduleRepo  = scheduleRepo;
+        this.shrinkageRepo = shrinkageRepo;
+    }
 
-  @WithTransaction
-  public Uni<ScheduleDto> create(@Valid final ScheduleDto scheduleDto) {
-    ScheduleEntity newSchedule = new ScheduleEntity();
-    newSchedule.setId(randomUUID());
-    newSchedule.setHoursADay(scheduleDto.getHoursADay());
+    @WithTransaction
+    public Uni<ScheduleDto> create(@Valid final ScheduleDto scheduleDto) {
+        ScheduleEntity newSchedule = new ScheduleEntity();
+        newSchedule.setId(randomUUID());
+        newSchedule.setHoursADay(scheduleDto.getHoursADay());
 
-    return scheduleRepo.persist(newSchedule)
-        .replaceWith(findById(newSchedule.getId()));
-  }
+        return scheduleRepo.persist(newSchedule)
+                           .replaceWith(findById(newSchedule.getId()));
+    }
 
-  @Override
-  @WithTransaction
-  protected Uni<Void> update(final ScheduleEntity toUpdate, final String key, final String value) {
-    return switch (key) {
-      case "hoursADay" -> updateInPlace(toUpdate, SET_HOURS_A_DAY, Short.parseShort(value));
+    @Override
+    @WithTransaction
+    protected Uni<Void> update(final ScheduleEntity toUpdate, final String key, final String value) {
+        return switch (key) {
+            case "hoursADay" -> updateInPlace(toUpdate, SET_HOURS_A_DAY, Short.parseShort(value));
 
-      default -> throw new IllegalStateException("Unexpected value: " + key);
-    };
-  }
+            default -> throw new IllegalStateException("Unexpected value: " + key);
+        };
+    }
 
-  public Uni<ScheduleDto> findByUserId(final UUID userId) {
-    return scheduleRepo.findByUserId(userId);
-  }
+    public Uni<ScheduleDto> findByUserId(final UUID userId) {
+        return scheduleRepo.findByUserId(userId);
+    }
 
-  @CacheResult(cacheName = "full-schedule-by-user-id")
-  public Uni<FullScheduleDto> findFullByUserId(final UUID userId) {
-    FullScheduleDto fullScheduleDto = new FullScheduleDto();
-    return scheduleRepo.findFullByUserId(userId)
-        .invoke(scheduleEntity -> {
-          fullScheduleDto.setId(scheduleEntity.getId());
-          fullScheduleDto.setHoursADay(scheduleEntity.getHoursADay());
-          fullScheduleDto.setCreatedAt(scheduleEntity.getCreatedAt());
-          fullScheduleDto.setCreatedBy(scheduleEntity.getCreatedBy().getId());
+    @CacheResult(cacheName = "full-schedule-by-user-id")
+    public Uni<FullScheduleDto> findFullByUserId(final UUID userId) {
+        FullScheduleDto fullScheduleDto = new FullScheduleDto();
+        return scheduleRepo.findFullByUserId(userId)
+                           .invoke(scheduleEntity -> {
+                               fullScheduleDto.setId(scheduleEntity.getId());
+                               fullScheduleDto.setHoursADay(scheduleEntity.getHoursADay());
+                               fullScheduleDto.setCreatedAt(scheduleEntity.getCreatedAt());
+                               fullScheduleDto.setCreatedBy(scheduleEntity.getCreatedBy().getId());
 
-          Set<ShrinkageDto> shrinkageDtos =
-              scheduleEntity.getShrinkages()
-                  .stream()
-                  .map(entity ->
-                      new ShrinkageDto(entity.getId(), entity.getName(), "", entity.getDurationInMin(),
-                          (entity.getPercentage() == null ? 0 : entity.getPercentage()),
-                          entity.getIsSystem(),
-                          entity.getCreatedAt(), entity.getCreatedBy().getId())
-                  )
-                  .collect(Collectors.toSet());
+                               Set<ShrinkageDto> shrinkageDtos =
+                                   scheduleEntity.getShrinkages()
+                                                 .stream()
+                                                 .map(entity ->
+                                                     new ShrinkageDto(entity.getId(), entity.getName(), "", entity.getDurationInMin(),
+                                                         (entity.getPercentage() == null ? 0 : entity.getPercentage()),
+                                                         entity.getIsSystem(),
+                                                         entity.getCreatedAt(), entity.getCreatedBy().getId())
+                                                 )
+                                                 .collect(Collectors.toSet());
 
-          fullScheduleDto.setShrinkages(shrinkageDtos);
-          fullScheduleDto.setTotalShrinkageTime();
+                               fullScheduleDto.setShrinkages(shrinkageDtos);
+                               fullScheduleDto.setTotalShrinkageTime();
 
-        }).replaceWith(fullScheduleDto);
+                           }).replaceWith(fullScheduleDto);
 
-  }
+    }
 }

@@ -1,10 +1,9 @@
 package com.bmc.flow.modules.database.entities.base;
 
+import jakarta.persistence.MappedSuperclass;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
-import jakarta.persistence.MappedSuperclass;
 
 /**
  * this class is the basis for record entities in the application.

@@ -1,11 +1,10 @@
 package com.bmc.flow.modules.database.entities.base;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
 
 /**
  * this class is the basis for catalog entities in the application.

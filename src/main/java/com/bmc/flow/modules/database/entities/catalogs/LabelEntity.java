@@ -7,6 +7,7 @@ import com.bmc.flow.modules.database.entities.records.CardLabelEntity;
 import com.bmc.flow.modules.database.entities.records.ProjectEntity;
 import com.bmc.flow.modules.database.entities.records.retro.RetroActionEntity;
 import com.bmc.flow.modules.database.entities.records.retro.RetrospectiveEntity;
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,8 +15,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-
-import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -42,13 +41,13 @@ public class LabelEntity extends BaseCatalogEntity {
     private String name;
 
     @OneToMany(mappedBy = "label", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CardLabelEntity> cards    = new HashSet<>();
+    private Set<CardLabelEntity> cards = new HashSet<>();
 
     @ManyToMany(mappedBy = "labels")
-    private Set<AccountEntity>   accounts = new HashSet<>();
+    private Set<AccountEntity> accounts = new HashSet<>();
 
     @ManyToMany(mappedBy = "labels")
-    private Set<BoardEntity>   boards   = new HashSet<>();
+    private Set<BoardEntity> boards = new HashSet<>();
 
     @ManyToMany(mappedBy = "labels")
     private Set<ProjectEntity> projects = new HashSet<>();

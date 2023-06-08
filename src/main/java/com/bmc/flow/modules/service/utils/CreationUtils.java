@@ -9,17 +9,17 @@ import static java.util.UUID.randomUUID;
 
 public class CreationUtils {
 
-  private CreationUtils() {
-  }
+    private CreationUtils() {
+    }
 
-  public static void createBaseCatalogEntity(BaseCatalogEntity CatalogEntity, BaseCatalogDto CatalogDto) {
-    UserEntity creator = new UserEntity();
-    creator.setId(CatalogDto.getCreatedBy());
+    public static void createBaseCatalogEntity(BaseCatalogEntity CatalogEntity, BaseCatalogDto CatalogDto) {
+        UserEntity creator = new UserEntity();
+        creator.setId(CatalogDto.getCreatedBy());
 
-    CatalogEntity.setId(randomUUID());
-    CatalogEntity.setName(CatalogDto.getName());
-    CatalogEntity.setDescription(CatalogDto.getDescription());
-    CatalogEntity.setCreatedBy(creator);
-    CatalogEntity.setIsSystem(FALSE);
-  }
+        CatalogEntity.setId(randomUUID());
+        CatalogEntity.setName(CatalogDto.getName());
+        CatalogEntity.setDescription(CatalogDto.getDescription());
+        CatalogEntity.setCreatedBy(creator);
+        CatalogEntity.setIsSystem(FALSE);
+    }
 }

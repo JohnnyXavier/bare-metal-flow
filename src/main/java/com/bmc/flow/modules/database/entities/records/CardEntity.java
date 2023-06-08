@@ -9,11 +9,10 @@ import com.bmc.flow.modules.database.entities.catalogs.BoardColumnEntity;
 import com.bmc.flow.modules.database.entities.catalogs.CardDifficultyEntity;
 import com.bmc.flow.modules.database.entities.catalogs.CardTypeEntity;
 import com.bmc.flow.modules.database.entities.catalogs.StatusEntity;
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
-import jakarta.persistence.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

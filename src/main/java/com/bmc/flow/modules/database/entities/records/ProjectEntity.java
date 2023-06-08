@@ -6,11 +6,10 @@ import com.bmc.flow.modules.database.entities.catalogs.BoardColumnEntity;
 import com.bmc.flow.modules.database.entities.catalogs.LabelEntity;
 import com.bmc.flow.modules.database.entities.records.retro.RetrospectiveEntity;
 import com.bmc.flow.modules.database.entities.resourcing.ScheduleEntryEntity;
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
-import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;

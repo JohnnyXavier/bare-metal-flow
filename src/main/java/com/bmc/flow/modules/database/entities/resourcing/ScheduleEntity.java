@@ -2,11 +2,10 @@ package com.bmc.flow.modules.database.entities.resourcing;
 
 import com.bmc.flow.modules.database.entities.UserEntity;
 import com.bmc.flow.modules.database.entities.base.BaseEntity;
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
-import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;

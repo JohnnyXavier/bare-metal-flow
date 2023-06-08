@@ -13,31 +13,31 @@ import static java.lang.Math.min;
 @Getter
 public class Pageable {
 
-  private static final Integer MAX_PAGE_SIZE = 100;
+    private static final Integer MAX_PAGE_SIZE = 100;
 
-  private static final Integer MIN_PAGE_SIZE = 5;
+    private static final Integer MIN_PAGE_SIZE = 5;
 
-  /**
-   * a pageSize has to be between {@link Pageable#MIN_PAGE_SIZE} and {@link Pageable#MAX_PAGE_SIZE}
-   */
-  private final ToIntFunction<Integer> checkPageSize = (pageSize) -> max(min(pageSize, MAX_PAGE_SIZE), MIN_PAGE_SIZE);
+    /**
+     * a pageSize has to be between {@link Pageable#MIN_PAGE_SIZE} and {@link Pageable#MAX_PAGE_SIZE}
+     */
+    private final ToIntFunction<Integer> checkPageSize = (pageSize) -> max(min(pageSize, MAX_PAGE_SIZE), MIN_PAGE_SIZE);
 
-  private final Sort sort;
+    private final Sort sort;
 
-  private final Sort.Direction direction;
+    private final Sort.Direction direction;
 
-  private final Page page;
+    private final Page page;
 
-  public Pageable(final String sortBy, final String sortDir, final Integer pageIx, final Integer pageSize) {
-    this.direction = Optional.ofNullable(sortDir)
-                             .filter("desc"::equals)
-                             .map(dir -> Sort.Direction.Descending)
-                             .orElse(Sort.Direction.Ascending);
+    public Pageable(final String sortBy, final String sortDir, final Integer pageIx, final Integer pageSize) {
+        this.direction = Optional.ofNullable(sortDir)
+                                 .filter("desc"::equals)
+                                 .map(dir -> Sort.Direction.Descending)
+                                 .orElse(Sort.Direction.Ascending);
 
-    this.sort = Sort.by(sortBy, direction);
+        this.sort = Sort.by(sortBy, direction);
 
-    this.page = Optional.ofNullable(pageIx)
-                        .map(index -> Page.of(max(index, 0), checkPageSize.applyAsInt(pageSize)))
-                        .orElseGet(() -> Page.ofSize(pageSize));
-  }
+        this.page = Optional.ofNullable(pageIx)
+                            .map(index -> Page.of(max(index, 0), checkPageSize.applyAsInt(pageSize)))
+                            .orElseGet(() -> Page.ofSize(pageSize));
+    }
 }

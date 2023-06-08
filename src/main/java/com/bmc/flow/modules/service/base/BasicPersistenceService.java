@@ -20,7 +20,8 @@ import java.util.UUID;
 public abstract class BasicPersistenceService<D, E> {
 
     private PanacheRepositoryBase<E, UUID> repository;
-    private Class<D>                       dtoClass;
+
+    private Class<D> dtoClass;
 
     /**
      * This no arg ctor is required by quarkus CDI. Do not delete
@@ -35,8 +36,8 @@ public abstract class BasicPersistenceService<D, E> {
 
     public Uni<D> findById(final UUID id) {
         return repository.find("id", id)
-            .project(dtoClass)
-            .singleResult();
+                         .project(dtoClass)
+                         .singleResult();
     }
 
     //FIXME: create a CatalogPersistence Service, so we put findAll there
@@ -48,10 +49,10 @@ public abstract class BasicPersistenceService<D, E> {
     protected Uni<PageResult<D>> findAllPaged(final PanacheQuery<E> panacheQuery, final String queryName,
                                               final Page page) {
         return panacheQuery.project(dtoClass)
-            .page(page)
-            .list()
-            .flatMap(ds -> countAll(panacheQuery, dtoClass.getSimpleName() + queryName)
-                .map(count -> new PageResult<>(ds, count, page)));
+                           .page(page)
+                           .list()
+                           .flatMap(ds -> countAll(panacheQuery, dtoClass.getSimpleName() + queryName)
+                               .map(count -> new PageResult<>(ds, count, page)));
     }
 
     /**
@@ -72,8 +73,8 @@ public abstract class BasicPersistenceService<D, E> {
 
     public Uni<Void> update(final UUID id, final String key, final String value) {
         return repository.findById(id)
-            .onItem().ifNull().fail()
-            .chain(entityToUpdate -> update(entityToUpdate, key, value));
+                         .onItem().ifNull().fail()
+                         .chain(entityToUpdate -> update(entityToUpdate, key, value));
     }
 
     protected abstract Uni<Void> update(final E toUpdate, final String key, final String value);

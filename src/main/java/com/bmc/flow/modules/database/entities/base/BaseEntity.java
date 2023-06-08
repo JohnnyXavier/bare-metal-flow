@@ -1,7 +1,10 @@
 package com.bmc.flow.modules.database.entities.base;
 
 import com.bmc.flow.modules.database.entities.UserEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MappedSuperclass;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +44,8 @@ public abstract class BaseEntity {
      * we will break the functional flow of reactive approach as on transactional method that will require a .replaceWith(),
      * flushing to DB, even manually will not happen until the end and the id won't be created before needed.
      * <p>
-     * we can decouple creation from transformation and make a later call to the required op but for the moment, manually generating the uuid
+     * we can decouple creation from transformation and make a later call to the required op but for the moment, manually generating the
+     * uuid
      * when needed, makes more sense as everything is contained by the transaction and an err on potential transformation will be caught.
      */
     @Id

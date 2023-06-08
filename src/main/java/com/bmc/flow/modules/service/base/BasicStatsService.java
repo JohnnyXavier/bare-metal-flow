@@ -8,10 +8,10 @@ import java.util.UUID;
 
 public abstract class BasicStatsService {
 
-  @CacheResult(cacheName = "count-all", keyGenerator = StringCKGen.class)
-  public Uni<Long> countSimpleById(final PanacheRepositoryBase<?, UUID> repo, final String countQuery, final UUID id,
-                                   final String cacheKey) {
-    return repo.count(countQuery, id);
-  }
+    @CacheResult(cacheName = "count-all", keyGenerator = StringCKGen.class)
+    public Uni<Long> countSimpleById(final PanacheRepositoryBase<?, UUID> repo, final String countQuery, final UUID id,
+                                     final String cacheKey) {
+        return repo.count(countQuery, id);
+    }
 
 }

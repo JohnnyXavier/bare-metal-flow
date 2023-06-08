@@ -5,14 +5,13 @@ import com.bmc.flow.modules.database.entities.records.AccountEntity;
 import com.bmc.flow.modules.database.entities.records.BoardEntity;
 import com.bmc.flow.modules.database.entities.records.CardEntity;
 import com.bmc.flow.modules.database.entities.records.ProjectEntity;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

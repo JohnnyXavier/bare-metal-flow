@@ -27,85 +27,86 @@ import static java.util.UUID.randomUUID;
 @JBossLog
 public class BoardService extends BasicPersistenceService<BoardDto, BoardEntity> {
 
-  private final BoardRepository       repository;
-  private final Mutiny.SessionFactory sf;
+    private final BoardRepository repository;
 
-  public BoardService(final BoardRepository repository, Mutiny.SessionFactory sf) {
-    super(repository, BoardDto.class);
-    this.repository = repository;
-    this.sf         = sf;
-  }
+    private final Mutiny.SessionFactory sf;
 
-  public Uni<List<BoardDto>> getAllByProjectId(final UUID projectId) {
-    return repository.findAllByProjectId(projectId);
-  }
+    public BoardService(final BoardRepository repository, Mutiny.SessionFactory sf) {
+        super(repository, BoardDto.class);
+        this.repository = repository;
+        this.sf         = sf;
+    }
 
-  public Uni<PageResult<BoardDto>> findAllByUserIdPaged(UUID userId, final Pageable pageable) {
-    return findAllPaged(repository.find("createdBy.id", pageable.getSort(), userId), "-all-boards-by-user",
-        pageable.getPage());
-  }
+    public Uni<List<BoardDto>> getAllByProjectId(final UUID projectId) {
+        return repository.findAllByProjectId(projectId);
+    }
 
-  @WithTransaction
-  public Uni<BoardDto> create(@Valid final BoardDto boardDto) {
-    UserEntity boardCreator = new UserEntity();
-    boardCreator.setId(boardDto.getCreatedBy());
+    public Uni<PageResult<BoardDto>> findAllByUserIdPaged(UUID userId, final Pageable pageable) {
+        return findAllPaged(repository.find("createdBy.id", pageable.getSort(), userId), "-all-boards-by-user",
+            pageable.getPage());
+    }
 
-    ProjectEntity project = new ProjectEntity();
-    project.setId(boardDto.getProjectId());
+    @WithTransaction
+    public Uni<BoardDto> create(@Valid final BoardDto boardDto) {
+        UserEntity boardCreator = new UserEntity();
+        boardCreator.setId(boardDto.getCreatedBy());
 
-    BoardTypeEntity boardTypeEntity = new BoardTypeEntity();
-    boardTypeEntity.setId(boardDto.getBoardTypeId());
+        ProjectEntity project = new ProjectEntity();
+        project.setId(boardDto.getProjectId());
 
-    BoardEntity board = new BoardEntity();
-    board.setId(randomUUID());
-    board.setName(boardDto.getName());
-    board.setDescription(boardDto.getDescription());
-    board.setBoardType(boardTypeEntity);
-    board.setProject(project);
-    board.setCreatedBy(boardCreator);
+        BoardTypeEntity boardTypeEntity = new BoardTypeEntity();
+        boardTypeEntity.setId(boardDto.getBoardTypeId());
 
-    return repository.persist(board)
-        .replaceWith(findById(board.getId()));
-  }
+        BoardEntity board = new BoardEntity();
+        board.setId(randomUUID());
+        board.setName(boardDto.getName());
+        board.setDescription(boardDto.getDescription());
+        board.setBoardType(boardTypeEntity);
+        board.setProject(project);
+        board.setCreatedBy(boardCreator);
 
-  @Override
-  @WithTransaction
-  protected Uni<Void> update(final BoardEntity toUpdate, final String key, final String value) {
-    return switch (key) {
-      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
-      case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
-      case "coverImage" -> updateInPlace(toUpdate, SET_COVER_IMAGE, value);
-      case "isFavorite" -> updateInPlace(toUpdate, SET_IS_FAVORITE, Boolean.valueOf(value));
-      case "addMember" -> addMember(toUpdate, value);
-      case "removeMember" -> removeMember(toUpdate, value);
+        return repository.persist(board)
+                         .replaceWith(findById(board.getId()));
+    }
 
-      default -> throw new IllegalStateException("Unexpected value: " + key);
-    };
-  }
+    @Override
+    @WithTransaction
+    protected Uni<Void> update(final BoardEntity toUpdate, final String key, final String value) {
+        return switch (key) {
+            case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+            case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
+            case "coverImage" -> updateInPlace(toUpdate, SET_COVER_IMAGE, value);
+            case "isFavorite" -> updateInPlace(toUpdate, SET_IS_FAVORITE, Boolean.valueOf(value));
+            case "addMember" -> addMember(toUpdate, value);
+            case "removeMember" -> removeMember(toUpdate, value);
 
-  private Uni<Void> addMember(BoardEntity toUpdate, String value) {
-    return sf.withTransaction((session, transaction) ->
-            session.createNativeQuery("insert into board_users(board_id, user_id) VALUES  (?1, ?2)")
-                .setParameter(1, toUpdate.getId())
-                .setParameter(2, UUID.fromString(value))
-                .executeUpdate()
-                .chain(() -> session.createNativeQuery("update board set updated_at = ?1 where id = ?2")
-                    .setParameter(1, LocalDateTime.now())
-                    .setParameter(2, toUpdate.getId())
-                    .executeUpdate()))
-        .replaceWithVoid();
-  }
+            default -> throw new IllegalStateException("Unexpected value: " + key);
+        };
+    }
 
-  private Uni<Void> removeMember(BoardEntity toUpdate, String value) {
-    return sf.withTransaction((session, transaction) ->
-            session.createNativeQuery("delete from board_users where user_id = ?1 and board_id = ?2")
-                .setParameter(1, UUID.fromString(value))
-                .setParameter(2, toUpdate.getId())
-                .executeUpdate()
-                .chain(() -> session.createNativeQuery("update board set updated_at = ?1 where id = ?2")
-                    .setParameter(1, LocalDateTime.now())
-                    .setParameter(2, toUpdate.getId())
-                    .executeUpdate()))
-        .replaceWithVoid();
-  }
+    private Uni<Void> addMember(BoardEntity toUpdate, String value) {
+        return sf.withTransaction((session, transaction) ->
+                     session.createNativeQuery("insert into board_users(board_id, user_id) VALUES  (?1, ?2)")
+                            .setParameter(1, toUpdate.getId())
+                            .setParameter(2, UUID.fromString(value))
+                            .executeUpdate()
+                            .chain(() -> session.createNativeQuery("update board set updated_at = ?1 where id = ?2")
+                                                .setParameter(1, LocalDateTime.now())
+                                                .setParameter(2, toUpdate.getId())
+                                                .executeUpdate()))
+                 .replaceWithVoid();
+    }
+
+    private Uni<Void> removeMember(BoardEntity toUpdate, String value) {
+        return sf.withTransaction((session, transaction) ->
+                     session.createNativeQuery("delete from board_users where user_id = ?1 and board_id = ?2")
+                            .setParameter(1, UUID.fromString(value))
+                            .setParameter(2, toUpdate.getId())
+                            .executeUpdate()
+                            .chain(() -> session.createNativeQuery("update board set updated_at = ?1 where id = ?2")
+                                                .setParameter(1, LocalDateTime.now())
+                                                .setParameter(2, toUpdate.getId())
+                                                .executeUpdate()))
+                 .replaceWithVoid();
+    }
 }

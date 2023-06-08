@@ -16,35 +16,35 @@ import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
 @ApplicationScoped
 public class CardStatusService extends BasicPersistenceService<StatusDto, StatusEntity> {
 
-  private final StatusRepository cardStatusRepo;
+    private final StatusRepository cardStatusRepo;
 
-  public CardStatusService(final StatusRepository cardStatusRepo) {
-    super(cardStatusRepo, StatusDto.class);
-    this.cardStatusRepo = cardStatusRepo;
-  }
+    public CardStatusService(final StatusRepository cardStatusRepo) {
+        super(cardStatusRepo, StatusDto.class);
+        this.cardStatusRepo = cardStatusRepo;
+    }
 
-  @WithTransaction
-  @Override
-  public Uni<StatusDto> create(@Valid final StatusDto statusDto) {
-    StatusEntity newCardStatus = new StatusEntity();
-    CreationUtils.createBaseCatalogEntity(newCardStatus, statusDto);
+    @WithTransaction
+    @Override
+    public Uni<StatusDto> create(@Valid final StatusDto statusDto) {
+        StatusEntity newCardStatus = new StatusEntity();
+        CreationUtils.createBaseCatalogEntity(newCardStatus, statusDto);
 
-    return cardStatusRepo.persist(newCardStatus)
-        .replaceWith(findById(newCardStatus.getId()));
-  }
+        return cardStatusRepo.persist(newCardStatus)
+                             .replaceWith(findById(newCardStatus.getId()));
+    }
 
-  @Override
-  @WithTransaction
-  protected Uni<Void> update(final StatusEntity toUpdate, final String key, final String value) {
-    return switch (key) {
-      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
-      case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
+    @Override
+    @WithTransaction
+    protected Uni<Void> update(final StatusEntity toUpdate, final String key, final String value) {
+        return switch (key) {
+            case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+            case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
 
-      default -> throw new IllegalStateException("Unexpected value: " + key);
-    };
-  }
+            default -> throw new IllegalStateException("Unexpected value: " + key);
+        };
+    }
 
-  public Uni<StatusEntity> findEntityByName(final String name) {
-    return cardStatusRepo.findEntityByName(name);
-  }
+    public Uni<StatusEntity> findEntityByName(final String name) {
+        return cardStatusRepo.findEntityByName(name);
+    }
 }

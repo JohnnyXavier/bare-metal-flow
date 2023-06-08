@@ -57,12 +57,12 @@ public class SprintService extends BasicPersistenceService<SprintDto, SprintEnti
         newSprint.setCreatedBy(sprintCreator);
 
         return repository.persist(newSprint)
-            .replaceWith(findById(newSprint.getId()));
+                         .replaceWith(findById(newSprint.getId()));
     }
 
     public Uni<Void> startSprint(final UUID sprintId) {
         return repository.findById(sprintId)
-            .onItem().ifNotNull().invoke(sprintFromDb -> {
+                         .onItem().ifNotNull().invoke(sprintFromDb -> {
                 if (sprintFromDb.getHasStarted() == FALSE) {
                     sprintFromDb.setStartDate(LocalDateTime.now());
                     sprintFromDb.setHasStarted(TRUE);
@@ -72,7 +72,7 @@ public class SprintService extends BasicPersistenceService<SprintDto, SprintEnti
 
     public Uni<SprintDto> closeSprint(final UUID sprintId) {
         return repository.findById(sprintId)
-            .onItem().ifNotNull().invoke(sprintFromDb -> {
+                         .onItem().ifNotNull().invoke(sprintFromDb -> {
                 if (sprintFromDb.getHasStarted() == TRUE && sprintFromDb.getIsClosed() == FALSE) {
 
                     sprintFromDb.setCloseDate(LocalDateTime.now());

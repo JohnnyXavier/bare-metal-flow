@@ -23,57 +23,57 @@ import static java.util.UUID.randomUUID;
 @ApplicationScoped
 public class BoardColumnService extends BasicPersistenceService<BoardColumnDto, BoardColumnEntity> {
 
-  private final BoardColumnRepository repository;
+    private final BoardColumnRepository repository;
 
-  private final Mutiny.SessionFactory sf;
+    private final Mutiny.SessionFactory sf;
 
-  public BoardColumnService(final BoardColumnRepository repository, Mutiny.SessionFactory sf) {
-    super(repository, BoardColumnDto.class);
-    this.repository = repository;
-    this.sf         = sf;
-  }
+    public BoardColumnService(final BoardColumnRepository repository, Mutiny.SessionFactory sf) {
+        super(repository, BoardColumnDto.class);
+        this.repository = repository;
+        this.sf         = sf;
+    }
 
-  public Uni<PageResult<BoardColumnDto>> findAllByBoardIdPaged(final UUID boardId, final Pageable pageable) {
-    return findAllPaged(repository.find("board.id", pageable.getSort(), boardId), "all-board-cols-by-board-id", pageable.getPage());
-  }
+    public Uni<PageResult<BoardColumnDto>> findAllByBoardIdPaged(final UUID boardId, final Pageable pageable) {
+        return findAllPaged(repository.find("board.id", pageable.getSort(), boardId), "all-board-cols-by-board-id", pageable.getPage());
+    }
 
-  @WithTransaction
-  public Uni<BoardColumnDto> create(@Valid final BoardColumnDto boardColumnDto) {
-    UserEntity boardColumnCreator = new UserEntity();
-    boardColumnCreator.setId(boardColumnDto.getCreatedBy());
+    @WithTransaction
+    public Uni<BoardColumnDto> create(@Valid final BoardColumnDto boardColumnDto) {
+        UserEntity boardColumnCreator = new UserEntity();
+        boardColumnCreator.setId(boardColumnDto.getCreatedBy());
 
-    BoardEntity board = new BoardEntity();
-    board.setId(boardColumnDto.getBoardId());
+        BoardEntity board = new BoardEntity();
+        board.setId(boardColumnDto.getBoardId());
 
-    StatusEntity status = new StatusEntity();
-    status.setId(boardColumnDto.getStatusId());
+        StatusEntity status = new StatusEntity();
+        status.setId(boardColumnDto.getStatusId());
 
-    BoardColumnEntity boardColumn = new BoardColumnEntity();
-    boardColumn.setId(randomUUID());
-    boardColumn.setBoard(board);
-    boardColumn.setStatus(status);
-    boardColumn.setCreatedBy(boardColumnCreator);
+        BoardColumnEntity boardColumn = new BoardColumnEntity();
+        boardColumn.setId(randomUUID());
+        boardColumn.setBoard(board);
+        boardColumn.setStatus(status);
+        boardColumn.setCreatedBy(boardColumnCreator);
 
-    return repository.persist(boardColumn)
-        .replaceWith(findById(boardColumn.getId()));
-  }
+        return repository.persist(boardColumn)
+                         .replaceWith(findById(boardColumn.getId()));
+    }
 
-  @Override
-  @WithTransaction
-  protected Uni<Void> update(final BoardColumnEntity toUpdate, final String key, final String value) {
-    return switch (key) {
-      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
-      case "status" -> setStatus(toUpdate, UUID.fromString(value));
+    @Override
+    @WithTransaction
+    protected Uni<Void> update(final BoardColumnEntity toUpdate, final String key, final String value) {
+        return switch (key) {
+            case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+            case "status" -> setStatus(toUpdate, UUID.fromString(value));
 
-      default -> throw new IllegalStateException("Unexpected value: " + key);
-    };
-  }
+            default -> throw new IllegalStateException("Unexpected value: " + key);
+        };
+    }
 
-  private Uni<Void> setStatus(final BoardColumnEntity toUpdate, final UUID uuid) {
-    StatusEntity status = new StatusEntity();
-    status.setId(uuid);
-    toUpdate.setStatus(status);
+    private Uni<Void> setStatus(final BoardColumnEntity toUpdate, final UUID uuid) {
+        StatusEntity status = new StatusEntity();
+        status.setId(uuid);
+        toUpdate.setStatus(status);
 
-    return Uni.createFrom().voidItem();
-  }
+        return Uni.createFrom().voidItem();
+    }
 }

@@ -20,49 +20,49 @@ import static java.util.UUID.randomUUID;
 @ApplicationScoped
 public class RetroActionService extends BasicPersistenceService<RetroActionDto, RetroActionEntity> {
 
-  private final RetroActionRepository repository;
+    private final RetroActionRepository repository;
 
 
-  public RetroActionService(final RetroActionRepository repository) {
-    super(repository, RetroActionDto.class);
-    this.repository = repository;
-  }
+    public RetroActionService(final RetroActionRepository repository) {
+        super(repository, RetroActionDto.class);
+        this.repository = repository;
+    }
 
-  public Uni<List<RetroActionDto>> findAllByRetroBoardId(final UUID retroBoardId) {
-    return repository.findAllByRetroBoardId(retroBoardId);
-  }
+    public Uni<List<RetroActionDto>> findAllByRetroBoardId(final UUID retroBoardId) {
+        return repository.findAllByRetroBoardId(retroBoardId);
+    }
 
 
-  public Uni<List<RetroActionDto>> findAllByProjectId(final UUID projectId) {
-    return repository.findAllByProjectId(projectId);
-  }
+    public Uni<List<RetroActionDto>> findAllByProjectId(final UUID projectId) {
+        return repository.findAllByProjectId(projectId);
+    }
 
-  @WithTransaction
-  public Uni<RetroActionDto> create(@Valid final RetroActionDto retroActionDto) {
-    UserEntity cardCreator = new UserEntity();
-    cardCreator.setId(retroActionDto.getCreatedBy());
+    @WithTransaction
+    public Uni<RetroActionDto> create(@Valid final RetroActionDto retroActionDto) {
+        UserEntity cardCreator = new UserEntity();
+        cardCreator.setId(retroActionDto.getCreatedBy());
 
-    RetrospectiveEntity board = new RetrospectiveEntity();
-    board.setId(retroActionDto.getRetroBoardId());
+        RetrospectiveEntity board = new RetrospectiveEntity();
+        board.setId(retroActionDto.getRetroBoardId());
 
-    RetroActionEntity newCard = new RetroActionEntity();
-    newCard.setId(randomUUID());
-    newCard.setActionToTake(retroActionDto.getActionToTake());
-    newCard.setCreatedBy(cardCreator);
-    newCard.setRetroBoard(board);
+        RetroActionEntity newCard = new RetroActionEntity();
+        newCard.setId(randomUUID());
+        newCard.setActionToTake(retroActionDto.getActionToTake());
+        newCard.setCreatedBy(cardCreator);
+        newCard.setRetroBoard(board);
 
-    return repository.persist(newCard)
-        .replaceWith(findById(newCard.getId()));
-  }
+        return repository.persist(newCard)
+                         .replaceWith(findById(newCard.getId()));
+    }
 
-  @Override
-  @WithTransaction
-  protected Uni<Void> update(final RetroActionEntity toUpdate, final String key, final String value) {
-    return switch (key) {
-      case "actionToTake" -> updateInPlace(toUpdate, SET_ACTION_TO_TAKE, value);
+    @Override
+    @WithTransaction
+    protected Uni<Void> update(final RetroActionEntity toUpdate, final String key, final String value) {
+        return switch (key) {
+            case "actionToTake" -> updateInPlace(toUpdate, SET_ACTION_TO_TAKE, value);
 
-      default -> throw new IllegalStateException("Unexpected value: " + key);
-    };
-  }
+            default -> throw new IllegalStateException("Unexpected value: " + key);
+        };
+    }
 
 }

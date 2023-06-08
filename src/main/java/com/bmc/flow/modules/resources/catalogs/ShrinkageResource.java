@@ -4,7 +4,6 @@ import com.bmc.flow.modules.database.dto.resourcing.ShrinkageDto;
 import com.bmc.flow.modules.database.entities.resourcing.ShrinkageEntity;
 import com.bmc.flow.modules.resources.base.BasicCatalogResource;
 import com.bmc.flow.modules.service.resourcing.ShrinkageService;
-
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
@@ -12,11 +11,11 @@ import jakarta.ws.rs.Produces;
 @Produces("application/json")
 public class ShrinkageResource extends BasicCatalogResource<ShrinkageDto, ShrinkageEntity> {
 
-  private final ShrinkageService shrinkageService;
+    private final ShrinkageService shrinkageService;
 
-  public ShrinkageResource(final ShrinkageService shrinkageService) {
-    super(shrinkageService);
-    this.shrinkageService = shrinkageService;
-  }
+    public ShrinkageResource(final ShrinkageService shrinkageService) {
+        super(shrinkageService);
+        this.shrinkageService = shrinkageService;
+    }
 
 }

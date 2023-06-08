@@ -17,35 +17,35 @@ import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
 @ApplicationScoped
 public class DepartmentService extends BasicPersistenceService<DepartmentDto, DepartmentEntity> {
 
-  private final DepartmentRepository departmentRepo;
+    private final DepartmentRepository departmentRepo;
 
-  public DepartmentService(final DepartmentRepository departmentRepo) {
-    super(departmentRepo, DepartmentDto.class);
-    this.departmentRepo = departmentRepo;
-  }
+    public DepartmentService(final DepartmentRepository departmentRepo) {
+        super(departmentRepo, DepartmentDto.class);
+        this.departmentRepo = departmentRepo;
+    }
 
-  @WithTransaction
-  public Uni<DepartmentDto> create(@Valid final DepartmentDto departmentDto) {
-    DepartmentEntity newDepartment = new DepartmentEntity();
-    CreationUtils.createBaseCatalogEntity(newDepartment, departmentDto);
+    @WithTransaction
+    public Uni<DepartmentDto> create(@Valid final DepartmentDto departmentDto) {
+        DepartmentEntity newDepartment = new DepartmentEntity();
+        CreationUtils.createBaseCatalogEntity(newDepartment, departmentDto);
 
-    return departmentRepo.persist(newDepartment)
-                         .replaceWith(findById(newDepartment.getId()));
-  }
+        return departmentRepo.persist(newDepartment)
+                             .replaceWith(findById(newDepartment.getId()));
+    }
 
-  @CacheResult(cacheName = "department-by-name")
-  public Uni<DepartmentEntity> findEntityByName(final String name) {
-    return departmentRepo.findEntityByName(name);
-  }
+    @CacheResult(cacheName = "department-by-name")
+    public Uni<DepartmentEntity> findEntityByName(final String name) {
+        return departmentRepo.findEntityByName(name);
+    }
 
-   @Override
-  @WithTransaction
-  protected Uni<Void> update(final DepartmentEntity toUpdate, final String key, final String value) {
-    return switch (key) {
-      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
-      case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
+    @Override
+    @WithTransaction
+    protected Uni<Void> update(final DepartmentEntity toUpdate, final String key, final String value) {
+        return switch (key) {
+            case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+            case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
 
-      default -> throw new IllegalStateException("Unexpected value: " + key);
-    };
-  }
+            default -> throw new IllegalStateException("Unexpected value: " + key);
+        };
+    }
 }

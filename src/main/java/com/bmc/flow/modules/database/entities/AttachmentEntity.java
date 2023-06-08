@@ -2,13 +2,12 @@ package com.bmc.flow.modules.database.entities;
 
 import com.bmc.flow.modules.database.entities.base.BaseEntity;
 import com.bmc.flow.modules.database.entities.records.CardEntity;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;

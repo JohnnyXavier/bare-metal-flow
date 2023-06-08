@@ -7,8 +7,8 @@ import java.util.List;
 @ConfigMapping(prefix = "obfuscation")
 public interface ObfuscationConfig {
 
-  List<String> cities();
+    List<String> cities();
 
-  List<String> alphabet();
+    List<String> alphabet();
 
 }

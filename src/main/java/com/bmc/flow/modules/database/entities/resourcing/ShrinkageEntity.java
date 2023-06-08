@@ -1,14 +1,13 @@
 package com.bmc.flow.modules.database.entities.resourcing;
 
 import com.bmc.flow.modules.database.entities.base.BaseCatalogEntity;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 

@@ -36,10 +36,13 @@ import static java.util.UUID.randomUUID;
 @JBossLog
 public class CardService extends BasicPersistenceService<CardSimpleDto, CardEntity> {
 
-    private final CardRepository      cardRepo;
+    private final CardRepository cardRepo;
+
     private final CardLabelRepository cardLabelRepo;
-    private final StatusRepository    cardStatusRepo;
-    private final SessionFactory      sf;
+
+    private final StatusRepository cardStatusRepo;
+
+    private final SessionFactory sf;
 
     public CardService(final CardRepository cardRepo, CardLabelRepository cardLabelRepo, final StatusRepository cardStatusRepo,
                        SessionFactory sf) {
@@ -53,19 +56,20 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
     @Override
     public Uni<CardSimpleDto> findById(UUID id) {
         return cardRepo.find("id", id)
-            .project(CardSimpleDto.class)
-            .singleResult().onItem()
-            .ifNotNull().call(card -> sf.withSession(session -> session.createNamedQuery("CardLabel.findAllByCardId", CardLabelDto.class)
-                .setParameter("id", id)
-                .getResultList()
-                .call(cardLabelDtos -> Uni.createFrom().item(cardLabelDtos
-                    .stream()
-                    .map(cardLabelDto -> {
-                        if (cardLabelDto.getCardId().equals(card.getId())) {
-                            card.getLabels().add(cardLabelDto);
-                        }
-                        return null;
-                    }).toList()))));
+                       .project(CardSimpleDto.class)
+                       .singleResult().onItem()
+                       .ifNotNull().call(
+                card -> sf.withSession(session -> session.createNamedQuery("CardLabel.findAllByCardId", CardLabelDto.class)
+                                                         .setParameter("id", id)
+                                                         .getResultList()
+                                                         .call(cardLabelDtos -> Uni.createFrom().item(cardLabelDtos
+                                                             .stream()
+                                                             .map(cardLabelDto -> {
+                                                                 if (cardLabelDto.getCardId().equals(card.getId())) {
+                                                                     card.getLabels().add(cardLabelDto);
+                                                                 }
+                                                                 return null;
+                                                             }).toList()))));
     }
 
     public Uni<PageResult<CardSimpleDto>> findAllByBoardIdPaged(final UUID boardId, final Pageable pageable) {
@@ -73,16 +77,19 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
             pageable.getPage())
             .onItem()
             .ifNotNull().call(result -> sf.withSession(session -> session.createNamedQuery("CardLabel.findAllByBoardId", CardLabelDto.class)
-                .setParameter("boardId", boardId)
-                .getResultList()
-                .call(cardLabelDtos -> Uni.createFrom().item(cardLabelDtos
-                    .stream()
-                    .map(cardLabelDto -> {
-                        result.getResultSet().forEach(cardSimpleDto -> {
-                            if (cardLabelDto.getCardId().equals(cardSimpleDto.getId())) {cardSimpleDto.getLabels().add(cardLabelDto);}
-                        });
-                        return null;
-                    }).toList()))));
+                                                                         .setParameter("boardId", boardId)
+                                                                         .getResultList()
+                                                                         .call(cardLabelDtos -> Uni.createFrom().item(cardLabelDtos
+                                                                             .stream()
+                                                                             .map(cardLabelDto -> {
+                                                                                 result.getResultSet().forEach(cardSimpleDto -> {
+                                                                                     if (cardLabelDto.getCardId().equals(
+                                                                                         cardSimpleDto.getId())) {
+                                                                                         cardSimpleDto.getLabels().add(cardLabelDto);
+                                                                                     }
+                                                                                 });
+                                                                                 return null;
+                                                                             }).toList()))));
     }
 
     @WithTransaction
@@ -118,8 +125,8 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
         newCard.getChangelog().add(newChangeLog);
 
         return cardRepo.persist(newCard)
-            .chain(() -> cardStatusRepo.findById(cardSimpleDto.getCardStatusId()).invoke(newCard::setCardStatus))
-            .replaceWith(findById(newCard.getId()));
+                       .chain(() -> cardStatusRepo.findById(cardSimpleDto.getCardStatusId()).invoke(newCard::setCardStatus))
+                       .replaceWith(findById(newCard.getId()));
     }
 
 
@@ -147,126 +154,126 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
 
     private Uni<Void> addAssignee(final CardEntity toUpdate, final String value) {
         return sf.withTransaction(txSession ->
-                txSession.createNativeQuery("insert into card_users_assigned(card_id, user_id) VALUES (?1, ?2)")
-                    .setParameter(1, toUpdate.getId())
-                    .setParameter(2, UUID.fromString(value))
-                    .executeUpdate()
-                    .chain(() -> txSession.createNamedQuery("Changelog.Create")
-                        .setParameter(1, value)
-                        .setParameter(2, "assignee")
-                        .setParameter(3, toUpdate.getCreatedBy().getId())
-                        .setParameter(4, toUpdate.getId())
-                        .setParameter(5, ChangeAction.ADDED.ordinal())
-                        .executeUpdate())
-                    .chain(() -> txSession.createNativeQuery("update card set updated_at = ?1 where id = ?2")
-                        .setParameter(1, LocalDateTime.now())
-                        .setParameter(2, toUpdate.getId())
-                        .executeUpdate()))
-            .replaceWithVoid();
+                     txSession.createNativeQuery("insert into card_users_assigned(card_id, user_id) VALUES (?1, ?2)")
+                              .setParameter(1, toUpdate.getId())
+                              .setParameter(2, UUID.fromString(value))
+                              .executeUpdate()
+                              .chain(() -> txSession.createNamedQuery("Changelog.Create")
+                                                    .setParameter(1, value)
+                                                    .setParameter(2, "assignee")
+                                                    .setParameter(3, toUpdate.getCreatedBy().getId())
+                                                    .setParameter(4, toUpdate.getId())
+                                                    .setParameter(5, ChangeAction.ADDED.ordinal())
+                                                    .executeUpdate())
+                              .chain(() -> txSession.createNativeQuery("update card set updated_at = ?1 where id = ?2")
+                                                    .setParameter(1, LocalDateTime.now())
+                                                    .setParameter(2, toUpdate.getId())
+                                                    .executeUpdate()))
+                 .replaceWithVoid();
     }
 
     private Uni<Void> removeAssignee(final CardEntity toUpdate, final String value) {
         return sf.withTransaction(txSession ->
-                txSession.createNativeQuery("delete from card_users_assigned where card_id=?1 and user_id=?2")
-                    .setParameter(1, toUpdate.getId())
-                    .setParameter(2, UUID.fromString(value))
-                    .executeUpdate()
-                    .chain(() -> txSession.createNamedQuery("Changelog.Create")
-                        .setParameter(1, value)
-                        .setParameter(2, "assignee")
-                        .setParameter(3, toUpdate.getCreatedBy().getId())
-                        .setParameter(4, toUpdate.getId())
-                        .setParameter(5, ChangeAction.REMOVED.ordinal())
-                        .executeUpdate())
-                    .chain(() -> txSession.createNativeQuery("update card set updated_at = ?1 where id = ?2")
-                        .setParameter(1, LocalDateTime.now())
-                        .setParameter(2, toUpdate.getId())
-                        .executeUpdate()))
-            .replaceWithVoid();
+                     txSession.createNativeQuery("delete from card_users_assigned where card_id=?1 and user_id=?2")
+                              .setParameter(1, toUpdate.getId())
+                              .setParameter(2, UUID.fromString(value))
+                              .executeUpdate()
+                              .chain(() -> txSession.createNamedQuery("Changelog.Create")
+                                                    .setParameter(1, value)
+                                                    .setParameter(2, "assignee")
+                                                    .setParameter(3, toUpdate.getCreatedBy().getId())
+                                                    .setParameter(4, toUpdate.getId())
+                                                    .setParameter(5, ChangeAction.REMOVED.ordinal())
+                                                    .executeUpdate())
+                              .chain(() -> txSession.createNativeQuery("update card set updated_at = ?1 where id = ?2")
+                                                    .setParameter(1, LocalDateTime.now())
+                                                    .setParameter(2, toUpdate.getId())
+                                                    .executeUpdate()))
+                 .replaceWithVoid();
     }
 
     private Uni<Void> removeWatcher(final CardEntity toUpdate, final String value) {
         return sf.withTransaction(txSession ->
-                txSession.createNativeQuery("delete from card_users_watchers where card_id=?1 and user_id=?2")
-                    .setParameter(1, toUpdate.getId())
-                    .setParameter(2, UUID.fromString(value))
-                    .executeUpdate()
-                    .chain(() -> txSession.createNamedQuery("Changelog.Create")
-                        .setParameter(1, value)
-                        .setParameter(2, "watcher")
-                        .setParameter(3, toUpdate.getCreatedBy().getId())
-                        .setParameter(4, toUpdate.getId())
-                        .setParameter(5, ChangeAction.REMOVED.ordinal())
-                        .executeUpdate())
-                    .chain(() -> txSession.createNativeQuery("update card set updated_at = ?1 where id = ?2")
-                        .setParameter(1, LocalDateTime.now())
-                        .setParameter(2, toUpdate.getId())
-                        .executeUpdate()))
-            .replaceWithVoid();
+                     txSession.createNativeQuery("delete from card_users_watchers where card_id=?1 and user_id=?2")
+                              .setParameter(1, toUpdate.getId())
+                              .setParameter(2, UUID.fromString(value))
+                              .executeUpdate()
+                              .chain(() -> txSession.createNamedQuery("Changelog.Create")
+                                                    .setParameter(1, value)
+                                                    .setParameter(2, "watcher")
+                                                    .setParameter(3, toUpdate.getCreatedBy().getId())
+                                                    .setParameter(4, toUpdate.getId())
+                                                    .setParameter(5, ChangeAction.REMOVED.ordinal())
+                                                    .executeUpdate())
+                              .chain(() -> txSession.createNativeQuery("update card set updated_at = ?1 where id = ?2")
+                                                    .setParameter(1, LocalDateTime.now())
+                                                    .setParameter(2, toUpdate.getId())
+                                                    .executeUpdate()))
+                 .replaceWithVoid();
     }
 
     private Uni<Void> addWatcher(final CardEntity toUpdate, final String value) {
         return sf.withTransaction(txSession ->
-                txSession.createNativeQuery("insert into card_users_watchers(card_id, user_id) VALUES " +
-                        " (?1, ?2)")
-                    .setParameter(1, toUpdate.getId())
-                    .setParameter(2, UUID.fromString(value))
-                    .executeUpdate()
-                    .chain(() -> txSession.createNamedQuery("Changelog.Create")
-                        .setParameter(1, value)
-                        .setParameter(2, "watcher")
-                        .setParameter(3, toUpdate.getCreatedBy().getId())
-                        .setParameter(4, toUpdate.getId())
-                        .setParameter(5, ChangeAction.ADDED.ordinal())
-                        .executeUpdate())
-                    .chain(() -> txSession.createNativeQuery("update card set updated_at = ?1 where id = ?2")
-                        .setParameter(1, LocalDateTime.now())
-                        .setParameter(2, toUpdate.getId())
-                        .executeUpdate()))
-            .replaceWithVoid();
+                     txSession.createNativeQuery("insert into card_users_watchers(card_id, user_id) VALUES " +
+                                  " (?1, ?2)")
+                              .setParameter(1, toUpdate.getId())
+                              .setParameter(2, UUID.fromString(value))
+                              .executeUpdate()
+                              .chain(() -> txSession.createNamedQuery("Changelog.Create")
+                                                    .setParameter(1, value)
+                                                    .setParameter(2, "watcher")
+                                                    .setParameter(3, toUpdate.getCreatedBy().getId())
+                                                    .setParameter(4, toUpdate.getId())
+                                                    .setParameter(5, ChangeAction.ADDED.ordinal())
+                                                    .executeUpdate())
+                              .chain(() -> txSession.createNativeQuery("update card set updated_at = ?1 where id = ?2")
+                                                    .setParameter(1, LocalDateTime.now())
+                                                    .setParameter(2, toUpdate.getId())
+                                                    .executeUpdate()))
+                 .replaceWithVoid();
     }
 
     private Uni<Void> setDifficulty(final CardEntity toUpdate, final String value) {
         Optional.ofNullable(value)
-            .ifPresentOrElse(difficulty -> {
-                    CardDifficultyEntity cardDifficulty = new CardDifficultyEntity();
-                    cardDifficulty.setId(UUID.fromString(difficulty));
-                    toUpdate.setCardDifficulty(cardDifficulty);
-                },
-                () -> toUpdate.setCardDifficulty(null));
+                .ifPresentOrElse(difficulty -> {
+                        CardDifficultyEntity cardDifficulty = new CardDifficultyEntity();
+                        cardDifficulty.setId(UUID.fromString(difficulty));
+                        toUpdate.setCardDifficulty(cardDifficulty);
+                    },
+                    () -> toUpdate.setCardDifficulty(null));
         return Uni.createFrom().voidItem();
     }
 
     private Uni<Void> setStatus(final CardEntity toUpdate, final String value) {
         Optional.ofNullable(value)
-            .ifPresentOrElse(status -> {
-                    StatusEntity cardStatus = new StatusEntity();
-                    cardStatus.setId(UUID.fromString(status));
-                    toUpdate.setCardStatus(cardStatus);
-                },
-                () -> toUpdate.setCardStatus(null));
+                .ifPresentOrElse(status -> {
+                        StatusEntity cardStatus = new StatusEntity();
+                        cardStatus.setId(UUID.fromString(status));
+                        toUpdate.setCardStatus(cardStatus);
+                    },
+                    () -> toUpdate.setCardStatus(null));
         return Uni.createFrom().voidItem();
     }
 
     private Uni<Void> removeLabel(final CardEntity toUpdate, final String value) {
         return sf.withTransaction((session, transaction) ->
-                session
-                    .createNativeQuery("delete from card_label where card_id =?1 and label_id =?2")
-                    .setParameter(1, toUpdate.getId())
-                    .setParameter(2, UUID.fromString(value))
-                    .executeUpdate()
-                    .chain(() -> session.createNamedQuery("Changelog.Create")
-                        .setParameter(1, value)
-                        .setParameter(2, "label")
-                        .setParameter(3, toUpdate.getCreatedBy().getId())
-                        .setParameter(4, toUpdate.getId())
-                        .setParameter(5, ChangeAction.REMOVED.ordinal())
-                        .executeUpdate())
-                    .chain(() -> session.createNativeQuery("update card set updated_at = ?1 where id = ?2")
-                        .setParameter(1, LocalDateTime.now())
-                        .setParameter(2, toUpdate.getId())
-                        .executeUpdate()))
-            .replaceWithVoid();
+                     session
+                         .createNativeQuery("delete from card_label where card_id =?1 and label_id =?2")
+                         .setParameter(1, toUpdate.getId())
+                         .setParameter(2, UUID.fromString(value))
+                         .executeUpdate()
+                         .chain(() -> session.createNamedQuery("Changelog.Create")
+                                             .setParameter(1, value)
+                                             .setParameter(2, "label")
+                                             .setParameter(3, toUpdate.getCreatedBy().getId())
+                                             .setParameter(4, toUpdate.getId())
+                                             .setParameter(5, ChangeAction.REMOVED.ordinal())
+                                             .executeUpdate())
+                         .chain(() -> session.createNativeQuery("update card set updated_at = ?1 where id = ?2")
+                                             .setParameter(1, LocalDateTime.now())
+                                             .setParameter(2, toUpdate.getId())
+                                             .executeUpdate()))
+                 .replaceWithVoid();
     }
 
     /**
@@ -281,26 +288,26 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
      */
     private Uni<Void> addLabel(final CardEntity toUpdate, final String value) {
         return sf.withTransaction((session, transaction) ->
-                session
-                    .createNativeQuery("insert into card_label(card_id, label_id, board_id, created_by_id, created_at) VALUES" +
-                        " (?1, ?2, ?3, ?4, ?5 )")
-                    .setParameter(1, toUpdate.getId())
-                    .setParameter(2, value)
-                    .setParameter(3, toUpdate.getBoard().getId())
-                    .setParameter(4, toUpdate.getCreatedBy().getId())
-                    .setParameter(5, LocalDateTime.now())
-                    .executeUpdate()
-                    .chain(() -> session.createNamedQuery("Changelog.Create")
-                        .setParameter(1, value)
-                        .setParameter(2, "label")
-                        .setParameter(3, toUpdate.getCreatedBy().getId())
-                        .setParameter(4, toUpdate.getId())
-                        .setParameter(5, ChangeAction.ADDED.ordinal())
-                        .executeUpdate())
-                    .chain(() -> session.createNativeQuery("update card set updated_at = ?1 where id = ?2")
-                        .setParameter(1, LocalDateTime.now())
-                        .setParameter(2, toUpdate.getId())
-                        .executeUpdate()))
-            .replaceWithVoid();
+                     session
+                         .createNativeQuery("insert into card_label(card_id, label_id, board_id, created_by_id, created_at) VALUES" +
+                             " (?1, ?2, ?3, ?4, ?5 )")
+                         .setParameter(1, toUpdate.getId())
+                         .setParameter(2, value)
+                         .setParameter(3, toUpdate.getBoard().getId())
+                         .setParameter(4, toUpdate.getCreatedBy().getId())
+                         .setParameter(5, LocalDateTime.now())
+                         .executeUpdate()
+                         .chain(() -> session.createNamedQuery("Changelog.Create")
+                                             .setParameter(1, value)
+                                             .setParameter(2, "label")
+                                             .setParameter(3, toUpdate.getCreatedBy().getId())
+                                             .setParameter(4, toUpdate.getId())
+                                             .setParameter(5, ChangeAction.ADDED.ordinal())
+                                             .executeUpdate())
+                         .chain(() -> session.createNativeQuery("update card set updated_at = ?1 where id = ?2")
+                                             .setParameter(1, LocalDateTime.now())
+                                             .setParameter(2, toUpdate.getId())
+                                             .executeUpdate()))
+                 .replaceWithVoid();
     }
 }

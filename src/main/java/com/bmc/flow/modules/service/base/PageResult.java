@@ -16,32 +16,32 @@ import java.util.List;
 @Getter
 public class PageResult<D> {
 
-  private List<D> resultSet;
+    private List<D> resultSet;
 
-  private Pagination pagination;
+    private Pagination pagination;
 
-  public PageResult(final List<D> resultSet, final Long count, final Page page) {
-    this.pagination = new Pagination(count, page);
-    this.resultSet = resultSet;
-  }
-
-  @Setter
-  @Getter
-  private static class Pagination {
-
-    private Long itemCount;
-
-    private Long totalPages;
-
-    private Integer currentPage;
-
-    private Integer pageSize;
-
-    public Pagination(final Long itemCount, final Page page) {
-      this.itemCount = itemCount;
-      this.currentPage = page.index + 1;
-      this.pageSize = page.size;
-      this.totalPages = (itemCount / page.size) + ((itemCount % page.size) != 0 ? 1 : 0);
+    public PageResult(final List<D> resultSet, final Long count, final Page page) {
+        this.pagination = new Pagination(count, page);
+        this.resultSet  = resultSet;
     }
-  }
+
+    @Setter
+    @Getter
+    private static class Pagination {
+
+        private Long itemCount;
+
+        private Long totalPages;
+
+        private Integer currentPage;
+
+        private Integer pageSize;
+
+        public Pagination(final Long itemCount, final Page page) {
+            this.itemCount   = itemCount;
+            this.currentPage = page.index + 1;
+            this.pageSize    = page.size;
+            this.totalPages  = (itemCount / page.size) + ((itemCount % page.size) != 0 ? 1 : 0);
+        }
+    }
 }

@@ -8,12 +8,12 @@ import com.bmc.flow.modules.service.records.CardService;
 import com.bmc.flow.modules.service.records.ProjectService;
 import io.smallrye.mutiny.Uni;
 import io.vertx.pgclient.PgException;
-
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Response;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -24,48 +24,48 @@ import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 @Produces("application/json")
 public class StatisticsResource {
 
-  private final AccountService accountService;
+    private final AccountService accountService;
 
-  private final ProjectService projectService;
+    private final ProjectService projectService;
 
-  private final CardService cardService;
+    private final CardService cardService;
 
-  private final UserService userService;
+    private final UserService userService;
 
-  private final Map<String, BasicPersistenceService<?, ?>> supportedMetrics = new HashMap<>();
+    private final Map<String, BasicPersistenceService<?, ?>> supportedMetrics = new HashMap<>();
 
-  public StatisticsResource(final AccountService accountService, final ProjectService projectService, final CardService cardService,
-                            final UserService userService) {
-    this.accountService = accountService;
-    this.projectService = projectService;
-    this.cardService = cardService;
-    this.userService = userService;
+    public StatisticsResource(final AccountService accountService, final ProjectService projectService, final CardService cardService,
+                              final UserService userService) {
+        this.accountService = accountService;
+        this.projectService = projectService;
+        this.cardService    = cardService;
+        this.userService    = userService;
 
-    Map<String, BasicPersistenceService<?, ?>> metricServiceMap = new HashMap<>();
-    metricServiceMap.put("accounts", accountService);
-    metricServiceMap.put("projects", projectService);
-    metricServiceMap.put("cards", cardService);
-    metricServiceMap.put("users", userService);
+        Map<String, BasicPersistenceService<?, ?>> metricServiceMap = new HashMap<>();
+        metricServiceMap.put("accounts", accountService);
+        metricServiceMap.put("projects", projectService);
+        metricServiceMap.put("cards", cardService);
+        metricServiceMap.put("users", userService);
 
-    supportedMetrics.putAll(metricServiceMap);
-  }
-
-  @GET
-  @Path("count/{metric}/{userId}")
-  public Uni<Response> getMetricCountCreatedByUser(final String metric, final UUID userId) {
-    BasicPersistenceService<?, ?> metricService = supportedMetrics.get(metric);
-
-    if (metricService == null) {
-      return Uni.createFrom().item(Response.ok().status(NOT_FOUND).build());
+        supportedMetrics.putAll(metricServiceMap);
     }
 
-    String cacheKey = "count-" + metric + "-by-user-" + userId;
-    return metricService.countAllByUserId(userId, cacheKey)
-                        .map(metricCount -> Map.of("name", metric, "value", metricCount))
-                        .map(metricMap -> Response.ok(metricMap).build())
-                        .onFailure(ConstraintViolationException.class).recoverWithItem(ResponseUtils::violationsToResponse)
-                        .onFailure(PgException.class).recoverWithItem(ResponseUtils::processPgException)
-                        .onFailure().recoverWithItem(ResponseUtils::failToServerError);
-  }
+    @GET
+    @Path("count/{metric}/{userId}")
+    public Uni<Response> getMetricCountCreatedByUser(final String metric, final UUID userId) {
+        BasicPersistenceService<?, ?> metricService = supportedMetrics.get(metric);
+
+        if (metricService == null) {
+            return Uni.createFrom().item(Response.ok().status(NOT_FOUND).build());
+        }
+
+        String cacheKey = "count-" + metric + "-by-user-" + userId;
+        return metricService.countAllByUserId(userId, cacheKey)
+                            .map(metricCount -> Map.of("name", metric, "value", metricCount))
+                            .map(metricMap -> Response.ok(metricMap).build())
+                            .onFailure(ConstraintViolationException.class).recoverWithItem(ResponseUtils::violationsToResponse)
+                            .onFailure(PgException.class).recoverWithItem(ResponseUtils::processPgException)
+                            .onFailure().recoverWithItem(ResponseUtils::failToServerError);
+    }
 
 }

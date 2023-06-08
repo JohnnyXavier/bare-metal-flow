@@ -16,38 +16,38 @@ import static com.bmc.flow.modules.service.reflection.MethodNames.*;
 @ApplicationScoped
 public class SeniorityService extends BasicPersistenceService<SeniorityDto, SeniorityEntity> {
 
-  private final SeniorityRepository seniorityRepo;
+    private final SeniorityRepository seniorityRepo;
 
-  public SeniorityService(final SeniorityRepository seniorityRepo) {
-    super(seniorityRepo, SeniorityDto.class);
-    this.seniorityRepo = seniorityRepo;
-  }
+    public SeniorityService(final SeniorityRepository seniorityRepo) {
+        super(seniorityRepo, SeniorityDto.class);
+        this.seniorityRepo = seniorityRepo;
+    }
 
-  @WithTransaction
-  public Uni<SeniorityDto> create(@Valid final SeniorityDto seniorityDto) {
-    SeniorityEntity newSeniority = new SeniorityEntity();
-    CreationUtils.createBaseCatalogEntity(newSeniority, seniorityDto);
+    @WithTransaction
+    public Uni<SeniorityDto> create(@Valid final SeniorityDto seniorityDto) {
+        SeniorityEntity newSeniority = new SeniorityEntity();
+        CreationUtils.createBaseCatalogEntity(newSeniority, seniorityDto);
 
-    newSeniority.setLevel(seniorityDto.getLevel());
+        newSeniority.setLevel(seniorityDto.getLevel());
 
-    return seniorityRepo.persist(newSeniority)
-        .replaceWith(findById(newSeniority.getId()));
-  }
+        return seniorityRepo.persist(newSeniority)
+                            .replaceWith(findById(newSeniority.getId()));
+    }
 
-  @CacheResult(cacheName = "seniority-by-name")
-  public Uni<SeniorityEntity> findEntityByName(final String name) {
-    return seniorityRepo.findEntityByName(name);
-  }
+    @CacheResult(cacheName = "seniority-by-name")
+    public Uni<SeniorityEntity> findEntityByName(final String name) {
+        return seniorityRepo.findEntityByName(name);
+    }
 
-  @Override
-  @WithTransaction
-  protected Uni<Void> update(final SeniorityEntity toUpdate, final String key, final String value) {
-    return switch (key) {
-      case "name" -> updateInPlace(toUpdate, SET_NAME, value);
-      case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
-      case "level" -> updateInPlace(toUpdate, SET_LEVEL, Short.parseShort(value));
+    @Override
+    @WithTransaction
+    protected Uni<Void> update(final SeniorityEntity toUpdate, final String key, final String value) {
+        return switch (key) {
+            case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+            case "description" -> updateInPlace(toUpdate, SET_DESCRIPTION, value);
+            case "level" -> updateInPlace(toUpdate, SET_LEVEL, Short.parseShort(value));
 
-      default -> throw new IllegalStateException("Unexpected value: " + key);
-    };
-  }
+            default -> throw new IllegalStateException("Unexpected value: " + key);
+        };
+    }
 }

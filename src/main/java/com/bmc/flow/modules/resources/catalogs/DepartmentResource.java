@@ -4,7 +4,6 @@ import com.bmc.flow.modules.database.dto.catalogs.DepartmentDto;
 import com.bmc.flow.modules.database.entities.catalogs.DepartmentEntity;
 import com.bmc.flow.modules.resources.base.BasicCatalogResource;
 import com.bmc.flow.modules.service.catalogs.DepartmentService;
-
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
@@ -12,11 +11,11 @@ import jakarta.ws.rs.Produces;
 @Produces("application/json")
 public class DepartmentResource extends BasicCatalogResource<DepartmentDto, DepartmentEntity> {
 
-  private final DepartmentService departmentService;
+    private final DepartmentService departmentService;
 
-  public DepartmentResource(final DepartmentService departmentService) {
-    super(departmentService);
-    this.departmentService = departmentService;
-  }
+    public DepartmentResource(final DepartmentService departmentService) {
+        super(departmentService);
+        this.departmentService = departmentService;
+    }
 
 }
