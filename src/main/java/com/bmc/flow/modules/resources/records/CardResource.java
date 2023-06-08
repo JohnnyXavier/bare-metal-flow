@@ -16,6 +16,9 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.UUID;
 
+/**
+ * this class is the rest resource handling card requests.
+ */
 @Path("/v1/cardSimple")
 @Produces("application/json")
 public class CardResource extends BasicOpsResource<CardSimpleDto, CardEntity> {

@@ -8,6 +8,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.UUID;
 
+/**
+ * this class is the data access for user data.
+ */
 @ApplicationScoped
 public class UserRepository implements PanacheRepositoryBase<UserEntity, UUID> {
 

@@ -9,6 +9,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * this class is the data access for board data.
+ */
 @ApplicationScoped
 public class BoardRepository implements PanacheRepositoryBase<BoardEntity, UUID> {
 

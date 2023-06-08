@@ -8,6 +8,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.UUID;
 
+/**
+ * this class is the data access for account data.
+ */
 @ApplicationScoped
 public class AccountRepository implements PanacheRepositoryBase<AccountEntity, UUID> {
 

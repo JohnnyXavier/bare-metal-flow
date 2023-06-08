@@ -19,6 +19,9 @@ import java.util.UUID;
 
 import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 
+/**
+ * this class is the rest resource handling board column requests.
+ */
 @Path("/v1/boardColumn")
 @Produces("application/json")
 public class BoardColumnResource extends BasicOpsResource<BoardColumnDto, BoardColumnEntity> {
@@ -32,11 +35,11 @@ public class BoardColumnResource extends BasicOpsResource<BoardColumnDto, BoardC
 
     @GET
     @Path("board/{id}")
-    public Uni<Response> findBoardsByProjectId(final UUID id,
-                                               @QueryParam(value = "sortBy") @NotNull final String sortBy,
-                                               @QueryParam(value = "sortDir") final String sortDir,
-                                               @QueryParam(value = "pageIx") final Integer pageIx,
-                                               @QueryParam(value = "pageSize") @NotNull final Integer pageSize) {
+    public Uni<Response> findBoardColumnsByBoardId(final UUID id,
+                                                   @QueryParam(value = "sortBy") @NotNull final String sortBy,
+                                                   @QueryParam(value = "sortDir") final String sortDir,
+                                                   @QueryParam(value = "pageIx") final Integer pageIx,
+                                                   @QueryParam(value = "pageSize") @NotNull final Integer pageSize) {
         return boardColumnService.findAllByBoardIdPaged(id, new Pageable(sortBy, sortDir, pageIx, pageSize))
                                  .map(boardDtos -> Response.ok(boardDtos).build())
                                  .onFailure(NoResultException.class).recoverWithItem(Response.status(NOT_FOUND)::build)

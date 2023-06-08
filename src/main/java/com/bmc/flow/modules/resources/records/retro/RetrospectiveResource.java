@@ -17,6 +17,9 @@ import java.util.UUID;
 
 import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 
+/**
+ * this class is the rest resource handling retrospective requests.
+ */
 @Path("/v1/retroboard")
 @Produces("application/json")
 public class RetrospectiveResource extends BasicOpsResource<RetrospectiveDto, RetrospectiveEntity> {

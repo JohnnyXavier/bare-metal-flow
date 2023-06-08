@@ -26,6 +26,9 @@ import java.util.UUID;
 import static jakarta.ws.rs.core.Response.Status.*;
 import static java.util.Map.ofEntries;
 
+/**
+ * this class is the rest resource handling user requests.
+ */
 @Path("v1/users")
 @Produces("application/json")
 @JBossLog

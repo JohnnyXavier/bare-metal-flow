@@ -15,6 +15,9 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.UUID;
 
+/**
+ * this class is the rest resource handling account requests.
+ */
 @Path("/v1/account")
 @Produces("application/json")
 public class AccountResource extends BasicOpsResource<AccountDto, AccountEntity> {

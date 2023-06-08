@@ -20,6 +20,9 @@ import java.util.UUID;
 
 import static java.util.Map.ofEntries;
 
+/**
+ * this class is the rest resource handling Label requests.
+ */
 @Path("/v1/label")
 @Produces("application/json")
 public class LabelResource extends BasicCatalogResource<LabelDto, LabelEntity> {

@@ -22,6 +22,9 @@ import java.util.UUID;
 import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 import static java.util.Map.ofEntries;
 
+/**
+ * this class is the rest resource handling sprint requests.
+ */
 @Path("/v1/sprint")
 @Produces("application/json")
 public class SprintResource extends BasicOpsResource<SprintDto, SprintEntity> {

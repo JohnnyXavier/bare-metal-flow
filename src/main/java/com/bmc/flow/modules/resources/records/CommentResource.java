@@ -16,6 +16,9 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.UUID;
 
+/**
+ * this class is the rest resource handling comment requests.
+ */
 @Path("/v1/comments")
 @Produces("application/json")
 public class CommentResource extends BasicOpsResource<CommentDto, CommentEntity> {

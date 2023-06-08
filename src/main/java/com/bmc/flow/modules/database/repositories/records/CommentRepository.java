@@ -8,6 +8,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.UUID;
 
+/**
+ * this class is the data access for comment data.
+ */
 @ApplicationScoped
 public class CommentRepository implements PanacheRepositoryBase<CommentEntity, UUID> {
 

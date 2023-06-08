@@ -11,6 +11,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * this class is the data access for label data.
+ */
 @ApplicationScoped
 public class LabelRepository implements PanacheRepositoryBase<LabelEntity, UUID> {
 

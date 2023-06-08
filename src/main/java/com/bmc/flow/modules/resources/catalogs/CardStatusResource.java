@@ -7,6 +7,9 @@ import com.bmc.flow.modules.service.catalogs.CardStatusService;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
+/**
+ * this class is the rest resource handling card status requests.
+ */
 @Path("/v1/cardStatus")
 @Produces("application/json")
 public class CardStatusResource extends BasicCatalogResource<StatusDto, StatusEntity> {

@@ -19,6 +19,9 @@ import java.util.UUID;
 
 import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 
+/**
+ * this class is the rest resource handling board requests.
+ */
 @Path("/v1/board")
 @Produces("application/json")
 public class BoardResource extends BasicOpsResource<BoardDto, BoardEntity> {

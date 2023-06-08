@@ -20,6 +20,11 @@ import java.util.UUID;
 
 import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 
+/**
+ * this class is the rest resource handling statistics requests.
+ * <p>
+ * this is a placeholder for a proper stats resource in a future.
+ */
 @Path("v1/statistics")
 @Produces("application/json")
 public class StatisticsResource {

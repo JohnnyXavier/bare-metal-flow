@@ -10,6 +10,7 @@ import static jakarta.ws.rs.core.Response.Status.*;
 /**
  * Postgresql error codes.
  * <p>
+ * used for mapping DB errors to REST responses.
  *
  * @see <a href="https://www.postgresql.org/docs/current/errcodes-appendix.html">postgresql errors</a>
  */

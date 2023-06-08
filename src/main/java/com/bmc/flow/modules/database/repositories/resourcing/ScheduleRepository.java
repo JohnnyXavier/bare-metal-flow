@@ -8,6 +8,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.UUID;
 
+/**
+ * this class is the data access for schedule data.
+ */
 @ApplicationScoped
 public class ScheduleRepository implements PanacheRepositoryBase<ScheduleEntity, UUID> {
 

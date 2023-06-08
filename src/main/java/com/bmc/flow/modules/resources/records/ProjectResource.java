@@ -15,6 +15,9 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.UUID;
 
+/**
+ * this class is the rest resource handling project requests.
+ */
 @Path("/v1/project")
 @Produces("application/json")
 public class ProjectResource extends BasicOpsResource<ProjectDto, ProjectEntity> {

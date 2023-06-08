@@ -16,6 +16,9 @@ import java.util.UUID;
 
 import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 
+/**
+ * this class is the rest resource handling schedule requests.
+ */
 @Path("v1/schedule")
 @Produces("application/json")
 public class ScheduleResource extends BasicOpsResource<ScheduleDto, ScheduleEntity> {

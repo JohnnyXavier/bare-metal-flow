@@ -7,6 +7,9 @@ import com.bmc.flow.modules.service.catalogs.CardTypeService;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
+/**
+ * this class is the rest resource handling card type requests.
+ */
 @Path("/v1/cardType")
 @Produces("application/json")
 public class CardTypeResource extends BasicCatalogResource<CardTypeDto, CardTypeEntity> {

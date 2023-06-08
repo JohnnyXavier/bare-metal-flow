@@ -16,6 +16,9 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.UUID;
 
+/**
+ * this class is the rest resource handling changelog requests.
+ */
 @Path("/v1/changelog")
 @Produces("application/json")
 public class ChangeLogResource extends BasicOpsResource<ChangeLogCardDto, ChangelogEntity> {

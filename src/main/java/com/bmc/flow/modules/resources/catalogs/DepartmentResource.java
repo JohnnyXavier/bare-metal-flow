@@ -7,6 +7,9 @@ import com.bmc.flow.modules.service.catalogs.DepartmentService;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
+/**
+ * this class is the rest resource handling department requests.
+ */
 @Path("/v1/department")
 @Produces("application/json")
 public class DepartmentResource extends BasicCatalogResource<DepartmentDto, DepartmentEntity> {

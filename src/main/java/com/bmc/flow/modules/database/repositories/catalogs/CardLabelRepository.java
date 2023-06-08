@@ -6,6 +6,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.UUID;
 
+/**
+ * this class is the data access for card label data.
+ */
 @ApplicationScoped
 public class CardLabelRepository implements PanacheRepositoryBase<CardLabelEntity, UUID> {
 

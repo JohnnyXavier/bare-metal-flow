@@ -7,6 +7,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.UUID;
 
+/**
+ * this class is the data access for shrinkage data.
+ */
 @ApplicationScoped
 public class ShrinkageRepository implements PanacheRepositoryBase<ShrinkageEntity, UUID> {
 

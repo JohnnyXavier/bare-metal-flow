@@ -7,6 +7,9 @@ import com.bmc.flow.modules.service.catalogs.CardDifficultyService;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
+/**
+ * this class is the rest resource handling card difficulty requests.
+ */
 @Path("/v1/cardDifficulty")
 @Produces("application/json")
 public class CardDifficultyResource extends BasicCatalogResource<CardDifficultyDto, CardDifficultyEntity> {

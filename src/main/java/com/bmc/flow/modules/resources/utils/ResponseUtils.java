@@ -15,12 +15,22 @@ import java.util.Set;
 
 import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
 
+/**
+ * this class is a set of utilities to handle {@link Response}
+ */
 @JBossLog
 public class ResponseUtils {
 
     private ResponseUtils() {
     }
 
+    /**
+     * handles dtos / entities integrity violations.
+     *
+     * @param throwable the violation exception
+     *
+     * @return a {@link Response} wrapping the errors in a map, the map is returned as a k/v json.
+     */
     public static Response violationsToResponse(final Throwable throwable) {
         // this is guaranteed to always be a ConstraintViolationException
         Set<ConstraintViolation<?>> violations = ((ConstraintViolationException) throwable).getConstraintViolations();
@@ -31,6 +41,13 @@ public class ResponseUtils {
         return Response.ok(errors).status(BAD_REQUEST).build();
     }
 
+    /**
+     * handles generic persistence exceptions and routes them to the proper specialized handler.
+     *
+     * @param throwable the persistence exception
+     *
+     * @return a {@link Response} the specialized handler's result or a {@link Response.Status#BAD_REQUEST} if no handler is matched
+     */
     public static Response persistenceExResponse(final Throwable throwable) {
         log.errorf(throwable.getMessage());
 
@@ -45,12 +62,28 @@ public class ResponseUtils {
         return Response.status(BAD_REQUEST).build();
     }
 
+    /**
+     * handles exceptions for which we want to return a 500.
+     * <p>
+     * this can be a blanket handler for when all else fails
+     *
+     * @param throwable the exception
+     *
+     * @return a {@link Response} carrying only a {@link Response.Status#INTERNAL_SERVER_ERROR}
+     */
     public static Response failToServerError(final Throwable throwable) {
         log.errorf(throwable.getMessage());
 
         return Response.serverError().build();
     }
 
+    /**
+     * handles postgreSQL exceptions.
+     *
+     * @param throwable the pgException
+     *
+     * @return a {@link Response} wrapping the errors in a map, the map is returned as a k/v json.
+     */
     public static Response processPgException(final Throwable throwable) {
         PgException pgEx      = ((PgException) throwable);
         String      pgErrCode = pgEx.getSqlState();
@@ -66,6 +99,13 @@ public class ResponseUtils {
         return Response.ok(errMessage).status(status).build();
     }
 
+    /**
+     * trims down a validation property {@link Path} down to the string after the last "." (dot).
+     *
+     * @param propertyPath the Path to trim
+     *
+     * @return the resulting string
+     */
     private static String trimPath(final Path propertyPath) {
         String fullPath = propertyPath.toString();
         return fullPath.substring(fullPath.lastIndexOf(".") + 1);

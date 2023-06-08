@@ -17,6 +17,9 @@ import java.util.UUID;
 
 import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 
+/**
+ * this class is the rest resource handling retrospective action requests.
+ */
 @Path("/v1/retroaction")
 @Produces("application/json")
 public class RetroActionResource extends BasicOpsResource<RetroActionDto, RetroActionEntity> {

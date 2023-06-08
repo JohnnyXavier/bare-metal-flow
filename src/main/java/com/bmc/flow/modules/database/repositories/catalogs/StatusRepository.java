@@ -9,6 +9,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * this class is the data access for status data.
+ */
 @ApplicationScoped
 public class StatusRepository implements PanacheRepositoryBase<StatusEntity, UUID> {
 

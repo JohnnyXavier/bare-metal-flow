@@ -17,6 +17,9 @@ import java.util.UUID;
 
 import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 
+/**
+ * this class is the rest resource handling retrospective card requests.
+ */
 @Path("/v1/retrocard")
 @Produces("application/json")
 public class RetroCardResource extends BasicOpsResource<RetroCardDto, RetroCardEntity> {

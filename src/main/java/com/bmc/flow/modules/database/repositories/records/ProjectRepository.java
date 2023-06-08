@@ -8,6 +8,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.UUID;
 
+/**
+ * this class is the data access for project data.
+ */
 @ApplicationScoped
 public class ProjectRepository implements PanacheRepositoryBase<ProjectEntity, UUID> {
 

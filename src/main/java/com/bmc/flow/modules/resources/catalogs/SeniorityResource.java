@@ -7,6 +7,9 @@ import com.bmc.flow.modules.service.catalogs.SeniorityService;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
+/**
+ * this class is the rest resource handling seniority requests.
+ */
 @Path("/v1/seniority")
 @Produces("application/json")
 public class SeniorityResource extends BasicCatalogResource<SeniorityDto, SeniorityEntity> {
