@@ -6,16 +6,17 @@ import lombok.Setter;
 
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * this class is the basis for all record related DTOs
+ */
 @Getter
 @Setter
 @RegisterForReflection
 public abstract class BaseRecordDto extends BaseDto {
 
-  @NotNull
-  protected String name;
-
-  protected String description;
-
-  protected String coverImage;
+    @NotNull
+    protected String name;
+    protected String description;
+    protected String coverImage;
 
 }

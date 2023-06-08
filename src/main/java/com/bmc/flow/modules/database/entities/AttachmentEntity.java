@@ -19,8 +19,6 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class AttachmentEntity extends BaseEntity {
 
-  public static final String FIELD_NAME = "attachment";
-
   private String name;
 
   private String extension;

@@ -21,8 +21,6 @@ import static jakarta.persistence.CascadeType.ALL;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class CardDifficultyEntity extends BaseCatalogEntity {
 
-  public static final String FIELD_NAME = "card-difficulty";
-
   private short level;
 
   @OneToMany(mappedBy = "cardDifficulty", cascade = ALL)

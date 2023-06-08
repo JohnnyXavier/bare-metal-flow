@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import java.util.UUID;
 
+/**
+ * this class carries card-label data.
+ */
 @Getter
 @Setter
 @RegisterForReflection

@@ -17,9 +17,8 @@ import jakarta.persistence.Table;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class CommentEntity extends BaseEntity {
 
-  public static final String FIELD_NAME = "comment";
-
-  @Column(columnDefinition = "text")
+  @Column(columnDefinition = "text" )
+  @EqualsAndHashCode.Include
   private String comment;
 
   @ManyToOne

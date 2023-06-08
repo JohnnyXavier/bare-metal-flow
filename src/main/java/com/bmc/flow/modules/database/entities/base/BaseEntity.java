@@ -1,10 +1,7 @@
 package com.bmc.flow.modules.database.entities.base;
 
 import com.bmc.flow.modules.database.entities.UserEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

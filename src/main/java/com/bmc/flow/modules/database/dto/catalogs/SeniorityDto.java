@@ -7,29 +7,33 @@ import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * this class carries seniority data
+ */
 @Getter
 @Setter
 @RegisterForReflection
 public class SeniorityDto extends BaseCatalogDto {
 
-  @NotNull
-  private short level;
+    @NotNull
+    private Short level;
 
-  public SeniorityDto(final UUID id, final String name, final String description, final Boolean isSystem, final short level,
-                       final LocalDateTime createdAt,
-                      @ProjectedFieldName("createdBy.id") final UUID createdBy) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.level = level;
-    this.createdAt = createdAt;
-    this.createdBy = createdBy;
-    this.isSystem = isSystem;
+    public SeniorityDto(final UUID id, final String name, final String description, final Boolean isSystem, final short level,
+                        final LocalDateTime createdAt,
+                        @ProjectedFieldName("createdBy.id") final UUID createdBy) {
+        this.id          = id;
+        this.name        = name;
+        this.description = description;
+        this.level       = level;
+        this.createdAt   = createdAt;
+        this.createdBy   = createdBy;
+        this.isSystem    = isSystem;
 
-  }
+    }
 
 }
 

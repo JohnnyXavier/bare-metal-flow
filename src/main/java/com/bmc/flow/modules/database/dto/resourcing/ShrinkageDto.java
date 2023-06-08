@@ -8,32 +8,35 @@ import lombok.Setter;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * this class carries shrinkage data.
+ */
 @Getter
 @Setter
 @RegisterForReflection
 public class ShrinkageDto extends BaseCatalogDto {
 
-  @Min(0)
-  private Short durationInMin;
+    @Min(0)
+    private Short durationInMin;
+    @Min(0)
+    @Max(100)
+    private Short percentage;
 
-  @Min(0)
-  @Max(100)
-  private Short percentage;
-
-  public ShrinkageDto(final UUID id, final String name, final String description, final Short durationInMin, final Short percentage,
-                      final Boolean isSystem, final LocalDateTime createdAt,
-                      @ProjectedFieldName("createdBy.id") final UUID createdBy) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.durationInMin = durationInMin;
-    this.percentage = percentage;
-    this.isSystem = isSystem;
-    this.createdAt = createdAt;
-    this.createdBy = createdBy;
-  }
+    public ShrinkageDto(final UUID id, final String name, final String description, final Short durationInMin, final Short percentage,
+                        final Boolean isSystem, final LocalDateTime createdAt,
+                        @ProjectedFieldName("createdBy.id") final UUID createdBy) {
+        this.id            = id;
+        this.name          = name;
+        this.description   = description;
+        this.durationInMin = durationInMin;
+        this.percentage    = percentage;
+        this.isSystem      = isSystem;
+        this.createdAt     = createdAt;
+        this.createdBy     = createdBy;
+    }
 
 }

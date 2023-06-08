@@ -9,22 +9,25 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * this class carries label data
+ */
 @Getter
 @Setter
 @RegisterForReflection
 public class LabelDto extends BaseCatalogDto {
 
-  private String colorHex;
+    private String colorHex;
 
-  public LabelDto(final UUID id, final String name, final String description, final String colorHex, final Boolean isSystem,
-                  final LocalDateTime createdAt,
-                  @ProjectedFieldName("createdBy.id") final UUID createdBy) {
-    this.id          = id;
-    this.name        = name;
-    this.description = description;
-    this.colorHex    = colorHex;
-    this.createdAt   = createdAt;
-    this.createdBy   = createdBy;
-    this.isSystem    = isSystem;
-  }
+    public LabelDto(final UUID id, final String name, final String description, final String colorHex, final Boolean isSystem,
+                    final LocalDateTime createdAt,
+                    @ProjectedFieldName("createdBy.id") final UUID createdBy) {
+        this.id          = id;
+        this.name        = name;
+        this.description = description;
+        this.colorHex    = colorHex;
+        this.createdAt   = createdAt;
+        this.createdBy   = createdBy;
+        this.isSystem    = isSystem;
+    }
 }

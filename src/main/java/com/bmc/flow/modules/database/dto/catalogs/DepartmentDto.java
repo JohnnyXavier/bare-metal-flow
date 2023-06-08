@@ -9,21 +9,24 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * this class carries department data
+ */
 @Getter
 @Setter
 @RegisterForReflection
 public class DepartmentDto extends BaseCatalogDto {
 
-  public DepartmentDto(final UUID id, final String name, final String description, final Boolean isSystem, final LocalDateTime createdAt,
-                       @ProjectedFieldName("createdBy.id") final UUID createdBy) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.createdAt = createdAt;
-    this.createdBy = createdBy;
-    this.isSystem = isSystem;
+    public DepartmentDto(final UUID id, final String name, final String description, final Boolean isSystem, final LocalDateTime createdAt,
+                         @ProjectedFieldName("createdBy.id") final UUID createdBy) {
+        this.id          = id;
+        this.name        = name;
+        this.description = description;
+        this.createdAt   = createdAt;
+        this.createdBy   = createdBy;
+        this.isSystem    = isSystem;
 
-  }
+    }
 
 }
 

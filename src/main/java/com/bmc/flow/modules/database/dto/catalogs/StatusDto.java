@@ -9,19 +9,22 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * this class carries status data
+ */
 @Getter
 @Setter
 @RegisterForReflection
 public class StatusDto extends BaseCatalogDto {
 
-  public StatusDto(final UUID id, final String name, final String description, final Boolean isSystem,
-                   final LocalDateTime createdAt,
-                   @ProjectedFieldName("createdBy.id") final UUID createdBy) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.isSystem = isSystem;
-    this.createdAt = createdAt;
-    this.createdBy = createdBy;
-  }
+    public StatusDto(final UUID id, final String name, final String description, final Boolean isSystem,
+                     final LocalDateTime createdAt,
+                     @ProjectedFieldName("createdBy.id") final UUID createdBy) {
+        this.id          = id;
+        this.name        = name;
+        this.description = description;
+        this.isSystem    = isSystem;
+        this.createdAt   = createdAt;
+        this.createdBy   = createdBy;
+    }
 }

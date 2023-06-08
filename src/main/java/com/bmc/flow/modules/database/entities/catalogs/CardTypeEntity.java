@@ -21,8 +21,6 @@ import static jakarta.persistence.CascadeType.ALL;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class CardTypeEntity extends BaseCatalogEntity {
 
-  public static final String FIELD_NAME = "card-type";
-
   @OneToMany(mappedBy = "cardType", cascade = ALL)
   private Set<CardEntity> cards = new HashSet<>();
 }

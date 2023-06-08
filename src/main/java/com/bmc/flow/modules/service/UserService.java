@@ -84,7 +84,8 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
 
     @Override
     public Uni<UserDto> create(UserDto fromDto) {
-        //TODO: this is a placeholder for creating a user after registration, maybe not required
+        //TODO: this is a placeholder for creating a user after registration, maybe not required unless we want to allow for users to
+        // create other users.
         return null;
     }
 
@@ -197,13 +198,13 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
     @Override
     public Uni<Boolean> deleteById(final UUID userId) {
         return userRepo.find("id =?1 and isActive=?2", userId, true)
-            .singleResult().onFailure().recoverWithNull()
-            .onItem().ifNotNull().transform(userToDeactivate -> {
+                       .singleResult().onFailure().recoverWithNull()
+                       .onItem().ifNotNull().transform(userToDeactivate -> {
                 secUtils.obfuscateUser(userToDeactivate);
                 userToDeactivate.setActive(false);
                 return TRUE;
             })
-            .onItem().ifNull().continueWith(FALSE);
+                       .onItem().ifNull().continueWith(FALSE);
     }
 
     public Uni<Void> update(final UserEntity toUpdate, final String key, final String value) {
@@ -219,12 +220,12 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
 
     private Uni<Void> setSeniority(final UserEntity toUpdate, final String value) {
         Optional.ofNullable(value)
-            .ifPresentOrElse(seniorityId -> {
-                    SeniorityEntity seniority = new SeniorityEntity();
-                    seniority.setId(UUID.fromString(seniorityId));
-                    toUpdate.setSeniority(seniority);
-                },
-                () -> toUpdate.setSeniority(null));
+                .ifPresentOrElse(seniorityId -> {
+                        SeniorityEntity seniority = new SeniorityEntity();
+                        seniority.setId(UUID.fromString(seniorityId));
+                        toUpdate.setSeniority(seniority);
+                    },
+                    () -> toUpdate.setSeniority(null));
 
         return Uni.createFrom().voidItem();
     }

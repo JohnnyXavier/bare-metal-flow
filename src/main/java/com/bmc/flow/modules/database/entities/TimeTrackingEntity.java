@@ -16,8 +16,6 @@ import java.time.Duration;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class TimeTrackingEntity extends BaseEntity {
 
-  public static final String FIELD_NAME = "time-tracking";
-
   private Duration months;
 
   private Duration days;

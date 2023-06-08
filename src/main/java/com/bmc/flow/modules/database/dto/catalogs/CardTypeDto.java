@@ -9,19 +9,22 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * this class carries card type data
+ */
 @Getter
 @Setter
 @RegisterForReflection
 public class CardTypeDto extends BaseCatalogDto {
 
-  public CardTypeDto(final UUID id, final String name, final String description, final Boolean isSystem,
-                      final LocalDateTime createdAt,
-                     @ProjectedFieldName("createdBy.id") final UUID createdBy) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.createdAt = createdAt;
-    this.createdBy = createdBy;
-    this.isSystem = isSystem;
-  }
+    public CardTypeDto(final UUID id, final String name, final String description, final Boolean isSystem,
+                       final LocalDateTime createdAt,
+                       @ProjectedFieldName("createdBy.id") final UUID createdBy) {
+        this.id          = id;
+        this.name        = name;
+        this.description = description;
+        this.createdAt   = createdAt;
+        this.createdBy   = createdBy;
+        this.isSystem    = isSystem;
+    }
 }

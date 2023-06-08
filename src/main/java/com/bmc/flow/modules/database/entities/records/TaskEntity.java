@@ -22,8 +22,6 @@ import static jakarta.persistence.FetchType.LAZY;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class TaskEntity extends BaseEntity {
 
-  public static final String FIELD_NAME = "task";
-
   private String name;
 
   private LocalDateTime dueDate;

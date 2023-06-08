@@ -3,7 +3,6 @@ package com.bmc.flow.modules.database.dto.records;
 import com.bmc.flow.modules.database.dto.base.BaseRecordDto;
 import io.quarkus.hibernate.reactive.panache.common.ProjectedFieldName;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,13 +11,27 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * this class carries card data.
+ * <p><br>
+ * this card simple variation is to connect with front end with minimal data.
+ * <p><br>
+ * I am leaning to a more disconnected relation on the front end. If the idea works ok, this class will remain and the {@link CardDetailDto}
+ * will be deleted.
+ * <p><br>
+ * the disconnected relation means: a card, having many components will be broken down to a main few in this class, and the rest will be
+ * loaded via different calls.
+ * <p><br>
+ * The idea behind that decision is that when updating a card I would want to reload the minimal data set possible to keep the front end
+ * updated. i.e. if I update watchers, just update watchers.
+ * <p><br>
+ * At some extent breaking a card into every component will be counterproductive. As usual... balance is key...
+ */
 @Getter
 @Setter
 @RegisterForReflection
 public class CardSimpleDto extends BaseRecordDto {
 
-    @NotNull
-    private Boolean           isCompleted;
     private LocalDateTime     dueDate;
     private LocalDateTime     updatedAt;
     private Long              position;

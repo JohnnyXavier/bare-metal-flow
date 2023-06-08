@@ -5,19 +5,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * this class is the basis for all DTOs
+ */
 @Getter
 @Setter
 @RegisterForReflection
 public abstract class BaseDto {
 
-  protected UUID id;
-
-  protected LocalDateTime createdAt;
-
-  @NotNull
-  protected UUID createdBy;
+    @NotNull
+    protected UUID          createdBy;
+    protected UUID          id;
+    protected LocalDateTime createdAt;
 
 }

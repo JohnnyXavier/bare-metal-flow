@@ -19,8 +19,6 @@ import static jakarta.persistence.CascadeType.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class DepartmentEntity extends BaseCatalogEntity {
 
-  public static final String FIELD_NAME = "department";
-
   @OneToMany(mappedBy = "department", cascade = ALL)
   private Set<UserEntity> users = new HashSet<>();
 

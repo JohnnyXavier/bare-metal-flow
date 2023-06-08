@@ -7,26 +7,30 @@ import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * this class carries card difficulty data
+ */
 @Getter
 @Setter
 @RegisterForReflection
 public class CardDifficultyDto extends BaseCatalogDto {
 
-  @NotNull
-  private Short level;
+    @NotNull
+    private Short level;
 
-  public CardDifficultyDto(final UUID id, final String name, final String description, final Short level, final Boolean isSystem,
-                           final LocalDateTime createdAt,
-                           @ProjectedFieldName("createdBy.id") final UUID createdBy) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.level = level;
-    this.createdAt = createdAt;
-    this.createdBy = createdBy;
-    this.isSystem = isSystem;
-  }
+    public CardDifficultyDto(final UUID id, final String name, final String description, final @NotNull Short level, final Boolean isSystem,
+                             final LocalDateTime createdAt,
+                             @ProjectedFieldName("createdBy.id") final UUID createdBy) {
+        this.id          = id;
+        this.name        = name;
+        this.description = description;
+        this.level       = level;
+        this.createdAt   = createdAt;
+        this.createdBy   = createdBy;
+        this.isSystem    = isSystem;
+    }
 }

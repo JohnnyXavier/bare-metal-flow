@@ -14,22 +14,24 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 @Setter
 @RegisterForReflection
 public class UserRegistrationDto {
-  @NotNull
-  @Email
-  private final String email;
-  @NotNull
-  private final String callSign;
-  @JsonProperty(access = WRITE_ONLY)
-  private final String password;
-  @JsonProperty(access = WRITE_ONLY)
-  private final String passwordCheck;
 
-  public UserRegistrationDto(final String email, final String callSign, final String password, final String passwordCheck) {
+    @NotNull
+    @Email
+    private String email;
+    @NotNull
+    private String callSign;
+    @JsonProperty(access = WRITE_ONLY)
+    private String password;
+    @JsonProperty(access = WRITE_ONLY)
+    private String passwordCheck;
 
-    this.callSign      = callSign;
-    this.email         = email;
-    this.password      = password;
-    this.passwordCheck = passwordCheck;
-  }
+    public UserRegistrationDto(final @NotNull String email, final @NotNull String callSign, final String password,
+                               final String passwordCheck) {
+
+        this.callSign      = callSign;
+        this.email         = email;
+        this.password      = password;
+        this.passwordCheck = passwordCheck;
+    }
 
 }
