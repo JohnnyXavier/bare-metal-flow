@@ -5,6 +5,11 @@ import lombok.extern.jbosslog.JBossLog;
 
 import java.lang.reflect.Method;
 
+/**
+ * this class is a Cache Key generator that will create a key based on the 2nd method parameter.
+ * <p>
+ * this allows for dynamic keys generation.
+ */
 @JBossLog
 public class StringCKGen implements CacheKeyGenerator {
 

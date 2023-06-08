@@ -18,6 +18,9 @@ import java.util.UUID;
 import static com.bmc.flow.modules.service.reflection.MethodNames.*;
 import static java.util.UUID.randomUUID;
 
+/**
+ * this class is a data access service for project data.
+ */
 @ApplicationScoped
 public class ProjectService extends BasicPersistenceService<ProjectDto, ProjectEntity> {
 

@@ -13,6 +13,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.UUID;
 
+/**
+ * this class is a data access service for changelog data.
+ */
 @ApplicationScoped
 public class ChangeLogService extends BasicPersistenceService<ChangeLogCardDto, ChangelogEntity> {
 

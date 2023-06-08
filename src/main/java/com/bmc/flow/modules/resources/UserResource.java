@@ -97,13 +97,13 @@ public class UserResource extends BasicOpsResource<UserDto, UserEntity> {
 
     /***
      * This is a silly login to play with the front end and have a showcase-able flow
-     * ---
+     * ---<br>
      * Security is not yet implemented in the app on purpose as the app functionality itself is the key for the moment
      * <p>
-     * this is not safe---
-     * this is not secure---
+     * this is not safe---<br>
+     * this is not secure---<br>
      * do not ever use this in any production environment if you clone this repo do not use the app as is, and implement
-     * your own sec or wait until I implement it myself
+     * your own sec or wait until I implement it myself<br
      * <p>
      *
      * @param email user unique readable identifier
@@ -134,7 +134,5 @@ public class UserResource extends BasicOpsResource<UserDto, UserEntity> {
                        .onFailure(NoResultException.class).recoverWithItem(Response.ok("user not found").status(NOT_FOUND).build())
                        .onFailure().recoverWithItem(ResponseUtils::failToServerError);
     }
-
-    // TODO: CREATE A ERR HANDLER ON RESOURCES GENERAL HANDLER
 
 }

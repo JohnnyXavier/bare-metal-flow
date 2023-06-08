@@ -20,6 +20,9 @@ import java.util.UUID;
 import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
 import static java.util.UUID.randomUUID;
 
+/**
+ * this class is a data access service for board column data.
+ */
 @ApplicationScoped
 public class BoardColumnService extends BasicPersistenceService<BoardColumnDto, BoardColumnEntity> {
 

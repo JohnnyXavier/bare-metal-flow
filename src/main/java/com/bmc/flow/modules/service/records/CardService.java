@@ -32,6 +32,9 @@ import static com.bmc.flow.modules.service.reflection.MethodNames.*;
 import static java.time.LocalDateTime.parse;
 import static java.util.UUID.randomUUID;
 
+/**
+ * this class is a data access service for card data.
+ */
 @ApplicationScoped
 @JBossLog
 public class CardService extends BasicPersistenceService<CardSimpleDto, CardEntity> {

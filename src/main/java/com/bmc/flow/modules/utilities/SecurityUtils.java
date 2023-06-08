@@ -6,6 +6,19 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * this class contains methods to handle some innocent security code.
+ * <p>
+ * no security code not utility in the application es secure or safe to use. The security done here is for showcasing purposes and not for
+ * production use.
+ * security is currently a ways to play with the application from the front end.
+ * <p>
+ * this is not safe---<br>
+ * this is not secure---<br>
+ * do not ever use this in any production environment if you clone this repo do not use the app as is, and implement
+ * your own sec or wait until I implement it myself<br
+ * <p>
+ */
 @ApplicationScoped
 public class SecurityUtils {
 

@@ -19,6 +19,9 @@ import java.util.UUID;
 import static com.bmc.flow.modules.database.entities.catalogs.ChangeAction.ADDED;
 import static java.util.UUID.randomUUID;
 
+/**
+ * this class is a data access service for comment data.
+ */
 @ApplicationScoped
 public class CommentService extends BasicPersistenceService<CommentDto, CommentEntity> {
 

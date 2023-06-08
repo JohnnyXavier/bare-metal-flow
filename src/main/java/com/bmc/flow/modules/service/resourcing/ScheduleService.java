@@ -20,6 +20,9 @@ import java.util.stream.Collectors;
 import static com.bmc.flow.modules.service.reflection.MethodNames.SET_HOURS_A_DAY;
 import static java.util.UUID.randomUUID;
 
+/**
+ * this class is a data access service for schedule data.
+ */
 @ApplicationScoped
 public class ScheduleService extends BasicPersistenceService<ScheduleDto, ScheduleEntity> {
 

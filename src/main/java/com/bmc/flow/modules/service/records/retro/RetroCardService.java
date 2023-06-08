@@ -18,6 +18,9 @@ import static com.bmc.flow.modules.service.reflection.MethodNames.SET_COMMENT;
 import static com.bmc.flow.modules.service.reflection.MethodNames.SET_VOTES;
 import static java.util.UUID.randomUUID;
 
+/**
+ * this class is a data access service for retrospective card data.
+ */
 @ApplicationScoped
 public class RetroCardService extends BasicPersistenceService<RetroCardDto, RetroCardEntity> {
 

@@ -7,12 +7,21 @@ import com.bmc.flow.modules.database.entities.base.BaseCatalogEntity;
 import static java.lang.Boolean.FALSE;
 import static java.util.UUID.randomUUID;
 
+/**
+ * this class is contains utilities to create entities or fragment of entities.
+ */
 public class CreationUtils {
 
     private CreationUtils() {
     }
 
-    public static void createBaseCatalogEntity(BaseCatalogEntity CatalogEntity, BaseCatalogDto CatalogDto) {
+    /**
+     * populates a catalog entity with data coming from a dto.
+     *
+     * @param CatalogEntity the catalog entity to add data to
+     * @param CatalogDto    the catalog dto containing the data to populate the entity
+     */
+    public static void populateBaseCatalogEntity(BaseCatalogEntity CatalogEntity, BaseCatalogDto CatalogDto) {
         UserEntity creator = new UserEntity();
         creator.setId(CatalogDto.getCreatedBy());
 

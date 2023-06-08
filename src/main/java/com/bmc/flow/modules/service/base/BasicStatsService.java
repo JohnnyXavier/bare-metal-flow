@@ -6,6 +6,11 @@ import io.smallrye.mutiny.Uni;
 
 import java.util.UUID;
 
+/**
+ * this class is the basis for future statistical operations.
+ * <p>
+ * this is a placeholder for a proper stats service in a future.
+ */
 public abstract class BasicStatsService {
 
     @CacheResult(cacheName = "count-all", keyGenerator = StringCKGen.class)

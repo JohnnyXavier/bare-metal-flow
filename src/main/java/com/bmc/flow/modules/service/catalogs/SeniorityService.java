@@ -13,6 +13,9 @@ import jakarta.validation.Valid;
 
 import static com.bmc.flow.modules.service.reflection.MethodNames.*;
 
+/**
+ * this class is a data access service for seniority data.
+ */
 @ApplicationScoped
 public class SeniorityService extends BasicPersistenceService<SeniorityDto, SeniorityEntity> {
 
@@ -26,7 +29,7 @@ public class SeniorityService extends BasicPersistenceService<SeniorityDto, Seni
     @WithTransaction
     public Uni<SeniorityDto> create(@Valid final SeniorityDto seniorityDto) {
         SeniorityEntity newSeniority = new SeniorityEntity();
-        CreationUtils.createBaseCatalogEntity(newSeniority, seniorityDto);
+        CreationUtils.populateBaseCatalogEntity(newSeniority, seniorityDto);
 
         newSeniority.setLevel(seniorityDto.getLevel());
 

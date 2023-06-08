@@ -14,6 +14,9 @@ import jakarta.validation.Valid;
 import static com.bmc.flow.modules.service.reflection.MethodNames.SET_DESCRIPTION;
 import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
 
+/**
+ * this class is a data access service for board data.
+ */
 @ApplicationScoped
 public class DepartmentService extends BasicPersistenceService<DepartmentDto, DepartmentEntity> {
 
@@ -27,7 +30,7 @@ public class DepartmentService extends BasicPersistenceService<DepartmentDto, De
     @WithTransaction
     public Uni<DepartmentDto> create(@Valid final DepartmentDto departmentDto) {
         DepartmentEntity newDepartment = new DepartmentEntity();
-        CreationUtils.createBaseCatalogEntity(newDepartment, departmentDto);
+        CreationUtils.populateBaseCatalogEntity(newDepartment, departmentDto);
 
         return departmentRepo.persist(newDepartment)
                              .replaceWith(findById(newDepartment.getId()));

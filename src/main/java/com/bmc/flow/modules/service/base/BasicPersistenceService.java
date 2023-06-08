@@ -16,6 +16,14 @@ import lombok.SneakyThrows;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
+/**
+ * this class is the basis for every data access service.
+ * <p>
+ * it abstracts the common data access methods commonly used in CRUD operations.
+ *
+ * @param <D> the dto
+ * @param <E> the entity
+ */
 @WithSession
 public abstract class BasicPersistenceService<D, E> {
 

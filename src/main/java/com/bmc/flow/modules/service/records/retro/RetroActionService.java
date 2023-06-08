@@ -17,6 +17,9 @@ import java.util.UUID;
 import static com.bmc.flow.modules.service.reflection.MethodNames.SET_ACTION_TO_TAKE;
 import static java.util.UUID.randomUUID;
 
+/**
+ * this class is a data access service for retrospective action data.
+ */
 @ApplicationScoped
 public class RetroActionService extends BasicPersistenceService<RetroActionDto, RetroActionEntity> {
 

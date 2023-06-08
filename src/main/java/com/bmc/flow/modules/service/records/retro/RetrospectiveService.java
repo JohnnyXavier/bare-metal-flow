@@ -16,6 +16,9 @@ import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
 
+/**
+ * this class is a data access service for retrospective data.
+ */
 @ApplicationScoped
 public class RetrospectiveService extends BasicPersistenceService<RetrospectiveDto, RetrospectiveEntity> {
 

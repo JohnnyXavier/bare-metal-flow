@@ -13,6 +13,9 @@ import static com.bmc.flow.modules.service.reflection.MethodNames.*;
 import static java.lang.Boolean.FALSE;
 import static java.util.UUID.randomUUID;
 
+/**
+ * this class is a data access service for shrinkage data.
+ */
 @ApplicationScoped
 public class ShrinkageService extends BasicPersistenceService<ShrinkageDto, ShrinkageEntity> {
 

@@ -13,6 +13,9 @@ import jakarta.validation.Valid;
 import static com.bmc.flow.modules.service.reflection.MethodNames.SET_DESCRIPTION;
 import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
 
+/**
+ * this class is a data access service for card difficulty data.
+ */
 @ApplicationScoped
 public class CardDifficultyService extends BasicPersistenceService<CardDifficultyDto, CardDifficultyEntity> {
 
@@ -27,7 +30,7 @@ public class CardDifficultyService extends BasicPersistenceService<CardDifficult
     @Override
     public Uni<CardDifficultyDto> create(@Valid final CardDifficultyDto cardDifficultyDto) {
         CardDifficultyEntity newCardDifficulty = new CardDifficultyEntity();
-        CreationUtils.createBaseCatalogEntity(newCardDifficulty, cardDifficultyDto);
+        CreationUtils.populateBaseCatalogEntity(newCardDifficulty, cardDifficultyDto);
 
         newCardDifficulty.setLevel(cardDifficultyDto.getLevel());
 

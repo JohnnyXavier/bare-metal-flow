@@ -32,6 +32,9 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.util.UUID.randomUUID;
 
+/**
+ * this class is a data access service for user data.
+ */
 @ApplicationScoped
 public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
 

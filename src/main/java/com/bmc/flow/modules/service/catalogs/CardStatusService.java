@@ -13,6 +13,9 @@ import jakarta.validation.Valid;
 import static com.bmc.flow.modules.service.reflection.MethodNames.SET_DESCRIPTION;
 import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
 
+/**
+ * this class is a data access service for card status data.
+ */
 @ApplicationScoped
 public class CardStatusService extends BasicPersistenceService<StatusDto, StatusEntity> {
 
@@ -27,7 +30,7 @@ public class CardStatusService extends BasicPersistenceService<StatusDto, Status
     @Override
     public Uni<StatusDto> create(@Valid final StatusDto statusDto) {
         StatusEntity newCardStatus = new StatusEntity();
-        CreationUtils.createBaseCatalogEntity(newCardStatus, statusDto);
+        CreationUtils.populateBaseCatalogEntity(newCardStatus, statusDto);
 
         return cardStatusRepo.persist(newCardStatus)
                              .replaceWith(findById(newCardStatus.getId()));

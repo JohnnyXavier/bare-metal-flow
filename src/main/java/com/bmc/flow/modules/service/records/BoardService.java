@@ -23,6 +23,9 @@ import java.util.UUID;
 import static com.bmc.flow.modules.service.reflection.MethodNames.*;
 import static java.util.UUID.randomUUID;
 
+/**
+ * this class is a data access service for board data.
+ */
 @ApplicationScoped
 @JBossLog
 public class BoardService extends BasicPersistenceService<BoardDto, BoardEntity> {

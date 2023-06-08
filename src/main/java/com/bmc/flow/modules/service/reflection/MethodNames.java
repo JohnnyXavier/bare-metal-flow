@@ -3,6 +3,9 @@ package com.bmc.flow.modules.service.reflection;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * this enum contains the method names that can be accessed via reflection.
+ */
 @Getter
 @RequiredArgsConstructor
 public enum MethodNames {

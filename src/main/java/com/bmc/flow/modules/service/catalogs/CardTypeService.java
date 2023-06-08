@@ -13,6 +13,9 @@ import jakarta.validation.Valid;
 import static com.bmc.flow.modules.service.reflection.MethodNames.SET_DESCRIPTION;
 import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
 
+/**
+ * this class is a data access service for card type data.
+ */
 @ApplicationScoped
 public class CardTypeService extends BasicPersistenceService<CardTypeDto, CardTypeEntity> {
 
@@ -27,7 +30,7 @@ public class CardTypeService extends BasicPersistenceService<CardTypeDto, CardTy
     @WithTransaction
     public Uni<CardTypeDto> create(@Valid final CardTypeDto cardTypeDto) {
         CardTypeEntity newCardType = new CardTypeEntity();
-        CreationUtils.createBaseCatalogEntity(newCardType, cardTypeDto);
+        CreationUtils.populateBaseCatalogEntity(newCardType, cardTypeDto);
 
         return cardTypeRepo.persist(newCardType)
                            .replaceWith(findById(newCardType.getId()));

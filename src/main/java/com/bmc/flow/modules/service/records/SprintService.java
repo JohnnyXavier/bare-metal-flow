@@ -24,6 +24,9 @@ import static java.lang.Boolean.TRUE;
 import static java.time.LocalDateTime.parse;
 import static java.util.UUID.randomUUID;
 
+/**
+ * this class is a data access service for sprint data.
+ */
 @ApplicationScoped
 public class SprintService extends BasicPersistenceService<SprintDto, SprintEntity> {
 

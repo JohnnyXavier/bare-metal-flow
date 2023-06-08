@@ -16,6 +16,9 @@ import java.util.UUID;
 
 import static com.bmc.flow.modules.service.reflection.MethodNames.*;
 
+/**
+ * this class is a data access service for label data.
+ */
 @ApplicationScoped
 public class LabelService extends BasicPersistenceService<LabelDto, LabelEntity> {
 
@@ -30,7 +33,7 @@ public class LabelService extends BasicPersistenceService<LabelDto, LabelEntity>
     @WithTransaction
     public Uni<LabelDto> create(@Valid final LabelDto labelDto) {
         LabelEntity newLabel = new LabelEntity();
-        CreationUtils.createBaseCatalogEntity(newLabel, labelDto);
+        CreationUtils.populateBaseCatalogEntity(newLabel, labelDto);
         newLabel.setColorHex(labelDto.getColorHex());
 
         return labelRepo.persist(newLabel)

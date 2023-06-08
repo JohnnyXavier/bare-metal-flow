@@ -16,6 +16,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * this class is a data access service for statistics.
+ * <p>
+ * this is a placeholder for a proper stats service in a future.
+ */
 @ApplicationScoped
 public class StatisticsService extends BasicStatsService {
 

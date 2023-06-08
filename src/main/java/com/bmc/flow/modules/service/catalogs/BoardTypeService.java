@@ -13,6 +13,9 @@ import jakarta.validation.Valid;
 import static com.bmc.flow.modules.service.reflection.MethodNames.SET_DESCRIPTION;
 import static com.bmc.flow.modules.service.reflection.MethodNames.SET_NAME;
 
+/**
+ * this class is a data access service for board data.
+ */
 @ApplicationScoped
 public class BoardTypeService extends BasicPersistenceService<BoardTypeDto, BoardTypeEntity> {
 
@@ -26,7 +29,7 @@ public class BoardTypeService extends BasicPersistenceService<BoardTypeDto, Boar
     @WithTransaction
     public Uni<BoardTypeDto> create(@Valid final BoardTypeDto boardTypeDto) {
         BoardTypeEntity newBoardType = new BoardTypeEntity();
-        CreationUtils.createBaseCatalogEntity(newBoardType, boardTypeDto);
+        CreationUtils.populateBaseCatalogEntity(newBoardType, boardTypeDto);
 
         return boardTypeRepo.persist(newBoardType)
                             .replaceWith(findById(newBoardType.getId()));
