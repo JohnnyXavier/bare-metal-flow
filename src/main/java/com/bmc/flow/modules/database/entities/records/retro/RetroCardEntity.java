@@ -10,6 +10,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+/**
+ * this class represents the retrospective card table and it's relations.
+ */
 @Entity
 @Table(name = "retro_card")
 @Getter
@@ -17,13 +20,13 @@ import jakarta.persistence.Table;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class RetroCardEntity extends BaseEntity {
 
-  @Column(columnDefinition = "text")
+    @Column(columnDefinition = "text")
+    private String comment;
 
-  private String comment;
+    // This will be updated concurrently and requires atomic additions instead of first one wins as with other data, careful...
+    // TODO: check for atomics on reactive environments?
+    private Short votes;
 
-  // This can / will be updated concurrently, careful...
-  private short votes;
-
-  @ManyToOne
-  private RetrospectiveEntity retroBoard;
+    @ManyToOne
+    private RetrospectiveEntity retroBoard;
 }

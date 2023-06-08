@@ -10,8 +10,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 import java.time.LocalDate;
 
+/**
+ * this class represents the schedule entry table and it's relations.
+ */
 @Entity
 @Table(name = "schedule_entry")
 @Getter
@@ -19,19 +23,19 @@ import java.time.LocalDate;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class ScheduleEntryEntity extends BaseEntity {
 
-  private LocalDate scheduledFrom;
+    private LocalDate scheduledFrom;
 
-  private LocalDate scheduledTo;
+    private LocalDate scheduledTo;
 
-  private short scheduledHours;
+    private short scheduledHours;
 
-  @Column(columnDefinition = "boolean default false")
-  private Boolean isUnbounded; //when someone is scheduled from now to eternity
+    @Column(columnDefinition = "boolean default false")
+    private Boolean isUnbounded; //when someone is scheduled from now to eternity
 
-  @ManyToOne
-  private ScheduleEntity schedule;
+    @ManyToOne
+    private ScheduleEntity schedule;
 
-  @ManyToOne
-  private ProjectEntity project;
+    @ManyToOne
+    private ProjectEntity project;
 
 }

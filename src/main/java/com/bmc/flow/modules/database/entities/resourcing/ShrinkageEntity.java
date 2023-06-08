@@ -9,8 +9,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+
 import java.util.Set;
 
+/**
+ * this class represents the shrinkage table and it's relations.
+ */
 @Entity
 @Table(name = "shrinkage")
 @Getter
@@ -19,13 +23,13 @@ import java.util.Set;
 public class ShrinkageEntity extends BaseCatalogEntity {
 
 
-  @Column(nullable = true)
-  private Short durationInMin;
+    @Column(nullable = true)
+    private Short durationInMin;
 
-  @Column(nullable = true)
-  private Short percentage;
+    @Column(nullable = true)
+    private Short percentage;
 
-  @ManyToMany(mappedBy = "shrinkages")
-  private Set<ScheduleEntity> schedules;
+    @ManyToMany(mappedBy = "shrinkages")
+    private Set<ScheduleEntity> schedules;
 
 }

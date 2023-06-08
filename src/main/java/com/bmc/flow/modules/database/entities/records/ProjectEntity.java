@@ -11,11 +11,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
 import static jakarta.persistence.CascadeType.*;
 
+/**
+ * this class represents the project table and it's relations.
+ */
 @Entity
 @Table(name = "project")
 @Getter
@@ -23,33 +27,33 @@ import static jakarta.persistence.CascadeType.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class ProjectEntity extends BaseRecordEntity {
 
-  @OneToMany(mappedBy = "project", cascade = ALL)
-  private Set<BoardEntity> boards = new HashSet<>();
+    @OneToMany(mappedBy = "project", cascade = ALL)
+    private Set<BoardEntity> boards = new HashSet<>();
 
-  @OneToMany(mappedBy = "project", cascade = ALL)
-  private Set<CardEntity> cards = new HashSet<>();
+    @OneToMany(mappedBy = "project", cascade = ALL)
+    private Set<CardEntity> cards = new HashSet<>();
 
-  @OneToMany(mappedBy = "project", cascade = ALL)
-  private Set<RetrospectiveEntity> retroBoards = new HashSet<>();
+    @OneToMany(mappedBy = "project", cascade = ALL)
+    private Set<RetrospectiveEntity> retroBoards = new HashSet<>();
 
-  @OneToMany(mappedBy = "project", cascade = ALL)
-  private Set<ScheduleEntryEntity> scheduling;
+    @OneToMany(mappedBy = "project", cascade = ALL)
+    private Set<ScheduleEntryEntity> scheduling;
 
-  @OneToMany(mappedBy = "project", cascade = ALL)
-  private Set<BoardColumnEntity> boardColumns = new HashSet<>();
+    @OneToMany(mappedBy = "project", cascade = ALL)
+    private Set<BoardColumnEntity> boardColumns = new HashSet<>();
 
-  @ManyToMany(cascade = {PERSIST, MERGE})
-  @JoinTable(name = "project_users", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-  private Set<UserEntity> users = new HashSet<>();
+    @ManyToMany(cascade = {PERSIST, MERGE})
+    @JoinTable(name = "project_users", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserEntity> users = new HashSet<>();
 
-  @ManyToMany(cascade = {PERSIST, MERGE})
-  @JoinTable(name = "project_labels", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "label_id"))
-  private Set<LabelEntity> labels = new HashSet<>();
+    @ManyToMany(cascade = {PERSIST, MERGE})
+    @JoinTable(name = "project_labels", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "label_id"))
+    private Set<LabelEntity> labels = new HashSet<>();
 
-  @ManyToOne
-  private UserEntity projectLead;
+    @ManyToOne
+    private UserEntity projectLead;
 
-  @ManyToOne
-  private AccountEntity account;
+    @ManyToOne
+    private AccountEntity account;
 
 }

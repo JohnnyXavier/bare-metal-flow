@@ -9,12 +9,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 import static jakarta.persistence.CascadeType.*;
 
+/**
+ * this class represents the sprint table and it's relations.
+ */
 @Entity
 @Table(name = "sprint")
 @Getter
@@ -22,58 +26,59 @@ import static jakarta.persistence.CascadeType.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class SprintEntity extends BaseEntity {
 
-  private String name;
+    private String name;
 
-  @Column(columnDefinition = "text")
-  private String goal;
+    @Column(columnDefinition = "text")
+    private String goal;
 
-  private LocalDateTime fromDate;
+    private LocalDateTime fromDate;
 
-  private LocalDateTime toDate; // fromDate + cycle
+    private LocalDateTime toDate; // fromDate + cycle
 
-  private LocalDateTime startDate; // on.start()
+    private LocalDateTime startDate; // on.start()
 
-  private LocalDateTime closeDate; // on.close()
+    private LocalDateTime closeDate; // on.close()
 
-  private Short daysCycle;
+    private Short daysCycle;
 
-  @Column(columnDefinition = "boolean default false")
-  private Boolean hasStarted;
+    @Column(columnDefinition = "boolean default false")
+    private Boolean hasStarted;
 
 
-  @Column(columnDefinition = "boolean default false")
-  private Boolean isClosed;
+    @Column(columnDefinition = "boolean default false")
+    private Boolean isClosed;
 
-  @Column(columnDefinition = "boolean default false")
-  private Short currentPoints;
+    @Column(columnDefinition = "boolean default false")
+    private Short currentPoints;
 
-  private Short originalPoints; //on sprint.start() add the current here
+    private Short originalPoints; //on sprint.start() add the current here
 
-  private Short finalPoints; // on sprint.close() add the final card points here
+    private Short finalPoints; // on sprint.close() add the final card points here
 
-  @ManyToMany(cascade = {PERSIST, MERGE})
-  @JoinTable(name = "sprint_cards", joinColumns = @JoinColumn(name = "sprint_id"), inverseJoinColumns = @JoinColumn(name = "card_id"))
-  private Set<CardEntity> cards = new HashSet<>();
+    @ManyToMany(cascade = {PERSIST, MERGE})
+    @JoinTable(name = "sprint_cards", joinColumns = @JoinColumn(name = "sprint_id"), inverseJoinColumns = @JoinColumn(name = "card_id"))
+    private Set<CardEntity> cards = new HashSet<>();
 
-  @ManyToMany(cascade = {PERSIST, MERGE})
-  @JoinTable(name = "sprint_original_cards", joinColumns = @JoinColumn(name = "sprint_id"), inverseJoinColumns = @JoinColumn(name = "card_id"))
-  private Set<CardEntity> originalCards = new HashSet<>();
+    @ManyToMany(cascade = {PERSIST, MERGE})
+    @JoinTable(name = "sprint_original_cards", joinColumns = @JoinColumn(name = "sprint_id"),
+               inverseJoinColumns = @JoinColumn(name = "card_id"))
+    private Set<CardEntity> originalCards = new HashSet<>();
 
-  @ManyToMany(cascade = {PERSIST, MERGE})
-  @JoinTable(name = "sprint_users", joinColumns = @JoinColumn(name = "sprint_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-  private Set<UserEntity> users = new HashSet<>();
+    @ManyToMany(cascade = {PERSIST, MERGE})
+    @JoinTable(name = "sprint_users", joinColumns = @JoinColumn(name = "sprint_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserEntity> users = new HashSet<>();
 
-  @ManyToMany(cascade = {PERSIST, MERGE})
-  @JoinTable(name = "sprint_labels", joinColumns = @JoinColumn(name = "sprint_id"), inverseJoinColumns = @JoinColumn(name = "label_id"))
-  private Set<LabelEntity> labels = new HashSet<>();
+    @ManyToMany(cascade = {PERSIST, MERGE})
+    @JoinTable(name = "sprint_labels", joinColumns = @JoinColumn(name = "sprint_id"), inverseJoinColumns = @JoinColumn(name = "label_id"))
+    private Set<LabelEntity> labels = new HashSet<>();
 
-  @ManyToOne
-  private ProjectEntity project;
+    @ManyToOne
+    private ProjectEntity project;
 
-  @ManyToOne
-  private BoardEntity board;
+    @ManyToOne
+    private BoardEntity board;
 
-  @OneToOne(cascade = ALL)
-  private RetrospectiveEntity retroBoard;
+    @OneToOne(cascade = ALL)
+    private RetrospectiveEntity retroBoard;
 
 }

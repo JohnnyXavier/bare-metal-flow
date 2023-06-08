@@ -9,10 +9,14 @@ import lombok.Setter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 
+/**
+ * this class represents the board type table and it's relations.
+ */
 @Entity
 @Table(name = "board_type")
 @Getter
@@ -20,7 +24,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class BoardTypeEntity extends BaseCatalogEntity {
 
-  @OneToMany(mappedBy = "boardType", cascade = ALL)
-  private Set<BoardEntity> board;
+    @OneToMany(mappedBy = "boardType", cascade = ALL)
+    private Set<BoardEntity> board;
 
 }

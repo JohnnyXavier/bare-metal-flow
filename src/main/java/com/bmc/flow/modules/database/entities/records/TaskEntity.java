@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +16,9 @@ import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.FetchType.LAZY;
 
+/**
+ * this class represents the task table and it's relations.
+ */
 @Entity
 @Table(name = "task")
 @Getter
@@ -22,21 +26,22 @@ import static jakarta.persistence.FetchType.LAZY;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class TaskEntity extends BaseEntity {
 
-  private String name;
+    private String name;
 
-  private LocalDateTime dueDate;
+    private LocalDateTime dueDate;
 
-  // this gets set when is completed is true
-  private LocalDateTime completedDate;
+    // this gets set when is completed is true
+    private LocalDateTime completedDate;
 
-  @Column(columnDefinition = "boolean default false")
-  private Boolean isCompleted;
+    @Column(columnDefinition = "boolean default false")
+    private Boolean isCompleted;
 
-  @ManyToOne(fetch = LAZY)
-  private CardEntity card;
+    @ManyToOne(fetch = LAZY)
+    private CardEntity card;
 
-  @ManyToMany(cascade = {PERSIST, MERGE}, fetch = LAZY)
-  @JoinTable(name = "tasks_users_assigned", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-  private Set<UserEntity> assignedTo = new HashSet<>();
+    @ManyToMany(cascade = {PERSIST, MERGE}, fetch = LAZY)
+    @JoinTable(name = "tasks_users_assigned", joinColumns = @JoinColumn(name = "task_id"),
+               inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserEntity> assignedTo = new HashSet<>();
 
 }

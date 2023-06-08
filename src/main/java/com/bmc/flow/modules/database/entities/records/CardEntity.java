@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.persistence.*;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -22,104 +23,118 @@ import java.util.UUID;
 
 import static jakarta.persistence.CascadeType.*;
 
+/**
+ * this class represents the card table and it's relations.
+ */
 @Entity
 @Table(name = "card")
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @SqlResultSetMapping(name = "cardMapping",
-    classes = {
-        @ConstructorResult(targetClass = CardSimpleDto.class,
-            columns = {
-                @ColumnResult(name = "id", type = UUID.class),
-                @ColumnResult(name = "name"),
-                @ColumnResult(name = "description"),
-                @ColumnResult(name = "created_at", type = LocalDateTime.class)}
-        )}
+                     classes = {
+                         @ConstructorResult(targetClass = CardSimpleDto.class,
+                                            columns = {
+                                                @ColumnResult(name = "id", type = UUID.class),
+                                                @ColumnResult(name = "name"),
+                                                @ColumnResult(name = "description"),
+                                                @ColumnResult(name = "created_at", type = LocalDateTime.class)}
+                         )}
 )
 public class CardEntity extends BaseEntity {
 
-  /**
-   * this should allow to store relative positions of a few thousand cards without triggering a reshuffle. with a fairly large gap we may
-   * not need to trigger a reordering of cards if we insert at the tail we can go position + gap if we insert at the head we can go 0 - gap
-   * this will give us 2<sup>63</sup>.-1 on each side of the zero
-   */
-  private Long position;
+    /**
+     * this should allow to store relative positions of a few thousand cards without triggering a reshuffle.
+     * <p>
+     * with a fairly large gap we may not need to trigger a reordering of cards if when inserting at the tail we go "position + gap" and
+     * when insert at the head we can go "0 - gap"
+     * <p>
+     * this will give us 2<sup>63</sup>.-1 on each side of the zero, and we will better tackle contention on head reordering (move to top
+     * operation). Contention for the "in between" placing operation will remain the same.
+     */
+    private Long position;
 
-  @Column(length = 512)
-  private String name;
+    @Column(length = 512)
+    private String name;
 
-  @Column(columnDefinition = "text")
-  private String description;
+    @Column(columnDefinition = "text")
+    private String description;
 
-  // FIXME:
-  //  maybe make an attachment entity that will have
-  //  name | type(img/vid/doc/text/link/etc) | url/src @ | sizeX | sizeY | sizeBytes |
-  @Column(length = 1024)
-  private String        coverImage;
-  private LocalDateTime dueDate;
-  private LocalDateTime completedDate;
-  private Duration      estimatedTime;
-  private Duration      loggedTime;
-  private Duration      remainingTime;
+    // FIXME:
+    //  maybe make an attachment entity that will have
+    //  name | type(img/vid/doc/text/link/etc) | url/src @ | sizeX | sizeY | sizeBytes |
+    @Column(length = 1024)
+    private String coverImage;
 
-  @Column(columnDefinition = "boolean default false")
-  private Boolean isCompleted;
+    private LocalDateTime dueDate;
 
-  @Column(nullable = true)
-  private Short bugsReported;
+    private LocalDateTime completedDate;
 
-  // generic tasks, definition of done, definition of ready
-  @OneToMany(mappedBy = "card", cascade = ALL)
-  private Set<TaskEntity> tasks = new HashSet<>();
+    private Duration estimatedTime;
 
-  @OneToMany(mappedBy = "card", cascade = ALL)
-  private Set<CommentEntity> comments = new HashSet<>();
+    private Duration loggedTime;
 
-  @ManyToMany(mappedBy = "cards")
-  private Set<SprintEntity> sprint;
+    private Duration remainingTime;
 
-  @OneToMany(mappedBy = "card", cascade = ALL)
-  private Set<ChangelogEntity> changelog = new HashSet<>();
+    @Column(columnDefinition = "boolean default false")
+    private Boolean isCompleted;
 
-  @OneToMany(mappedBy = "card", cascade = ALL)
-  private Set<CardBugReport> bugReports = new HashSet<>();
+    @Column(nullable = true)
+    private Short bugsReported;
 
-  @ManyToMany(cascade = ALL)
-  @JoinTable(name = "card_attachments", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name =
-      "attachment_id"))
-  private Set<AttachmentEntity> attachments = new HashSet<>();
+    // generic tasks, definition of done, definition of ready
+    @OneToMany(mappedBy = "card", cascade = ALL)
+    private Set<TaskEntity> tasks = new HashSet<>();
 
-  @ManyToMany(cascade = {PERSIST, MERGE})
-  @JoinTable(name = "card_users_assigned", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-  private Set<UserEntity> assignees = new HashSet<>();
+    @OneToMany(mappedBy = "card", cascade = ALL)
+    private Set<CommentEntity> comments = new HashSet<>();
 
-  @ManyToMany(cascade = {PERSIST, MERGE})
-  @JoinTable(name = "card_users_watchers", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-  private Set<UserEntity> watchers = new HashSet<>();
+    @ManyToMany(mappedBy = "cards")
+    private Set<SprintEntity> sprint;
 
-  @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<CardLabelEntity> labels = new HashSet<>();
+    @OneToMany(mappedBy = "card", cascade = ALL)
+    private Set<ChangelogEntity> changelog = new HashSet<>();
 
-  @ManyToOne
-  private BoardEntity board;
+    @OneToMany(mappedBy = "card", cascade = ALL)
+    private Set<CardBugReport> bugReports = new HashSet<>();
 
-  @ManyToOne
-  private BoardColumnEntity boardColumn;
+    @ManyToMany(cascade = ALL)
+    @JoinTable(name = "card_attachments", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name =
+        "attachment_id"))
+    private Set<AttachmentEntity> attachments = new HashSet<>();
 
-  @ManyToOne
-  private ProjectEntity project;
+    @ManyToMany(cascade = {PERSIST, MERGE})
+    @JoinTable(name = "card_users_assigned", joinColumns = @JoinColumn(name = "card_id"),
+               inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserEntity> assignees = new HashSet<>();
 
-  @ManyToOne
-  private AccountEntity account;
+    @ManyToMany(cascade = {PERSIST, MERGE})
+    @JoinTable(name = "card_users_watchers", joinColumns = @JoinColumn(name = "card_id"),
+               inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserEntity> watchers = new HashSet<>();
 
-  @ManyToOne
-  private CardTypeEntity cardType;
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CardLabelEntity> labels = new HashSet<>();
 
-  @ManyToOne
-  private StatusEntity cardStatus;
+    @ManyToOne
+    private BoardEntity board;
 
-  @ManyToOne
-  private CardDifficultyEntity cardDifficulty;
+    @ManyToOne
+    private BoardColumnEntity boardColumn;
+
+    @ManyToOne
+    private ProjectEntity project;
+
+    @ManyToOne
+    private AccountEntity account;
+
+    @ManyToOne
+    private CardTypeEntity cardType;
+
+    @ManyToOne
+    private StatusEntity cardStatus;
+
+    @ManyToOne
+    private CardDifficultyEntity cardDifficulty;
 
 }

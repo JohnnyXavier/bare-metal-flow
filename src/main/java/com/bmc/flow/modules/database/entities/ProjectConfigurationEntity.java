@@ -9,8 +9,14 @@ import lombok.Setter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
 import java.util.UUID;
 
+/**
+ * this class represents the project configuration table and it's relations.
+ * <p>
+ * a project configuration allows to define defaults per projects.
+ */
 @Entity
 @Table(name = "project_configuration")
 @Getter
@@ -18,15 +24,15 @@ import java.util.UUID;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class ProjectConfigurationEntity extends BaseEntity {
 
-  private Integer hoursADay;
+    private Integer hoursADay;
 
-  private UUID cardDifficultyDefault;
+    private UUID cardDifficultyDefault;
 
-  private UUID cardStatusDefault;
+    private UUID cardStatusDefault;
 
-  private UUID cardTypeDefault;
+    private UUID cardTypeDefault;
 
-  @OneToOne
-  private ProjectEntity project;
+    @OneToOne
+    private ProjectEntity project;
 
 }

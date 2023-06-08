@@ -14,59 +14,64 @@ import java.util.UUID;
 
 import static jakarta.persistence.FetchType.LAZY;
 
+/**
+ * this class represents the card label table and it's relations.
+ * <p>
+ * this table is the more efficient approach of a many-to-many table for card and labels.
+ */
 @Entity
 @Table(name = "card_label")
 @Getter
 @Setter
 @NamedNativeQuery(name = "CardLabel.findAllByBoardId",
-    query = "select cl.card_id, cl.label_id, l.name, l.description, l.color_hex" +
-        " from card_label cl" +
-        " join label l on l.id = cl.label_id" +
-        " where cl.board_id = :boardId",
-    resultSetMapping = "Mapping.CardLabelDto")
+                  query = "select cl.card_id, cl.label_id, l.name, l.description, l.color_hex" +
+                      " from card_label cl" +
+                      " join label l on l.id = cl.label_id" +
+                      " where cl.board_id = :boardId",
+                  resultSetMapping = "Mapping.CardLabelDto")
 @NamedNativeQuery(name = "CardLabel.findAllByCardId",
-    query = "select cl.card_id, cl.label_id, l.name, l.description, l.color_hex" +
-        " from card_label cl" +
-        " join label l on l.id = cl.label_id" +
-        " where cl.card_id = :id",
-    resultSetMapping = "Mapping.CardLabelDto")
+                  query = "select cl.card_id, cl.label_id, l.name, l.description, l.color_hex" +
+                      " from card_label cl" +
+                      " join label l on l.id = cl.label_id" +
+                      " where cl.card_id = :id",
+                  resultSetMapping = "Mapping.CardLabelDto")
 @SqlResultSetMapping(name = "Mapping.CardLabelDto",
-    classes = {
-        @ConstructorResult(targetClass = CardLabelDto.class,
-            columns = {
-                @ColumnResult(name = "card_id", type = UUID.class),
-                @ColumnResult(name = "label_id", type = UUID.class),
-                @ColumnResult(name = "name"),
-                @ColumnResult(name = "description"),
-                @ColumnResult(name = "color_hex")
-            }
-        )}
+                     classes = {
+                         @ConstructorResult(targetClass = CardLabelDto.class,
+                                            columns = {
+                                                @ColumnResult(name = "card_id", type = UUID.class),
+                                                @ColumnResult(name = "label_id", type = UUID.class),
+                                                @ColumnResult(name = "name"),
+                                                @ColumnResult(name = "description"),
+                                                @ColumnResult(name = "color_hex")
+                                            }
+                         )}
 )
-//@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+//@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 // FIXME: revisit the equals and hashcode on this entity
 public class CardLabelEntity {
 
-  @EmbeddedId
-  private CardLabelId id;
+    @EmbeddedId
+    private CardLabelId id;
 
-  @ManyToOne(fetch = LAZY)
-  @MapsId("cardId")
-  private CardEntity card;
+    @ManyToOne(fetch = LAZY)
+    @MapsId("cardId")
+    private CardEntity card;
 
-  @ManyToOne(fetch = LAZY)
-  @MapsId("labelId")
-  private LabelEntity label;
+    @ManyToOne(fetch = LAZY)
+    @MapsId("labelId")
+    private LabelEntity label;
 
-  @ManyToOne(fetch = LAZY)
-  private BoardEntity board;
+    @ManyToOne(fetch = LAZY)
+    private BoardEntity board;
 
-  @ManyToOne(fetch = LAZY)
-  private UserEntity createdBy;
+    @ManyToOne(fetch = LAZY)
+    private UserEntity createdBy;
 
-  @CreationTimestamp
-  @Column(updatable = false)
-  private LocalDateTime createdAt;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
-  // there is no need to have an "updatedAt" field given that no field here is updatable
-  // either it is and entry on the db, or it is not
+    // there is no need to have an "updatedAt" field given that no field here is updatable
+    // either it is and entry on the db, or it is not
 }

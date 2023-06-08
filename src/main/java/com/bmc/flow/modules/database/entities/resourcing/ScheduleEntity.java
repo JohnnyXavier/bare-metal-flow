@@ -7,11 +7,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
 import static jakarta.persistence.CascadeType.*;
 
+/**
+ * this class represents the schedule table and it's relations.
+ */
 @Entity
 @Table(name = "schedule")
 @Getter
@@ -19,16 +23,17 @@ import static jakarta.persistence.CascadeType.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class ScheduleEntity extends BaseEntity {
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @MapsId
-  private UserEntity user;
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    private UserEntity user;
 
-  private short hoursADay;
+    private short hoursADay;
 
-  @OneToMany(mappedBy = "schedule", cascade = ALL, fetch = FetchType.LAZY)
-  private Set<ScheduleEntryEntity> scheduleEntries = new HashSet<>();
+    @OneToMany(mappedBy = "schedule", cascade = ALL, fetch = FetchType.LAZY)
+    private Set<ScheduleEntryEntity> scheduleEntries = new HashSet<>();
 
-  @ManyToMany(cascade = {PERSIST, MERGE}, fetch = FetchType.LAZY)
-  @JoinTable(name = "schedule_shrinkages", joinColumns = @JoinColumn(name = "schedule_id"), inverseJoinColumns = @JoinColumn(name = "shrinkage_id"))
-  private Set<ShrinkageEntity> shrinkages = new HashSet<>();
+    @ManyToMany(cascade = {PERSIST, MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(name = "schedule_shrinkages", joinColumns = @JoinColumn(name = "schedule_id"),
+               inverseJoinColumns = @JoinColumn(name = "shrinkage_id"))
+    private Set<ShrinkageEntity> shrinkages = new HashSet<>();
 }

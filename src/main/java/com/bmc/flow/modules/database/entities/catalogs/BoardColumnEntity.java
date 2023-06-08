@@ -13,11 +13,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 
+/**
+ * this class represents the board column table and it's relations.
+ */
 @Entity
 @Table(name = "board_column")
 @Getter
@@ -25,21 +29,21 @@ import static jakarta.persistence.CascadeType.ALL;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class BoardColumnEntity extends BaseEntity {
 
-  private String name;
+    private String name;
 
-  @ManyToOne
-  private StatusEntity status;
+    @ManyToOne
+    private StatusEntity status;
 
-  @ManyToOne
-  private BoardEntity board;
+    @ManyToOne
+    private BoardEntity board;
 
-  @ManyToOne
-  private ProjectEntity project;
+    @ManyToOne
+    private ProjectEntity project;
 
-  @ManyToOne
-  private AccountEntity account;
+    @ManyToOne
+    private AccountEntity account;
 
-  @OneToMany(mappedBy = "boardColumn", cascade = ALL)
-  private Set<CardEntity> cards = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "boardColumn", cascade = ALL)
+    private Set<CardEntity> cards = new LinkedHashSet<>();
 
 }

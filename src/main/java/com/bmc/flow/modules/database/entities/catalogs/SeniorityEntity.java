@@ -9,11 +9,15 @@ import lombok.Setter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import java.util.HashSet;
 import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 
+/**
+ * this class represents the seniority table and it's relations.
+ */
 @Entity
 @Table(name = "seniority")
 @Getter
@@ -21,9 +25,9 @@ import static jakarta.persistence.CascadeType.ALL;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class SeniorityEntity extends BaseCatalogEntity {
 
-  @OneToMany(mappedBy = "seniority", cascade = ALL)
-  public Set<UserEntity> users = new HashSet<>();
+    private Short level;
 
-  private short level;
+    @OneToMany(mappedBy = "seniority", cascade = ALL)
+    public Set<UserEntity> users = new HashSet<>();
 
 }

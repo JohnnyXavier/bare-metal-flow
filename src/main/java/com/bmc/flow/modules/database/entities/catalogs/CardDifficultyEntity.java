@@ -9,11 +9,15 @@ import lombok.Setter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import java.util.HashSet;
 import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 
+/**
+ * this class represents the card difficulty table and it's relations.
+ */
 @Entity
 @Table(name = "card_difficulty")
 @Getter
@@ -21,9 +25,9 @@ import static jakarta.persistence.CascadeType.ALL;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class CardDifficultyEntity extends BaseCatalogEntity {
 
-  private short level;
+    private Short level;
 
-  @OneToMany(mappedBy = "cardDifficulty", cascade = ALL)
-  private Set<CardEntity> cards = new HashSet<>();
+    @OneToMany(mappedBy = "cardDifficulty", cascade = ALL)
+    private Set<CardEntity> cards = new HashSet<>();
 
 }

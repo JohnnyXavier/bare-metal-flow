@@ -2,18 +2,21 @@ package com.bmc.flow.modules.database.entities.catalogs;
 
 import com.bmc.flow.modules.database.entities.base.BaseCatalogEntity;
 import com.bmc.flow.modules.database.entities.records.CardEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
-import static jakarta.persistence.CascadeType.ALL;
-
+/**
+ * this class represents the card status table and it's relations.
+ * <p>
+ * will probably migrate to a general status instead of the specialized card status it is now.
+ */
 @Entity
 @Table(name = "card_status")
 @Getter
@@ -21,10 +24,10 @@ import static jakarta.persistence.CascadeType.ALL;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class StatusEntity extends BaseCatalogEntity {
 
-  @OneToMany(mappedBy = "cardStatus", cascade = ALL)
-  private Set<CardEntity> cards = new HashSet<>();
+    @OneToMany(mappedBy = "cardStatus")
+    private Set<CardEntity> cards = new HashSet<>();
 
-  @OneToMany(mappedBy = "status", cascade = ALL)
-  private Set<BoardColumnEntity> boardColumns = new HashSet<>();
+    @OneToMany(mappedBy = "status")
+    private Set<BoardColumnEntity> boardColumns = new HashSet<>();
 
 }

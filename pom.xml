@@ -49,7 +49,7 @@
             <artifactId>quarkus-reactive-pg-client</artifactId>
         </dependency>
 
-        <!-- quarkus utilities dependencies -->
+        <!-- data utilities dependencies -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-cache</artifactId>
