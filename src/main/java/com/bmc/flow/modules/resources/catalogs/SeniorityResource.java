@@ -14,11 +14,8 @@ import jakarta.ws.rs.Produces;
 @Produces("application/json")
 public class SeniorityResource extends BasicCatalogResource<SeniorityDto, SeniorityEntity> {
 
-    private final SeniorityService seniorityService;
-
     public SeniorityResource(final SeniorityService seniorityService) {
         super(seniorityService);
-        this.seniorityService = seniorityService;
     }
 
 }

@@ -14,11 +14,8 @@ import jakarta.ws.rs.Produces;
 @Produces("application/json")
 public class CardStatusResource extends BasicCatalogResource<StatusDto, StatusEntity> {
 
-    private final CardStatusService cardStatusService;
-
     public CardStatusResource(final CardStatusService cardStatusService) {
         super(cardStatusService);
-        this.cardStatusService = cardStatusService;
     }
 
 }

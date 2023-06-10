@@ -26,7 +26,7 @@ public class ScheduleEntryEntity extends BaseEntity {
 
     private LocalDate scheduledTo;
 
-    private short scheduledHours;
+    private Short scheduledHours;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean isUnbounded; //when someone is scheduled from now to eternity

@@ -14,11 +14,8 @@ import jakarta.ws.rs.Produces;
 @Produces("application/json")
 public class CardTypeResource extends BasicCatalogResource<CardTypeDto, CardTypeEntity> {
 
-    private final CardTypeService cardTypeService;
-
     public CardTypeResource(final CardTypeService cardTypeService) {
         super(cardTypeService);
-        this.cardTypeService = cardTypeService;
     }
 
 }

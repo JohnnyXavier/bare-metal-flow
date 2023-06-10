@@ -21,7 +21,7 @@ public class SeniorityDto extends BaseCatalogDto {
     @NotNull
     private Short level;
 
-    public SeniorityDto(final UUID id, final String name, final String description, final Boolean isSystem, final short level,
+    public SeniorityDto(final UUID id, final String name, final String description, final Boolean isSystem, final Short level,
                         final LocalDateTime createdAt,
                         @ProjectedFieldName("createdBy.id") final UUID createdBy) {
         this.id          = id;

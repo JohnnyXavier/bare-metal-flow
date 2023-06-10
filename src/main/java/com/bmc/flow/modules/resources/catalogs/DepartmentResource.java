@@ -14,11 +14,8 @@ import jakarta.ws.rs.Produces;
 @Produces("application/json")
 public class DepartmentResource extends BasicCatalogResource<DepartmentDto, DepartmentEntity> {
 
-    private final DepartmentService departmentService;
-
     public DepartmentResource(final DepartmentService departmentService) {
         super(departmentService);
-        this.departmentService = departmentService;
     }
 
 }

@@ -26,7 +26,7 @@ public class ScheduleEntity extends BaseEntity {
     @MapsId
     private UserEntity user;
 
-    private short hoursADay;
+    private Short hoursADay;
 
     @OneToMany(mappedBy = "schedule", cascade = ALL, fetch = FetchType.LAZY)
     private Set<ScheduleEntryEntity> scheduleEntries = new HashSet<>();

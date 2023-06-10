@@ -14,11 +14,8 @@ import jakarta.ws.rs.Produces;
 @Produces("application/json")
 public class ShrinkageResource extends BasicCatalogResource<ShrinkageDto, ShrinkageEntity> {
 
-    private final ShrinkageService shrinkageService;
-
     public ShrinkageResource(final ShrinkageService shrinkageService) {
         super(shrinkageService);
-        this.shrinkageService = shrinkageService;
     }
 
 }
