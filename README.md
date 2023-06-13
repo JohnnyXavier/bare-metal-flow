@@ -1,4 +1,14 @@
-# bare-metal-flow ProjectEntity
+# bare-metal-flow
+
+**bare-metal-flow** or **Anvil**, have not settled on a name yet... is a fragment of a fully functioning app, that will eventually become a
+fully functioning app.
+
+to understand what it does and why this exists check the accompanying website.
+[bare metal code - Anvil](https://www.baremetalcode.com/bmc_showcase/)
+
+---
+
+## bare-metal-flow tech
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
