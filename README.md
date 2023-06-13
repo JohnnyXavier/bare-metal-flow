@@ -3,7 +3,16 @@
 **bare-metal-flow** or **Anvil**, have not settled on a name yet... is a fragment of a fully functioning app, that will eventually become a
 fully functioning app.
 
-to understand what it does and why this exists check the accompanying website.
+it is a showcase app targeting recruiters and tech interviewers, but in time, as I add more features it'll turn it into a full
+application.
+
+I made also a front end code that will be showcased in videos and screenshots, but it is a licensed template for which I have a professional
+use license but not yet a FOSS one.
+
+for the moment the project looks like this:
+![hero-kanban-dark.jpeg](hero-kanban-dark.jpeg)
+
+to understand what it does and why this exists in more detail check the accompanying website.<br>
 [bare metal code - Anvil](https://www.baremetalcode.com/bmc_showcase/)
 
 ---
