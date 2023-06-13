@@ -14,11 +14,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
 
-import java.util.AbstractMap;
-import java.util.Map;
 import java.util.UUID;
-
-import static java.util.Map.ofEntries;
 
 /**
  * this class is the rest resource handling Label requests.
@@ -28,10 +24,6 @@ import static java.util.Map.ofEntries;
 public class LabelResource extends BasicCatalogResource<LabelDto, LabelEntity> {
 
     private final LabelService labelService;
-
-    private final Map<String, String> userSupportedCollections = ofEntries(
-        new AbstractMap.SimpleImmutableEntry<>("card", "card")
-    );
 
     public LabelResource(final LabelService labelService) {
         super(labelService);
