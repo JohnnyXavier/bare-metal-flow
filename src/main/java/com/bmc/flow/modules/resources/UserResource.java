@@ -80,8 +80,12 @@ public class UserResource extends BasicOpsResource<UserDto, UserEntity> {
     public Uni<Response> register(final UserRegistrationDto fromDto) {
         return userService.register(fromDto)
                           .map(newlyCreatedDto -> {
-                              Cookie cookie = new Cookie("userId", newlyCreatedDto.getId().toString(), "/", "localhost");
-                              return Response.ok(newlyCreatedDto).status(CREATED).cookie(new NewCookie(cookie)).build();
+                              Cookie cookie = new Cookie.Builder("userId")
+                                  .value(newlyCreatedDto.getId().toString())
+                                  .path("/")
+                                  .domain("localhost")
+                                  .build();
+                              return Response.ok(newlyCreatedDto).status(CREATED).cookie(new NewCookie.Builder(cookie).build()).build();
                           })
                           .onFailure(ConstraintViolationException.class).recoverWithItem(ResponseUtils::violationsToResponse)
                           .onFailure(PgException.class).recoverWithItem(ResponseUtils::processPgException)
@@ -123,10 +127,23 @@ public class UserResource extends BasicOpsResource<UserDto, UserEntity> {
                        .singleResult()
                        .map(userEntity -> {
                            if (userEntity.getPassword().equals(password)) {
-                               Cookie cookie = new Cookie("userId", userEntity.getId().toString(), "/", "localhost");
-                               return Response.ok().cookie(new NewCookie(cookie)).build();
+                               NewCookie setUserIdCookie = new NewCookie.Builder("userId")
+                                   .value(userEntity.getId().toString())
+                                   .path("/")
+                                   .domain("localhost")
+                                   .build();
+
+                               return Response.ok().cookie(setUserIdCookie).build();
                            } else {
-                               return Response.status(UNAUTHORIZED).cookie(new NewCookie("userId", null)).build();
+                               NewCookie removeUserIdCookie = new NewCookie.Builder("userId")
+                                   .value(null)
+                                   .path("/")
+                                   .domain("localhost")
+                                   .maxAge(0)
+                                   .build();
+
+                               return Response.status(UNAUTHORIZED)
+                                              .cookie(removeUserIdCookie).build();
                            }
                        })
                        .onFailure(ConstraintViolationException.class).recoverWithItem(ResponseUtils::violationsToResponse)
