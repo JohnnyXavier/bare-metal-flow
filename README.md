@@ -38,7 +38,7 @@ You can run your application in dev mode that enables live coding using:
 The application can be packaged using:
 
 ```shell script
-./mvnw package
+mvn package
 ```
 
 It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
@@ -49,17 +49,20 @@ The application is now runnable using `java -jar target/quarkus-app/quarkus-run.
 If you want to build an _über-jar_, execute the following command:
 
 ```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
+mvn package -Dquarkus.package.type=uber-jar
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+The application, packaged as an _über-jar_, is now runnable using
+```shell script
+java -jar target/*-runner.jar
+```
 
 ## Creating a native executable
 
 You can create a native executable using:
 
 ```shell script
-./mvnw package -Pnative
+mvn package -Pnative
 ```
 
 Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
@@ -76,6 +79,11 @@ If you want to learn more about building native executables, please consult http
 
 - Hibernate ORM ([guide](https://quarkus.io/guides/hibernate-orm)): Define your persistent model with Hibernate ORM and
   JPA
+- Hibernate Validator ([guide](https://quarkus.io/guides/validation)): Validate object properties (field, getter) and method parameters for
+  your beans (REST, CDI, Jakarta Persistence)
+- Reactive PostgreSQL client ([guide](https://quarkus.io/guides/reactive-sql-clients)): Connect to the PostgreSQL database using the
+  reactive pattern
+- Cache ([guide](https://quarkus.io/guides/cache)): Enable application data caching in CDI beans
 - Micrometer Registry Prometheus ([guide](https://quarkus.io/guides/micrometer)): Enable Prometheus support for
   Micrometer
 - YAML Configuration ([guide](https://quarkus.io/guides/config#yaml)): Use YAML to configure your Quarkus application

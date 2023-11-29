@@ -130,15 +130,15 @@ public abstract class BasicPersistenceService<D, E> {
      *        id=?3
      *
      * @param toUpdate -
-     * @param methods  -
+     * @param methodName  -
      * @param value    -
      *
      * @return -
      */
     @WithTransaction
     @SneakyThrows
-    protected Uni<Void> updateInPlace(final E toUpdate, final MethodNames methods, final Object value) {
-        Method m = toUpdate.getClass().getMethod(methods.getMethodName(), value.getClass());
+    protected Uni<Void> updateInPlace(final E toUpdate, final MethodNames methodName, final Object value) {
+        final Method m = toUpdate.getClass().getMethod(methodName.getMethodName(), value.getClass());
         m.invoke(toUpdate, value);
 
         return Uni.createFrom().voidItem();

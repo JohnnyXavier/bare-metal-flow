@@ -1,6 +1,7 @@
 package com.bmc.flow.modules.service.base;
 
 import io.quarkus.panache.common.Page;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import java.util.List;
  */
 @Setter
 @Getter
+@RegisterForReflection
 public class PageResult<D> {
 
     private List<D> resultSet;
@@ -27,6 +29,7 @@ public class PageResult<D> {
 
     @Setter
     @Getter
+    @RegisterForReflection
     private static class Pagination {
 
         private Long itemCount;

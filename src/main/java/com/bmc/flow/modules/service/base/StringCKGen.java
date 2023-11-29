@@ -1,6 +1,7 @@
 package com.bmc.flow.modules.service.base;
 
 import io.quarkus.cache.CacheKeyGenerator;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.extern.jbosslog.JBossLog;
 
 import java.lang.reflect.Method;
@@ -11,6 +12,7 @@ import java.lang.reflect.Method;
  * this allows for dynamic keys generation.
  */
 @JBossLog
+@RegisterForReflection
 public class StringCKGen implements CacheKeyGenerator {
 
     @Override

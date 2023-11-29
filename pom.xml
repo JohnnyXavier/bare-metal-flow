@@ -7,15 +7,22 @@
     <artifactId>bare-metal-flow</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
+        <!-- maven / compiler / project properties -->
         <compiler-plugin.version>3.11.0</compiler-plugin.version>
-        <maven.compiler.release>20</maven.compiler.release>
+        <maven.compiler.release>21</maven.compiler.release>
+<!--        <maven.compiler.release>22</maven.compiler.release> pg / lombok incompatibilities-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- quarkus  -->
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.1.2.Final</quarkus.platform.version>
-        <skipITs>true</skipITs>
+        <quarkus.platform.version>3.5.3</quarkus.platform.version>
+        <!-- Other plugins settings -->
         <surefire-plugin.version>3.0.0</surefire-plugin.version>
+        <!-- Other properties-->
+        <skipITs>true</skipITs>
+        <!-- Other versions-->
+        <version.lombok>1.18.30</version.lombok>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -73,7 +80,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.26</version>
+            <scope>compile</scope>
+            <version>${version.lombok}</version>
         </dependency>
 
         <!-- test dependencies -->
@@ -120,6 +128,7 @@
                 <configuration>
                     <systemPropertyVariables>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                        <!--suppress UnresolvedMavenProperty -->
                         <maven.home>${maven.home}</maven.home>
                     </systemPropertyVariables>
                 </configuration>
@@ -138,6 +147,7 @@
                                 <native.image.path>${project.build.directory}/${project.build.finalName}-runner
                                 </native.image.path>
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                                <!--suppress UnresolvedMavenProperty -->
                                 <maven.home>${maven.home}</maven.home>
                             </systemPropertyVariables>
                         </configuration>
