@@ -1,3 +1,6 @@
+### Analysis Status
+[![Qodana](https://github.com/JohnnyXavier/bare-metal-flow/actions/workflows/code_quality.yml/badge.svg)](https://github.com/JohnnyXavier/bare-metal-flow/actions/workflows/code_quality.yml)
+
 # bare-metal-flow
 
 **bare-metal-flow** or **Anvil**, have not settled on a name yet... is a fragment of a fully functioning app, that will eventually become a
