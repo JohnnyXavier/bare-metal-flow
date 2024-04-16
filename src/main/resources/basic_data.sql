@@ -42,7 +42,7 @@ declare
     seniority_jr uuid;
     seniority_sr uuid;
     --
-    system_user uuid;
+    system_user_bmc uuid;
     user_two uuid;
     user_three uuid;
     user_four uuid;
@@ -136,7 +136,7 @@ default_description := ''default description'';
 seniority_jr := ''e73b9f18-b57b-466a-b614-81301b6389ea'';
 seniority_sr := ''fb408e5b-72f1-42fe-b5b9-4cb802e3daf9'';
 
-system_user := ''7132ad6d-6c39-4ff0-bf7e-e7eb6091f50b'';
+system_user_bmc := ''7132ad6d-6c39-4ff0-bf7e-e7eb6091f50b'';
 user_two := ''9c540951-b340-46cb-b1be-331f3ef9d8c5'';
 user_three := gen_random_uuid();
 user_four := gen_random_uuid();
@@ -186,143 +186,143 @@ label_important := gen_random_uuid();
 
 -- first create the default user to use it as creator of the rest of the domain
 insert into users(id, email, call_sign, password, avatar, seniority_id, created_at, updated_at, created_by_id) VALUES
-    (system_user, ''admin@demo.com'', ''admin user'', ''admin'', robohash || system_user || ''?set=set3'', null, cre_upd, cre_upd, system_user);
+    (system_user_bmc, ''admin@demo.com'', ''admin user'', ''admin'', robohash || system_user_bmc || ''?set=set3'', null, cre_upd, cre_upd, system_user_bmc);
 
 -- insert Catalog data
 insert into seniority(id, name, level, description, is_system, created_at, updated_at, created_by_id) VALUES
-    (gen_random_uuid(), ''placement'', 100, ''temporary training, none or minimal working experience'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''trainee'', 200, ''being trained on the job, requires full guidance'', true, cre_upd, cre_upd, system_user),
-    (seniority_jr, ''junior'', 300, ''can achieve simple tasks, requires heavy guidance'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''semi-sr'', 400, ''can achieve medium complex tasks, requires some guidance'', true, cre_upd, cre_upd, system_user),
-    (seniority_sr, ''senior'', 500, ''can achieve highly complex tasks, requires minimum to no guidance'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''architect'', 600, ''can achieve highly complex tasks, can design systems, requires no guidance'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''guru front end'', 600, ''front end houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''guru back end'', 600, ''back end houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''guru devops end'', 600, ''devops end houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''guru admin end'', 600, ''admin/ops houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user);
+    (gen_random_uuid(), ''placement'', 100, ''temporary training, none or minimal working experience'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''trainee'', 200, ''being trained on the job, requires full guidance'', true, cre_upd, cre_upd, system_user_bmc),
+    (seniority_jr, ''junior'', 300, ''can achieve simple tasks, requires heavy guidance'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''semi-sr'', 400, ''can achieve medium complex tasks, requires some guidance'', true, cre_upd, cre_upd, system_user_bmc),
+    (seniority_sr, ''senior'', 500, ''can achieve highly complex tasks, requires minimum to no guidance'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''architect'', 600, ''can achieve highly complex tasks, can design systems, requires no guidance'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''guru front end'', 600, ''front end houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''guru back end'', 600, ''back end houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''guru devops end'', 600, ''devops end houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''guru admin end'', 600, ''admin/ops houdini, go to expert when all hopes are lost'', true, cre_upd, cre_upd, system_user_bmc);
 
 insert into label(id, color_hex, description, name, created_at, updated_at, created_by_id, is_system) VALUES
-    (label_pers, ''#576CBC'', ''my personal stuff'', ''personal'', cre_upd, cre_upd, system_user, true),
-    (label_be, ''#B2A4FF'', ''this is a back-end label'', ''back-end'', cre_upd, cre_upd, system_user, true),
-    (label_fe, ''#655DBB'', ''this is a front-end label'', ''front-end'', cre_upd, cre_upd, system_user, true),
-    (label_devops, ''#0E8388'', ''this is a devops label'', ''devops'', cre_upd, cre_upd, system_user, true),
-    (label_qa, ''#C8B6A6'', ''this is a qa label'', ''qa'', cre_upd, cre_upd, system_user, true),
-    (label_urgent, ''#CC3636'', ''this is an URGENT label'', ''URGENT'', cre_upd, cre_upd, system_user, true),
-    (label_important, ''#ECA869'', ''this is an important label'', ''important'', cre_upd, cre_upd, system_user, true);
+    (label_pers, ''#576CBC'', ''my personal stuff'', ''personal'', cre_upd, cre_upd, system_user_bmc, true),
+    (label_be, ''#B2A4FF'', ''this is a back-end label'', ''back-end'', cre_upd, cre_upd, system_user_bmc, true),
+    (label_fe, ''#655DBB'', ''this is a front-end label'', ''front-end'', cre_upd, cre_upd, system_user_bmc, true),
+    (label_devops, ''#0E8388'', ''this is a devops label'', ''devops'', cre_upd, cre_upd, system_user_bmc, true),
+    (label_qa, ''#C8B6A6'', ''this is a qa label'', ''qa'', cre_upd, cre_upd, system_user_bmc, true),
+    (label_urgent, ''#CC3636'', ''this is an URGENT label'', ''URGENT'', cre_upd, cre_upd, system_user_bmc, true),
+    (label_important, ''#ECA869'', ''this is an important label'', ''important'', cre_upd, cre_upd, system_user_bmc, true);
 
 insert into card_status(id, name, is_system, created_at, updated_at, created_by_id) values
-    (card_status_new, ''new'', true, cre_upd, cre_upd, system_user),
-    (card_status_in_progress, ''in progress'', true, cre_upd, cre_upd, system_user),
-    (card_status_testing, ''testing'', true, cre_upd, cre_upd, system_user),
-    (card_status_done, ''done'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''blocked'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''blocked-internal'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''blocked-external'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''paused'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''testing-internal'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''testing-client'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''backlog'', true, cre_upd, cre_upd, system_user);
+    (card_status_new, ''new'', true, cre_upd, cre_upd, system_user_bmc),
+    (card_status_in_progress, ''in progress'', true, cre_upd, cre_upd, system_user_bmc),
+    (card_status_testing, ''testing'', true, cre_upd, cre_upd, system_user_bmc),
+    (card_status_done, ''done'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''blocked'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''blocked-internal'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''blocked-external'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''paused'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''testing-internal'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''testing-client'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''backlog'', true, cre_upd, cre_upd, system_user_bmc);
 
 insert into card_type(id, name, is_system, created_at, updated_at, created_by_id) values
-    (default_card_type, ''story'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''bug'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''epic'', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''task'', true, cre_upd, cre_upd, system_user);
+    (default_card_type, ''story'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''bug'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''epic'', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''task'', true, cre_upd, cre_upd, system_user_bmc);
 
 insert into card_difficulty(id, name, level, is_system, created_at, updated_at, created_by_id) values
-    (gen_random_uuid(), ''trivial'', 100, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''easy'', 200, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''medium'', 300, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''hard'', 400, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''very hard'', 500, true, cre_upd, cre_upd, system_user);
+    (gen_random_uuid(), ''trivial'', 100, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''easy'', 200, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''medium'', 300, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''hard'', 400, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''very hard'', 500, true, cre_upd, cre_upd, system_user_bmc);
 
 insert into board_type(id, name, description, is_system, created_at, updated_at, created_by_id) values
-    (board_type_kanban, ''kanban'', ''pick from a backlog working style'', true, cre_upd, cre_upd, system_user),
-    (board_type_sprint, ''sprint'', ''short iterations in time working style'', true, cre_upd, cre_upd, system_user);
+    (board_type_kanban, ''kanban'', ''pick from a backlog working style'', true, cre_upd, cre_upd, system_user_bmc),
+    (board_type_sprint, ''sprint'', ''short iterations in time working style'', true, cre_upd, cre_upd, system_user_bmc);
 
 insert into department(id, name, description, is_system, created_at, updated_at, created_by_id) VALUES
-    (department_eng, ''engineering'', '''', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''quality'', '''', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''operations'', '''', true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''finance'', '''', true, cre_upd, cre_upd, system_user);
+    (department_eng, ''engineering'', '''', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''quality'', '''', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''operations'', '''', true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''finance'', '''', true, cre_upd, cre_upd, system_user_bmc);
 
 insert into shrinkage(id, name, duration_in_min, percentage, is_system, created_at, updated_at, created_by_id) VALUES
-    (gen_random_uuid(), ''general-05-%'', null, 5, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''general-10-%'', null, 10, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''general-15-%'', null, 15, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''general-20-%'', null, 20, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''general-25-%'', null, 25, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''general-30-%'', null, 30, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''general-35-%'', null, 35, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''general-40-%'', null, 40, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''general-55-%'', null, 45, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''general-50-%'', null, 50, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''coffee-break-15-min'', 15, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''coffee-break-10-min'', 10, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''personal-break-5-min'', 5, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''personal-break-10-min'', 10, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''personal-break-15-min'', 15, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''agile-standUp-10-min'', 10, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''agile-standUp-15-min'', 15, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''agile-standUp-20-min'', 20, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''agile-sprint-planning-30-min'', 30, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''agile-sprint-planning-45-min'', 45, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''agile-sprint-planning-60-min'', 60, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''agile-sprint-retro-30-min'', 30, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''agile-sprint-retro-45-min'', 45, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''agile-sprint-retro-60-min'', 60, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''meetings-client-15-min'', 15, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''meetings-client-30-min'', 30, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''meetings-client-45-min'', 45, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''meetings-client-60-min'', 60, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''meetings-internal-15-min'', 15, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''meetings-internal-30-min'', 30, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''meetings-internal-45-min'', 45, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''meetings-internal-60-min'', 60, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''meetings-external-15-min'', 15, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''meetings-external-30-min'', 30, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''meetings-external-45-min'', 45, null, true, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''meetings-external-60-min'', 60, null, true, cre_upd, cre_upd, system_user);
+    (gen_random_uuid(), ''general-05-%'', null, 5, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''general-10-%'', null, 10, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''general-15-%'', null, 15, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''general-20-%'', null, 20, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''general-25-%'', null, 25, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''general-30-%'', null, 30, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''general-35-%'', null, 35, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''general-40-%'', null, 40, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''general-55-%'', null, 45, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''general-50-%'', null, 50, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''coffee-break-15-min'', 15, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''coffee-break-10-min'', 10, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''personal-break-5-min'', 5, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''personal-break-10-min'', 10, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''personal-break-15-min'', 15, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''agile-standUp-10-min'', 10, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''agile-standUp-15-min'', 15, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''agile-standUp-20-min'', 20, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''agile-sprint-planning-30-min'', 30, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''agile-sprint-planning-45-min'', 45, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''agile-sprint-planning-60-min'', 60, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''agile-sprint-retro-30-min'', 30, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''agile-sprint-retro-45-min'', 45, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''agile-sprint-retro-60-min'', 60, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''meetings-client-15-min'', 15, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''meetings-client-30-min'', 30, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''meetings-client-45-min'', 45, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''meetings-client-60-min'', 60, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''meetings-internal-15-min'', 15, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''meetings-internal-30-min'', 30, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''meetings-internal-45-min'', 45, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''meetings-internal-60-min'', 60, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''meetings-external-15-min'', 15, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''meetings-external-30-min'', 30, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''meetings-external-45-min'', 45, null, true, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''meetings-external-60-min'', 60, null, true, cre_upd, cre_upd, system_user_bmc);
 
 -- insert demo data
 
 update users set seniority_id = (select id from seniority where name = ''architect''), department_id = department_eng
-where id = system_user;
+where id = system_user_bmc;
 
 insert into users(id, email, call_sign, avatar, department_id, seniority_id, password, created_at, updated_at, created_by_id) VALUES
-    (user_two, ''maverick@demo.com'', ''maverick'', robohash || user_two || ''?set=set3'', department_eng, seniority_sr, ''maverick'', cre_upd, cre_upd, system_user),
-    (user_three, ''goose@demo.com'', ''goose'', robohash || seniority_jr || ''?set=set3'', department_eng, seniority_jr, ''goose'', cre_upd, cre_upd, system_user),
-    (user_four, ''iceman@demo.com'', ''iceman'', robohash || seniority_sr || ''?set=set3'', department_eng, seniority_jr, ''iceman'', cre_upd, cre_upd, system_user);
+    (user_two, ''maverick@demo.com'', ''maverick'', robohash || user_two || ''?set=set3'', department_eng, seniority_sr, ''maverick'', cre_upd, cre_upd, system_user_bmc),
+    (user_three, ''goose@demo.com'', ''goose'', robohash || seniority_jr || ''?set=set3'', department_eng, seniority_jr, ''goose'', cre_upd, cre_upd, system_user_bmc),
+    (user_four, ''iceman@demo.com'', ''iceman'', robohash || seniority_sr || ''?set=set3'', department_eng, seniority_jr, ''iceman'', cre_upd, cre_upd, system_user_bmc);
 
 insert into account(id, name, description, cover_image, created_at, updated_at, created_by_id) VALUES
-    (account_one, ''default-account'', ''system default account'', robohash || account_one, cre_upd, cre_upd, system_user),
-    (account_two, ''account-two'', ''another demo pre created account'', robohash || account_two, cre_upd, cre_upd, system_user);
+    (account_one, ''default-account'', ''system default account'', robohash || account_one, cre_upd, cre_upd, system_user_bmc),
+    (account_two, ''account-two'', ''another demo pre created account'', robohash || account_two, cre_upd, cre_upd, system_user_bmc);
 
 
 insert into project(id, name, account_id, description, cover_image, created_at, updated_at, created_by_id) values
-    (default_project, ''default-project'', account_one, default_description, robohash || default_project, cre_upd, cre_upd, system_user),
-    (project_two, ''bmc-site'', account_one, default_description, robohash || default_project, cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''bmc-data-pipeline'', account_two, default_description, robohash || gen_random_uuid(), cre_upd, cre_upd, system_user),
-    (gen_random_uuid(), ''test-project'', account_two, default_description, robohash || gen_random_uuid(), cre_upd, cre_upd, system_user);
+    (default_project, ''default-project'', account_one, default_description, robohash || default_project, cre_upd, cre_upd, system_user_bmc),
+    (project_two, ''bmc-site'', account_one, default_description, robohash || default_project, cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''bmc-data-pipeline'', account_two, default_description, robohash || gen_random_uuid(), cre_upd, cre_upd, system_user_bmc),
+    (gen_random_uuid(), ''test-project'', account_two, default_description, robohash || gen_random_uuid(), cre_upd, cre_upd, system_user_bmc);
 
 insert into board(id, name, description, cover_image, board_type_id, project_id, created_at, updated_at, created_by_id) values
-    (default_kanban_board, ''default-kanban-board'', default_description, robohash_default, board_type_kanban, default_project, cre_upd, cre_upd, system_user),
-    (default_sprint_board, ''default-sprint-board'', default_description, robohash_default, board_type_sprint, default_project, cre_upd, cre_upd, system_user);
+    (default_kanban_board, ''default-kanban-board'', default_description, robohash_default, board_type_kanban, default_project, cre_upd, cre_upd, system_user_bmc),
+    (default_sprint_board, ''default-sprint-board'', default_description, robohash_default, board_type_sprint, default_project, cre_upd, cre_upd, system_user_bmc);
 
 
 insert into retrospective(id, created_at, updated_at, created_by_id, project_id) VALUES
-    (default_retro_board, cre_upd, cre_upd, system_user, default_project);
+    (default_retro_board, cre_upd, cre_upd, system_user_bmc, default_project);
 
 insert into sprint(id, created_at, updated_at, goal, name, from_date, to_date, created_by_id, board_id, project_id, retro_board_id) VALUES
-    (default_sprint, cre_upd, cre_upd, ''this is a sprint Goal'', ''this is the sprint name'', make_timestamp(2023, 10, 01, 00, 00, 00), make_timestamp(2023, 10, 15, 00, 00, 00), system_user, default_sprint_board, default_project, default_retro_board);
+    (default_sprint, cre_upd, cre_upd, ''this is a sprint Goal'', ''this is the sprint name'', make_timestamp(2023, 10, 01, 00, 00, 00), make_timestamp(2023, 10, 15, 00, 00, 00), system_user_bmc, default_sprint_board, default_project, default_retro_board);
 
 insert into card(id, name, description, cover_image, due_date, board_id, card_status_id, card_type_id, created_at, updated_at, created_by_id) values
-    (default_kanban_card, ''default-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), default_kanban_board, card_status_new, default_card_type, cre_upd, cre_upd, system_user),
-    (default_sprint_card, ''default-sprint-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), default_sprint_board, card_status_new, default_card_type, cre_upd, cre_upd, system_user);
+    (default_kanban_card, ''default-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), default_kanban_board, card_status_new, default_card_type, cre_upd, cre_upd, system_user_bmc),
+    (default_sprint_card, ''default-sprint-card'', default_description, robohash_default, make_timestamp(2023, 10, 01, 00, 00, 00), default_sprint_board, card_status_new, default_card_type, cre_upd, cre_upd, system_user_bmc);
 
 insert into project_users(user_id, project_id) VALUES
-    (system_user, default_project),
-    (system_user, project_two),
+    (system_user_bmc, default_project),
+    (system_user_bmc, project_two),
     (user_two, default_project);
 
 -- Alpha data
@@ -400,7 +400,7 @@ insert into board_users(board_id, user_id) VALUES
     (alpha_kanban_board_work_1, user_three),
     (alpha_kanban_board_work_1, user_four),
     (alpha_kanban_board_college_1, user_alpha),
-    (alpha_kanban_board_college_1, system_user),
+    (alpha_kanban_board_college_1, system_user_bmc),
     (alpha_kanban_board_college_1, user_four),
     (alpha_kanban_board_college_1, user_two),
     (alpha_kanban_board_college_1, user_three),

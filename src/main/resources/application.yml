@@ -62,8 +62,8 @@ quarkus: # persistence configuration
       max-size: 16
       cache-prepared-statements: true
     db-kind: postgresql
-    username: postgres
-    password: postgres
+    username: john
+    password: john
   hibernate-orm:
 #    statistics: true
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
@@ -79,7 +79,7 @@ quarkus: # persistence configuration
   http:
     port: 8080
     access-log:
-      enabled: true
+      enabled: false
   #    cors:
   #      ~: true
   #      origins: "http://localhost:3000"
