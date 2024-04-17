@@ -1,5 +1,6 @@
 ### Analysis Status
 [![Qodana](https://github.com/JohnnyXavier/bare-metal-flow/actions/workflows/code_quality.yml/badge.svg)](https://github.com/JohnnyXavier/bare-metal-flow/actions/workflows/code_quality.yml)
+&nbsp; &nbsp; [![CodeQL](https://github.com/JohnnyXavier/bare-metal-flow/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/JohnnyXavier/bare-metal-flow/actions/workflows/github-code-scanning/codeql)
 
 # bare-metal-flow
 
