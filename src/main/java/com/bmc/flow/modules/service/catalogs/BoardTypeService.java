@@ -34,19 +34,14 @@ public class BoardTypeService extends BasicPersistenceService<BoardTypeDto, Boar
         return boardTypeRepo.persist(newBoardType)
                             .replaceWith(findById(newBoardType.getId()));
     }
-
-
-    public Uni<BoardTypeEntity> findEntityByName(final String name) {
-        return boardTypeRepo.findEntityByName(name);
-    }
-
-
     @Override
     @WithTransaction
     protected Uni<Void> update(final BoardTypeEntity toUpdate, final String key, final String value) {
         return updateInPlace(toUpdate, key, value);
     }
-
+    public Uni<BoardTypeEntity> findEntityByName(final String name) {
+        return boardTypeRepo.findEntityByName(name);
+    }
     protected Uni<Void> updateInPlace(final BoardTypeEntity toUpdate, final String key, final String value) {
         return switch (key) {
             case "name" -> updateInPlace(toUpdate, SET_NAME, value);

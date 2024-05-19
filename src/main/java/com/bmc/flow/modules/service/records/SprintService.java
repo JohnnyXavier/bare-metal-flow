@@ -62,7 +62,20 @@ public class SprintService extends BasicPersistenceService<SprintDto, SprintEnti
         return repository.persist(newSprint)
                          .replaceWith(findById(newSprint.getId()));
     }
+    @Override
+    @WithTransaction
+    protected Uni<Void> update(final SprintEntity toUpdate, final String key, final String value) {
+        return switch (key) {
+            case "name" -> updateInPlace(toUpdate, SET_NAME, value);
+            case "fromDate" -> updateInPlace(toUpdate, SET_FROM_DATE, parse(value));
+            case "startDate" -> updateInPlace(toUpdate, SET_START_DATE, parse(value));
+            case "endDate" -> updateInPlace(toUpdate, SET_END_DATE, parse(value));
+            case "closeDate" -> updateInPlace(toUpdate, SET_CLOSE_DATE, parse(value));
+            case "goal" -> updateInPlace(toUpdate, SET_GOAL, value);
 
+            default -> throw new IllegalStateException("Unexpected value: " + key);
+        };
+    }
     public Uni<Void> startSprint(final UUID sprintId) {
         return repository.findById(sprintId)
                          .onItem().ifNotNull().invoke(sprintFromDb -> {
@@ -72,7 +85,6 @@ public class SprintService extends BasicPersistenceService<SprintDto, SprintEnti
                 }
             }).replaceWith(Uni.createFrom().voidItem());
     }
-
     public Uni<SprintDto> closeSprint(final UUID sprintId) {
         return repository.findById(sprintId)
                          .onItem().ifNotNull().invoke(sprintFromDb -> {
@@ -90,22 +102,6 @@ public class SprintService extends BasicPersistenceService<SprintDto, SprintEnti
                 }
             }).flatMap(sprintEntity -> this.findById(sprintEntity.getId()));
     }
-
-    @Override
-    @WithTransaction
-    protected Uni<Void> update(final SprintEntity toUpdate, final String key, final String value) {
-        return switch (key) {
-            case "name" -> updateInPlace(toUpdate, SET_NAME, value);
-            case "fromDate" -> updateInPlace(toUpdate, SET_FROM_DATE, parse(value));
-            case "startDate" -> updateInPlace(toUpdate, SET_START_DATE, parse(value));
-            case "endDate" -> updateInPlace(toUpdate, SET_END_DATE, parse(value));
-            case "closeDate" -> updateInPlace(toUpdate, SET_CLOSE_DATE, parse(value));
-            case "goal" -> updateInPlace(toUpdate, SET_GOAL, value);
-
-            default -> throw new IllegalStateException("Unexpected value: " + key);
-        };
-    }
-
     public Uni<PageResult<SprintDto>> findAllInCollectionId(final String collectionName, final UUID collectionId, final Pageable pageable) {
         return findAllPaged(repository.findAllByCollectionId(collectionName, collectionId, pageable.getSort()),
             "-find-all-sprints-in-" + collectionName,

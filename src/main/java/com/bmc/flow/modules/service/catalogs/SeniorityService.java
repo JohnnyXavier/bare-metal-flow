@@ -36,12 +36,6 @@ public class SeniorityService extends BasicPersistenceService<SeniorityDto, Seni
         return seniorityRepo.persist(newSeniority)
                             .replaceWith(findById(newSeniority.getId()));
     }
-
-    @CacheResult(cacheName = "seniority-by-name")
-    public Uni<SeniorityEntity> findEntityByName(final String name) {
-        return seniorityRepo.findEntityByName(name);
-    }
-
     @Override
     @WithTransaction
     protected Uni<Void> update(final SeniorityEntity toUpdate, final String key, final String value) {
@@ -52,5 +46,9 @@ public class SeniorityService extends BasicPersistenceService<SeniorityDto, Seni
 
             default -> throw new IllegalStateException("Unexpected value: " + key);
         };
+    }
+    @CacheResult(cacheName = "seniority-by-name")
+    public Uni<SeniorityEntity> findEntityByName(final String name) {
+        return seniorityRepo.findEntityByName(name);
     }
 }

@@ -91,7 +91,28 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
         // create other users.
         return null;
     }
+    public Uni<Void> update(final UserEntity toUpdate, final String key, final String value) {
+        return switch (key) {
+            case "email" -> updateInPlace(toUpdate, SET_EMAIL, value.toLowerCase());
+            case "callSign" -> updateInPlace(toUpdate, SET_CALL_SIGN, value);
+            case "avatar" -> updateInPlace(toUpdate, SET_AVATAR, value);
+            case "seniority" -> setSeniority(toUpdate, value);
 
+            default -> throw new IllegalStateException("Unexpected value: " + key);
+        };
+    }
+    @WithTransaction
+    @Override
+    public Uni<Boolean> deleteById(final UUID userId) {
+        return userRepo.find("id =?1 and isActive=?2", userId, true)
+                       .singleResult().onFailure().recoverWithNull()
+                       .onItem().ifNotNull().transform(userToDeactivate -> {
+                secUtils.obfuscateUser(userToDeactivate);
+                userToDeactivate.setActive(false);
+                return TRUE;
+            })
+                       .onItem().ifNull().continueWith(FALSE);
+    }
     @WithTransaction
     public Uni<UserDto> register(@Valid final UserRegistrationDto userRegistrationDto) {
 
@@ -196,31 +217,6 @@ public class UserService extends BasicPersistenceService<UserDto, UserEntity> {
             .chain(() -> shrinkageRepo.findEntityByName("agile-standUp-10-min").invoke(shrinkages::add))
             .replaceWith(findById(newUser.getId()));
     }
-
-    @WithTransaction
-    @Override
-    public Uni<Boolean> deleteById(final UUID userId) {
-        return userRepo.find("id =?1 and isActive=?2", userId, true)
-                       .singleResult().onFailure().recoverWithNull()
-                       .onItem().ifNotNull().transform(userToDeactivate -> {
-                secUtils.obfuscateUser(userToDeactivate);
-                userToDeactivate.setActive(false);
-                return TRUE;
-            })
-                       .onItem().ifNull().continueWith(FALSE);
-    }
-
-    public Uni<Void> update(final UserEntity toUpdate, final String key, final String value) {
-        return switch (key) {
-            case "email" -> updateInPlace(toUpdate, SET_EMAIL, value.toLowerCase());
-            case "callSign" -> updateInPlace(toUpdate, SET_CALL_SIGN, value);
-            case "avatar" -> updateInPlace(toUpdate, SET_AVATAR, value);
-            case "seniority" -> setSeniority(toUpdate, value);
-
-            default -> throw new IllegalStateException("Unexpected value: " + key);
-        };
-    }
-
     private Uni<Void> setSeniority(final UserEntity toUpdate, final String value) {
         Optional.ofNullable(value)
                 .ifPresentOrElse(seniorityId -> {

@@ -74,27 +74,6 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
                                                                  return null;
                                                              }).toList()))));
     }
-
-    public Uni<PageResult<CardSimpleDto>> findAllByBoardIdPaged(final UUID boardId, final Pageable pageable) {
-        return findAllPaged(cardRepo.findAllByBoardId(boardId, pageable.getSort()), "-all-cards-by-board",
-            pageable.getPage())
-            .onItem()
-            .ifNotNull().call(result -> sf.withSession(session -> session.createNamedQuery("CardLabel.findAllByBoardId", CardLabelDto.class)
-                                                                         .setParameter("boardId", boardId)
-                                                                         .getResultList()
-                                                                         .call(cardLabelDtos -> Uni.createFrom().item(cardLabelDtos
-                                                                             .stream()
-                                                                             .map(cardLabelDto -> {
-                                                                                 result.getResultSet().forEach(cardSimpleDto -> {
-                                                                                     if (cardLabelDto.getCardId().equals(
-                                                                                         cardSimpleDto.getId())) {
-                                                                                         cardSimpleDto.getLabels().add(cardLabelDto);
-                                                                                     }
-                                                                                 });
-                                                                                 return null;
-                                                                             }).toList()))));
-    }
-
     @WithTransaction
     public Uni<CardSimpleDto> create(@Valid final CardSimpleDto cardSimpleDto) {
 
@@ -131,8 +110,6 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
                        .chain(() -> cardStatusRepo.findById(cardSimpleDto.getCardStatusId()).invoke(newCard::setCardStatus))
                        .replaceWith(findById(newCard.getId()));
     }
-
-
     @Override
     @WithTransaction
     protected Uni<Void> update(final CardEntity toUpdate, final String key, final String value) {
@@ -154,7 +131,25 @@ public class CardService extends BasicPersistenceService<CardSimpleDto, CardEnti
             default -> throw new IllegalStateException("Unexpected value: " + key);
         };
     }
-
+    public Uni<PageResult<CardSimpleDto>> findAllByBoardIdPaged(final UUID boardId, final Pageable pageable) {
+        return findAllPaged(cardRepo.findAllByBoardId(boardId, pageable.getSort()), "-all-cards-by-board",
+            pageable.getPage())
+            .onItem()
+            .ifNotNull().call(result -> sf.withSession(session -> session.createNamedQuery("CardLabel.findAllByBoardId", CardLabelDto.class)
+                                                                         .setParameter("boardId", boardId)
+                                                                         .getResultList()
+                                                                         .call(cardLabelDtos -> Uni.createFrom().item(cardLabelDtos
+                                                                             .stream()
+                                                                             .map(cardLabelDto -> {
+                                                                                 result.getResultSet().forEach(cardSimpleDto -> {
+                                                                                     if (cardLabelDto.getCardId().equals(
+                                                                                         cardSimpleDto.getId())) {
+                                                                                         cardSimpleDto.getLabels().add(cardLabelDto);
+                                                                                     }
+                                                                                 });
+                                                                                 return null;
+                                                                             }).toList()))));
+    }
     private Uni<Void> addAssignee(final CardEntity toUpdate, final String value) {
         return sf.withTransaction(txSession ->
                      txSession.createNativeQuery("insert into card_users_assigned(card_id, user_id) VALUES (?1, ?2)")

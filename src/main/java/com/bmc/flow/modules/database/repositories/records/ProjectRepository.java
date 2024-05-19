@@ -14,7 +14,8 @@ import java.util.UUID;
 @ApplicationScoped
 public class ProjectRepository implements PanacheRepositoryBase<ProjectEntity, UUID> {
 
-    private static final String SELECT_DTO = " select e.id, e.name, e.description, e.coverImage, e.createdAt, e.createdBy.id, e.account.id," +
+    private static final String SELECT_DTO = " select e.id, e.name, e.description, e.coverImage, e.createdAt, e.createdBy.id, e.account" +
+        ".id," +
         " e.projectLead.id";
 
     private static final String FROM_ENTITY = " from ProjectEntity e";

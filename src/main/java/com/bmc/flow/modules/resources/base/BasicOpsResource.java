@@ -99,7 +99,8 @@ public abstract class BasicOpsResource<D, E> {
      *
      * @param id the id of the entity we want to delete
      *
-     * @return a {@link Response} carrying only a {@link Response.Status#OK} if success or {@link Response.Status#NOT_FOUND} if the id is not found
+     * @return a {@link Response} carrying only a {@link Response.Status#OK} if success or {@link Response.Status#NOT_FOUND} if the id is
+     * not found
      */
     @DELETE
     @Path("{id}")

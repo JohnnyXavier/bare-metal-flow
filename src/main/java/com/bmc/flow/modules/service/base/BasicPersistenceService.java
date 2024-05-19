@@ -54,8 +54,7 @@ public abstract class BasicPersistenceService<D, E> {
         return this.findAllPaged(repository.findAll(pageable.getSort()), "-find-all", pageable.getPage());
     }
 
-    protected Uni<PageResult<D>> findAllPaged(final PanacheQuery<E> panacheQuery, final String queryName,
-                                              final Page page) {
+    protected Uni<PageResult<D>> findAllPaged(final PanacheQuery<E> panacheQuery, final String queryName, final Page page) {
         return panacheQuery.project(dtoClass)
                            .page(page)
                            .list()
@@ -129,9 +128,9 @@ public abstract class BasicPersistenceService<D, E> {
      *     where
      *        id=?3
      *
-     * @param toUpdate -
-     * @param methodName  -
-     * @param value    -
+     * @param toUpdate   -
+     * @param methodName -
+     * @param value      -
      *
      * @return -
      */

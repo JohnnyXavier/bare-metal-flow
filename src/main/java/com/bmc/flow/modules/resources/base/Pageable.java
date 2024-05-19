@@ -30,16 +30,16 @@ public class Pageable {
      * <p>
      * this is a proper "method" coded a la {@link Function} style.<br>
      * it has an input parameter, the pageSize, and a body which is the code after the -> symbol.<br>
-     * the generic input type T in this case is an Integer, so we don't need to specify what type pageSize is and the return Type is int in this
+     * the generic input type T in this case is an Integer, so we don't need to specify what type pageSize is and the return Type is int in
+     * this
      * specialized type of the more general {@link Function}
-     *
+     * <p>
      * this is the equivalent of
      * <pre>
      *     int checkPageSize (Integer pageSize) {
      *         return max(min(pageSize, MAX_PAGE_SIZE), MIN_PAGE_SIZE);
      *     }
      * </pre>
-     *
      */
     private final        ToIntFunction<Integer> checkPageSize = (pageSize) -> max(min(pageSize, MAX_PAGE_SIZE), MIN_PAGE_SIZE);
     private final        Sort                   sort;

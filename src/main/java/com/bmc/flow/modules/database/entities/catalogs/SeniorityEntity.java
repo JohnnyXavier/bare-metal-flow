@@ -25,7 +25,7 @@ import static jakarta.persistence.CascadeType.ALL;
 public class SeniorityEntity extends BaseCatalogEntity {
 
     @OneToMany(mappedBy = "seniority", cascade = ALL)
-    public Set<UserEntity> users = new HashSet<>();
-    private Short level;
+    public  Set<UserEntity> users = new HashSet<>();
+    private Short           level;
 
 }

@@ -66,7 +66,8 @@ public class UserResource extends BasicOpsResource<UserDto, UserEntity> {
         String collections = userSupportedCollections.get(collection);
         if (collections == null) {
             return Uni.createFrom().item(Response.ok().status(NOT_FOUND).build());
-        } else {
+        }
+        else {
             return userService.findAllInCollectionId(collections, collectionId, new Pageable(sortBy, sortDir, pageIx,
                                   pageSize))
                               .map(userDtos -> Response.ok(userDtos).build());
@@ -134,7 +135,8 @@ public class UserResource extends BasicOpsResource<UserDto, UserEntity> {
                                    .build();
 
                                return Response.ok().cookie(setUserIdCookie).build();
-                           } else {
+                           }
+                           else {
                                NewCookie removeUserIdCookie = new NewCookie.Builder("userId")
                                    .value(null)
                                    .path("/")

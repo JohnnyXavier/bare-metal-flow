@@ -35,12 +35,6 @@ public class DepartmentService extends BasicPersistenceService<DepartmentDto, De
         return departmentRepo.persist(newDepartment)
                              .replaceWith(findById(newDepartment.getId()));
     }
-
-    @CacheResult(cacheName = "department-by-name")
-    public Uni<DepartmentEntity> findEntityByName(final String name) {
-        return departmentRepo.findEntityByName(name);
-    }
-
     @Override
     @WithTransaction
     protected Uni<Void> update(final DepartmentEntity toUpdate, final String key, final String value) {
@@ -50,5 +44,9 @@ public class DepartmentService extends BasicPersistenceService<DepartmentDto, De
 
             default -> throw new IllegalStateException("Unexpected value: " + key);
         };
+    }
+    @CacheResult(cacheName = "department-by-name")
+    public Uni<DepartmentEntity> findEntityByName(final String name) {
+        return departmentRepo.findEntityByName(name);
     }
 }

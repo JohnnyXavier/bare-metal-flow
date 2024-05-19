@@ -46,12 +46,6 @@ public class AccountService extends BasicPersistenceService<AccountDto, AccountE
         return accountRepo.persist(newAccount)
                           .replaceWith(findById(newAccount.getId()));
     }
-
-    public Uni<PageResult<AccountDto>> findAllByUserIdPaged(final UUID userId, final Pageable pageable) {
-        return findAllPaged(accountRepo.findAllCreatedByUserId(userId, pageable.getSort()), "-all-accounts-by-user",
-            pageable.getPage());
-    }
-
     @Override
     @WithTransaction
     protected Uni<Void> update(final AccountEntity toUpdate, final String key, final String value) {
@@ -62,6 +56,10 @@ public class AccountService extends BasicPersistenceService<AccountDto, AccountE
 
             default -> throw new IllegalStateException("Unexpected value: " + key);
         };
+    }
+    public Uni<PageResult<AccountDto>> findAllByUserIdPaged(final UUID userId, final Pageable pageable) {
+        return findAllPaged(accountRepo.findAllCreatedByUserId(userId, pageable.getSort()), "-all-accounts-by-user",
+            pageable.getPage());
     }
 
 }

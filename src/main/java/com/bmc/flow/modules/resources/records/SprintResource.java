@@ -51,7 +51,8 @@ public class SprintResource extends BasicOpsResource<SprintDto, SprintEntity> {
         String collections = SupportedCollections.get(collection);
         if (collections == null) {
             return Uni.createFrom().item(Response.ok().status(NOT_FOUND).build());
-        } else {
+        }
+        else {
             return sprintService.findAllInCollectionId(collections, collectionId, new Pageable(sortBy, sortDir, pageIx, pageSize))
                                 .map(userDtos -> Response.ok(userDtos).build())
                                 .onFailure(NoResultException.class).recoverWithItem(Response.status(NOT_FOUND)::build)

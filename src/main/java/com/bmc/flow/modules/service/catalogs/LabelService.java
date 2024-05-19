@@ -39,11 +39,6 @@ public class LabelService extends BasicPersistenceService<LabelDto, LabelEntity>
         return labelRepo.persist(newLabel)
                         .replaceWith(findById(newLabel.getId()));
     }
-
-    public Uni<PageResult<LabelDto>> findAllByCardIdPaged(final UUID cardId, final Pageable pageable) {
-        return findAllPaged(labelRepo.findAllByCardId(cardId, pageable.getSort()), "labels-in-card-" + cardId, pageable.getPage());
-    }
-
     @Override
     @WithTransaction
     protected Uni<Void> update(final LabelEntity toUpdate, final String key, final String value) {
@@ -55,7 +50,9 @@ public class LabelService extends BasicPersistenceService<LabelDto, LabelEntity>
             default -> throw new IllegalStateException("Unexpected value: " + key);
         };
     }
-
+    public Uni<PageResult<LabelDto>> findAllByCardIdPaged(final UUID cardId, final Pageable pageable) {
+        return findAllPaged(labelRepo.findAllByCardId(cardId, pageable.getSort()), "labels-in-card-" + cardId, pageable.getPage());
+    }
     public Uni<LabelEntity> findEntityByName(final String name) {
         return labelRepo.findEntityByName(name);
 

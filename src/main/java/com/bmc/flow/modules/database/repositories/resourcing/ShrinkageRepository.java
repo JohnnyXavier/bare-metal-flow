@@ -13,7 +13,8 @@ import java.util.UUID;
 @ApplicationScoped
 public class ShrinkageRepository implements PanacheRepositoryBase<ShrinkageEntity, UUID> {
 
-    private static final String SELECT_DTO = " select e.id, e.name, e.description, e.durationInMin, e.percentage, e.isSystem, e.createdAt," +
+    private static final String SELECT_DTO = " select e.id, e.name, e.description, e.durationInMin, e.percentage, e.isSystem, e" +
+        ".createdAt," +
         " e.createdBy";
 
     private static final String FROM_ENTITY = " from ShrinkageEntity e";

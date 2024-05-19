@@ -18,7 +18,8 @@ import java.util.UUID;
 public class SprintRepository implements PanacheRepositoryBase<SprintEntity, UUID> {
 
     private static final String SELECT_DTO = " select e.id, e.name, e.goal, e.fromDate, e.toDate, e.startDate, e.closeDate, e.daysCycle," +
-        " e.hasStarted, e.isClosed, e.originalPoints, e.finalPoints, e.createdAt, e.createdBy.id, e.board.id, e.project.id, e.retroBoard.id";
+        " e.hasStarted, e.isClosed, e.originalPoints, e.finalPoints, e.createdAt, e.createdBy.id, e.board.id, e.project.id, e.retroBoard" +
+        ".id";
 
     private static final String FROM_ENTITY = " from SprintEntity e";
 
