@@ -1,120 +1,120 @@
 obfuscation:
-  cities:
-    - new_york
-    - angeles
-    - chicago
-    - houston
-    - phoenix
-    - philly
-    - antonio
-    - diego
-    - dallas
-    - jose
-    - austin
-    - jacksonville
-    - fort_worth
-    - columbus
-    - indianapolis
-    - charlotte
-    - francisco
-    - seattle
-    - denver
-    - nashville
-    - oklahoma
-    - paso
-    - boston
-    - portland
-    - vegas
-    - detroit
-  alphabet:
-    - alpha
-    - bravo
-    - charlie
-    - delta
-    - echo
-    - foxtrot
-    - golf
-    - hotel
-    - india
-    - juliet
-    - kilo
-    - lima
-    - mike
-    - november
-    - oscar
-    - papa
-    - quebec
-    - romeo
-    - sierra
-    - tango
-    - uniform
-    - victor
-    - whiskey
-    - x_ray
-    - yankee
-    - zulu
+    cities:
+        - new_york
+        - angeles
+        - chicago
+        - houston
+        - phoenix
+        - philly
+        - antonio
+        - diego
+        - dallas
+        - jose
+        - austin
+        - jacksonville
+        - fort_worth
+        - columbus
+        - indianapolis
+        - charlotte
+        - francisco
+        - seattle
+        - denver
+        - nashville
+        - oklahoma
+        - paso
+        - boston
+        - portland
+        - vegas
+        - detroit
+    alphabet:
+        - alpha
+        - bravo
+        - charlie
+        - delta
+        - echo
+        - foxtrot
+        - golf
+        - hotel
+        - india
+        - juliet
+        - kilo
+        - lima
+        - mike
+        - november
+        - oscar
+        - papa
+        - quebec
+        - romeo
+        - sierra
+        - tango
+        - uniform
+        - victor
+        - whiskey
+        - x_ray
+        - yankee
+        - zulu
 
 
 quarkus: # persistence configuration
-  datasource:
-    reactive:
-      url: vertx-reactive:postgresql://localhost:5432/bare_metal_flow
-      max-size: 16
-      cache-prepared-statements: true
-    db-kind: postgresql
-    username: john
-    password: john
-  hibernate-orm:
-#    statistics: true
-    physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-    sql-load-script: basic_data.sql
+    datasource:
+        reactive:
+            url: vertx-reactive:postgresql://localhost:5432/anvil
+            max-size: 16
+            cache-prepared-statements: true
+        db-kind: postgresql
+        username: john
+        password: john
+    hibernate-orm:
+        #    statistics: true
+        physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+        sql-load-script: basic_data.sql
+        log:
+            sql: true
+            format-sql: true
+        database:
+            default-schema: public
+            generation: drop-and-create
+
+    # server configuration
+    http:
+        port: 8080
+        access-log:
+            enabled: false
+    #    cors:
+    #      ~: true
+    #      origins: "http://localhost:3000"
+    #      methods: GET,PUT,POST,DELETE,OPTIONS
+
+
+    # log configuration
     log:
-      sql: true
-      format-sql: true
-    database:
-      default-schema: public
-      generation: drop-and-create
+        category:
+            "io.vertx.sqlclient.impl":
+                level: ERROR
+            "com.bmc.flow.modules.service.base.CountAllCKGen":
+                level: INFO
+            "com.bmc":
+                level: DEBUG
+            "org.hibernate.stat":
+                level: DEBUG
+        #      "org.hibernate.SQL":
+        #        level: DEBUG
 
-  # server configuration
-  http:
-    port: 8080
-    access-log:
-      enabled: false
-  #    cors:
-  #      ~: true
-  #      origins: "http://localhost:3000"
-  #      methods: GET,PUT,POST,DELETE,OPTIONS
+        console:
+            async: true
 
-
-  # log configuration
-  log:
-    category:
-      "io.vertx.sqlclient.impl":
-        level: ERROR
-      "com.bmc.flow.modules.service.base.CountAllCKGen":
-        level: INFO
-      "com.bmc":
-        level: DEBUG
-      "org.hibernate.stat":
-        level: DEBUG
-#      "org.hibernate.SQL":
-#        level: DEBUG
-
-    console:
-      async: true
-
-  #   cache configuration
-  cache:
-    caffeine:
-      count-all:
-        metrics-enabled: false
-        expire-after-write: 10S
-        initial-capacity: 20
+    #   cache configuration
+    cache:
+        caffeine:
+            count-all:
+                metrics-enabled: false
+                expire-after-write: 10S
+                initial-capacity: 20
 
 "%dev":
-  quarkus:
-    http:
-      cors:
-        ~: true
-        origins: "/.*/"
-        access-control-allow-credentials: true
+    quarkus:
+        http:
+            cors:
+                ~: true
+                origins: "/.*/"
+                access-control-allow-credentials: true
